@@ -78,8 +78,16 @@ def _clean_response(text: str) -> str:
     if normalized is not None:
         return normalized
 
-    # For multi-word answers, still clean up leading "Yes—"/"No—" preamble
+    # For multi-word answers, clean up leading "Yes—"/"No—" preamble
     text = re.sub(r"^\s*(Yes|No)\s*[\u2014\u2013\-:,]\s*", "", text, flags=re.IGNORECASE)
+
+    # Strip conversational filler from the start of explanations
+    filler_pattern = r"^\s*(Here is a simple explanation:?|Here is the answer:?|The explanation is:?|This means that|Basically,?|Simply put,?)\s*"
+    text = re.sub(filler_pattern, "", text, flags=re.IGNORECASE)
+    
+    # Capitalize the first letter if it got stripped by the regex
+    if text:
+        text = text[0].upper() + text[1:]
 
     return text.strip()
 
@@ -110,10 +118,11 @@ async def ask_ollama(
             "1. If the column expects a capability or yes/no answer, respond with EXACTLY ONE WORD: Yes, No, or N/A.\n"
             "2. Never write 'Capable', 'Supported', 'Available', or any synonym. Use ONLY 'Yes' or 'No'.\n"
             "3. Never combine words like 'Capable/No' or 'Yes/Supported'. Pick ONE word.\n"
-            "4. For descriptive columns, write a concise factual answer (1-2 sentences max).\n"
-            "5. No markdown, no bold, no bullets, no labels, no preamble.\n"
-            "6. Do not repeat the question or column name.\n"
-            "7. Do not explain your reasoning.\n"
+            "4. For explanation or descriptive columns, give ONLY the core factual answer. Keep it very short and simple (1-2 sentences absolute maximum). Do not elaborate.\n"
+            "5. Cut straight to the point. Never start with 'This is...', 'The explanation is...', or 'Here is...'.\n"
+            "6. No markdown, no bold, no bullets, no labels, no preamble.\n"
+            "7. Do not repeat the question or column name.\n"
+            "8. Do not explain your reasoning.\n"
         ),
         "stream": False,
         "options": {"temperature": 0.1, "num_predict": 256},
