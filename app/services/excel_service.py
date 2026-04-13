@@ -6,9 +6,16 @@ from app.config import SOURCE_FILE, FILES_DIR
 from app.services.ollama_service import ask_ollama
 
 
+def _load_workbook():
+    """Load the source Excel file, raising FileNotFoundError if missing."""
+    if not os.path.exists(SOURCE_FILE):
+        raise FileNotFoundError(f"Source file not found: {SOURCE_FILE}")
+    return load_workbook(SOURCE_FILE)
+
+
 def read_all_sheets() -> dict:
     """Read all sheets from the Excel file and return headers + data."""
-    wb = load_workbook(SOURCE_FILE)
+    wb = _load_workbook()
     sheets = {}
 
     for sheet_name in wb.sheetnames:
@@ -38,7 +45,7 @@ def read_all_sheets() -> dict:
 
 async def auto_fill_sheets() -> dict:
     """Fill every empty cell in every sheet using the LLM."""
-    wb = load_workbook(SOURCE_FILE)
+    wb = _load_workbook()
     results = []
 
     for sheet_name in wb.sheetnames:
