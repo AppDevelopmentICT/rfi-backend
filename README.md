@@ -1,1 +1,3 @@
 # Yang Kemaren Kocak
+
+## RUN  `run.sh` PAKE BASHHHHHHHHH JANGAN POWERSHELLLLLLL
