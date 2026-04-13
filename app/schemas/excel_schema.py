@@ -1,6 +1,8 @@
 from __future__ import annotations
-from typing import Any
+from typing import Any, Optional
 from pydantic import BaseModel, Field
+
+from app.config import OLLAMA_MODEL
 
 
 # ─── Shared Error Schema ────────────────────────────────────────────
@@ -15,7 +17,7 @@ class ErrorResponse(BaseModel):
         }
 
 
-# ─── GET /api/excel ─────────────────────────────────────────────────
+# ─── Sheet Data (used by both example and real APIs) ────────────────
 
 class SheetData(BaseModel):
     """One sheet's content: headers list + rows as dicts."""
@@ -36,7 +38,7 @@ class SheetData(BaseModel):
 
 
 class ExcelReadResponse(BaseModel):
-    """Response for GET /api/excel — keyed by sheet name."""
+    """Response for read endpoints — keyed by sheet name."""
 
     class Config:
         json_schema_extra = {
@@ -50,11 +52,8 @@ class ExcelReadResponse(BaseModel):
             }
         }
 
-    # FastAPI will serialise the actual dict[str, SheetData] return value;
-    # the response_model is declared on the route for docs purposes.
 
-
-# ─── POST /api/auto-fill ────────────────────────────────────────────
+# ─── Filled Cell ────────────────────────────────────────────────────
 
 class FilledCell(BaseModel):
     """One cell that was filled by the LLM."""
@@ -76,8 +75,10 @@ class FilledCell(BaseModel):
         }
 
 
+# ─── Auto-Fill Response (example API, returns JSON) ─────────────────
+
 class AutoFillResponse(BaseModel):
-    """Response for POST /api/auto-fill."""
+    """Response for the example POST /api/example/auto-fill (JSON body)."""
     message: str = Field(
         ...,
         description="Summary of how many cells were filled",
@@ -91,3 +92,28 @@ class AutoFillResponse(BaseModel):
     results: list[FilledCell] = Field(
         ..., description="Details of every cell that was filled"
     )
+
+
+# ─── Auto-Fill Request Payload (real API) ────────────────────────────
+
+class AutoFillRequest(BaseModel):
+    """
+    Multipart form fields for POST /api/rfi/auto-fill.
+
+    | Field   | Type           | Required | Description                                   |
+    |---------|----------------|----------|-----------------------------------------------|
+    | `file`  | UploadFile     | ✅       | The `.xlsx` file to process                   |
+    | `model` | string / null  | ❌       | Ollama model name (default: mistral:7b)       |
+    """
+    model: Optional[str] = Field(
+        default=None,
+        description=f"Ollama model name override (default: {OLLAMA_MODEL})",
+        json_schema_extra={"example": "mistral:7b"},
+    )
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "model": "mistral:7b",
+            }
+        }

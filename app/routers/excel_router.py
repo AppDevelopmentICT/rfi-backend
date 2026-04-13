@@ -21,16 +21,14 @@ ERROR_RESPONSES = {
     },
 }
 
-router = APIRouter(prefix="/api", tags=["Excel"])
+router = APIRouter(prefix="/api/example", tags=["Example (Hardcoded File)"])
 
 
 @router.get(
     "/excel",
-    summary="Read Excel File",
-    description="Return all sheets, all rows, all columns from the RFI Excel file.",
-    responses={
-        404: ERROR_RESPONSES[404],
-    },
+    summary="[Example] Read Hardcoded Excel",
+    description="Return all sheets from the hardcoded RFI-Examples.xlsx file. For testing only.",
+    responses={404: ERROR_RESPONSES[404]},
 )
 def get_excel():
     try:
@@ -44,8 +42,8 @@ def get_excel():
 @router.post(
     "/auto-fill",
     response_model=AutoFillResponse,
-    summary="Auto-Fill with LLM",
-    description="Use the Ollama LLM to fill every empty cell in every sheet of the Excel file.",
+    summary="[Example] Auto-Fill Hardcoded Excel",
+    description="Auto-fill the hardcoded RFI-Examples.xlsx using default LLM model. For testing only.",
     responses={
         404: ERROR_RESPONSES[404],
         422: ERROR_RESPONSES[422],
@@ -69,3 +67,4 @@ async def post_auto_fill():
         )
 
     return result
+

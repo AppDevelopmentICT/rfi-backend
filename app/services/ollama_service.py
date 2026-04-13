@@ -1,4 +1,5 @@
 import re
+from typing import Optional
 import httpx
 from app.config import OLLAMA_API, OLLAMA_MODEL
 
@@ -25,11 +26,21 @@ def _clean_response(text: str) -> str:
     return text.strip()
 
 
-async def ask_ollama(question: str, column_name: str) -> str:
-    """Send a question to the Ollama LLM and return the response."""
+async def ask_ollama(
+    question: str,
+    column_name: str,
+    model: Optional[str] = None,
+) -> str:
+    """Send a question to the Ollama LLM and return the response.
+
+    Args:
+        question:    The RFI/RFP question text.
+        column_name: The column header to fill.
+        model:       Optional model override; defaults to OLLAMA_MODEL from config.
+    """
     url = f"{OLLAMA_API}/api/generate"
     payload = {
-        "model": OLLAMA_MODEL,
+        "model": model or OLLAMA_MODEL,
         "prompt": (
             f"RFI/RFP Question: {question}\n"
             f"Column to fill: '{column_name}'\n"
@@ -55,3 +66,4 @@ async def ask_ollama(question: str, column_name: str) -> str:
             return _clean_response(raw)
     except Exception as e:
         return f"Error: {e}"
+
