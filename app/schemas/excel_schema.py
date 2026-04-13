@@ -59,8 +59,8 @@ class FilledCell(BaseModel):
     """One cell that was filled by the LLM."""
     sheet: str = Field(..., description="Sheet name")
     row: int = Field(..., description="1-indexed row number")
-    column: str = Field(..., description="Column header name")
-    question: str = Field(..., description="The question text from that row")
+    column: str = Field(..., description="Column header name that was filled")
+    context: str = Field(..., description="The context data from filled columns used as LLM input")
     answer: str = Field(..., description="LLM-generated answer")
 
     class Config:
@@ -69,7 +69,7 @@ class FilledCell(BaseModel):
                 "sheet": "Sheet1",
                 "row": 2,
                 "column": "Answer",
-                "question": "Does it support SSO?",
+                "context": "Question: Does it support SSO?\nCategory: Security",
                 "answer": "Mendix supports SSO via SAML 2.0 and OpenID Connect.",
             }
         }
@@ -100,20 +100,26 @@ class AutoFillRequest(BaseModel):
     """
     Multipart form fields for POST /api/rfi/auto-fill.
 
-    | Field   | Type           | Required | Description                                   |
-    |---------|----------------|----------|-----------------------------------------------|
-    | `file`  | UploadFile     | ✅       | The `.xlsx` file to process                   |
-    | `model` | string / null  | ❌       | Ollama model name (default: mistral:7b)       |
+    | Field             | Type           | Required | Description                                                        |
+    |-------------------|----------------|----------|--------------------------------------------------------------------|
+    | `file`            | UploadFile     | ✅       | The `.xlsx` file to process                                        |
+    | `model`           | string / null  | ❌       | Ollama model name (default: mistral:7b)                            |
+    | `context_columns` | string / null  | ❌       | Comma-separated column names for LLM context (auto-detected if omitted) |
+    | `fill_columns`    | string / null  | ❌       | Comma-separated column names for LLM to fill (auto-detected if omitted) |
     """
     model: Optional[str] = Field(
         default=None,
         description=f"Ollama model name override (default: {OLLAMA_MODEL})",
         json_schema_extra={"example": "mistral:7b"},
     )
+    context_columns: Optional[str] = Field(
+        default=None,
+        description="Comma-separated column names to use as LLM context (e.g. 'Question,Category')",
+        json_schema_extra={"example": "Question,Category"},
+    )
+    fill_columns: Optional[str] = Field(
+        default=None,
+        description="Comma-separated column names for the LLM to fill (e.g. 'Answer,Remark')",
+        json_schema_extra={"example": "Answer,Remark"},
+    )
 
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "model": "mistral:7b",
-            }
-        }

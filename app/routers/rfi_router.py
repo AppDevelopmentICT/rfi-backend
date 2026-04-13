@@ -5,7 +5,7 @@ from typing import Optional
 
 from app.config import OLLAMA_MODEL
 from app.services.rfi_service import parse_excel_bytes, auto_fill_bytes
-from app.schemas.excel_schema import AutoFillResponse, ErrorResponse
+from app.schemas.excel_schema import ErrorResponse
 
 # ─── Error responses for OpenAPI docs ────────────────────────────────
 ERROR_RESPONSES = {
@@ -15,7 +15,7 @@ ERROR_RESPONSES = {
     },
     422: {
         "model": ErrorResponse,
-        "description": "Excel file has no fillable data (missing question column or empty sheets)",
+        "description": "Excel file has no fillable data or invalid columns specified",
     },
     502: {
         "model": ErrorResponse,
@@ -61,9 +61,17 @@ async def read_uploaded_excel(
     summary="Auto-Fill Uploaded Excel with LLM",
     description=(
         "Upload an `.xlsx` file and let the LLM fill every empty cell.\n\n"
-        "**Payload:**\n"
-        "- `file` (required) — the `.xlsx` file\n"
-        "- `model` (optional) — Ollama model name (default: `mistral:7b`)\n\n"
+        "**Column detection is fully dynamic:**\n"
+        "- Context columns (input to LLM) = columns where >50% of rows have data\n"
+        "- Fill columns (LLM output) = columns that have empty cells\n\n"
+        "You can optionally override with `context_columns` and `fill_columns`.\n\n"
+        "**Payload (multipart form):**\n"
+        "| Field | Type | Required | Description |\n"
+        "|---|---|---|---|\n"
+        "| `file` | UploadFile | ✅ | The `.xlsx` file |\n"
+        "| `model` | string | ❌ | Ollama model name (default: `mistral:7b`) |\n"
+        "| `context_columns` | string | ❌ | Comma-separated column names to use as LLM context |\n"
+        "| `fill_columns` | string | ❌ | Comma-separated column names for LLM to fill |\n\n"
         "**Returns** the filled `.xlsx` file as a download."
     ),
     responses={
@@ -82,6 +90,14 @@ async def auto_fill_uploaded_excel(
         default=None,
         description=f"Ollama model name (default: {OLLAMA_MODEL})",
     ),
+    context_columns: Optional[str] = Form(
+        default=None,
+        description="Comma-separated column names to use as context/input for the LLM (e.g. 'Question,Category'). If omitted, auto-detected.",
+    ),
+    fill_columns: Optional[str] = Form(
+        default=None,
+        description="Comma-separated column names for the LLM to fill (e.g. 'Answer,Remark'). If omitted, auto-detected.",
+    ),
 ):
     # ── validate file ───────────────────────────────────────────────
     if not file.filename or not file.filename.endswith((".xlsx", ".xls")):
@@ -94,9 +110,26 @@ async def auto_fill_uploaded_excel(
     if not file_bytes:
         raise HTTPException(status_code=404, detail="Uploaded file is empty")
 
+    # ── parse optional column lists ─────────────────────────────────
+    ctx_cols = (
+        [c.strip() for c in context_columns.split(",") if c.strip()]
+        if context_columns
+        else None
+    )
+    fill_cols = (
+        [c.strip() for c in fill_columns.split(",") if c.strip()]
+        if fill_columns
+        else None
+    )
+
     # ── run auto-fill ───────────────────────────────────────────────
     try:
-        result = await auto_fill_bytes(file_bytes, model=model)
+        result = await auto_fill_bytes(
+            file_bytes,
+            model=model,
+            context_columns=ctx_cols,
+            fill_columns=fill_cols,
+        )
     except ConnectionError as e:
         raise HTTPException(status_code=502, detail=f"Ollama service unreachable: {e}")
     except Exception as e:
@@ -105,7 +138,7 @@ async def auto_fill_uploaded_excel(
     if not result["results"]:
         raise HTTPException(
             status_code=422,
-            detail="No fillable cells found — check that sheets have a 'Question' column with empty answer cells",
+            detail="No empty cells found to fill. Either all cells already have data, or no context/fill columns could be detected. Try specifying context_columns and fill_columns explicitly.",
         )
 
     # ── return filled file as download ──────────────────────────────
@@ -119,3 +152,4 @@ async def auto_fill_uploaded_excel(
             "X-AutoFill-Message": result["message"],
         },
     )
+
