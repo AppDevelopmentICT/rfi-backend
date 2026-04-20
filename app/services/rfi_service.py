@@ -1,4 +1,5 @@
 import io
+import uuid
 from typing import Optional
 
 from openpyxl import load_workbook
@@ -63,7 +64,7 @@ def _classify_columns(
     if num_rows == 0:
         return [], []
 
-    # ── user-specified overrides ────────────────────────────────────
+    # user-specified overrides
     header_lower_map = {h.strip().lower(): i for i, h in enumerate(headers)}
 
     if context_columns and fill_columns:
@@ -71,7 +72,7 @@ def _classify_columns(
         fill = [header_lower_map[c.strip().lower()] for c in fill_columns if c.strip().lower() in header_lower_map]
         return ctx, fill
 
-    # ── auto-detect ─────────────────────────────────────────────────
+    # auto-detect
     fill_count = {}   # col_idx -> number of empty cells
     filled_count = {} # col_idx -> number of non-empty cells
 
@@ -210,4 +211,44 @@ async def auto_fill_bytes(
         "message": f"Filled {len(results)} cells",
         "results": results,
     }
+
+def flatten_sheets_to_questions(sheets_data: dict) -> list:
+    """Helper to convert multiple sheets into a flat list of Question objects."""
+    all_questions = []
+    q_counter = 1
+
+    for sheet_name, content in sheets_data.items():
+        headers = content.get("headers", [])
+        data = content.get("data", [])
+
+        # Find the question column
+        question_key = None
+        for h in headers:
+            if "question" in h.lower():
+                question_key = h
+                break
+        
+        if not question_key and headers:
+            # Fallback to first column if no 'Question' header found
+            question_key = headers[0]
+
+        if not question_key:
+            continue
+
+        for row in data:
+            q_text = row.get(question_key)
+            if not q_text or not str(q_text).strip():
+                continue
+            
+            all_questions.append({
+                "id": str(uuid.uuid4()),
+                "number": q_counter,
+                "question": str(q_text).strip(),
+                "answer": "",
+                "originalAnswer": str(row.get("Answer", "") or ""),
+                "status": "idle"
+            })
+            q_counter += 1
+            
+    return all_questions
 
