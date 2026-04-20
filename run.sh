@@ -1,9 +1,10 @@
+#!/bin/bash
 if [ -d "venv" ]; then
-    source venv/Scripts/activate
+    source venv/bin/activate
 else
     python3 -m venv venv
-    source venv/Scripts/activate
-    pip install -r requirements.txt
+    source venv/bin/activate
+    pip install --default-timeout=1000 -r requirements.txt
 fi
-pip install -r requirements.txt --quiet
-uvicorn app.main:app --host 0.0.0.0 --port 1254 --reload
+pip install --default-timeout=1000 -r requirements.txt --quiet
+python run.py
