@@ -9,7 +9,7 @@ from app.schemas.ai_schema import (
     RegenerateResponse
 )
 
-router = APIRouter(prefix="/v1/ai", tags=["AI"])
+router = APIRouter(prefix="/api/v1/ai", tags=["AI"])
 
 @router.post("/generate-all", response_model=GenerateAllResponse)
 async def generate_all(req: GenerateAllRequest, user: dict = Depends(get_current_user)):

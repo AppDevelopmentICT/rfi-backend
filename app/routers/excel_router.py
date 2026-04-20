@@ -21,7 +21,7 @@ ERROR_RESPONSES = {
     },
 }
 
-router = APIRouter(prefix="/api/example", tags=["Example (Hardcoded File)"])
+router = APIRouter(prefix="/api/v1/example", tags=["Example (Hardcoded File)"])
 
 
 @router.get(

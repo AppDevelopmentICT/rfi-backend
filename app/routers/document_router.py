@@ -4,7 +4,7 @@ from app.services.knowledge.storage import document_store
 from app.schemas.ai_schema import UploadDocumentResponse
 from app.core.security import get_current_user
 
-router = APIRouter(prefix="/v1/document", tags=["Document"])
+router = APIRouter(prefix="/api/v1/document", tags=["Document"])
 
 @router.post("/upload", response_model=UploadDocumentResponse)
 async def upload_document(

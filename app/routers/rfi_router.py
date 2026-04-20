@@ -23,7 +23,7 @@ ERROR_RESPONSES = {
     },
 }
 
-router = APIRouter(prefix="/api/rfi", tags=["RFI/RFP"])
+router = APIRouter(prefix="/api/v1/rfi", tags=["RFI/RFP"])
 
 
 
