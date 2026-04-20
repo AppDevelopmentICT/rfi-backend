@@ -74,7 +74,7 @@ async def auto_fill_sheets() -> dict:
             if i == question_col:
                 continue
             low = h.lower()
-            if low in ("no", "no.", "
+            if low in ("no", "no.", "n"):
                 continue
             fill_cols.append(i)
 
