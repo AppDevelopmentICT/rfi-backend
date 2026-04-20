@@ -28,3 +28,9 @@ class RegenerateRequest(BaseModel):
 class RegenerateResponse(BaseModel):
     id: str
     answer: str
+
+class SaveQuestionsRequest(BaseModel):
+    questions: list[Question]
+
+class SaveQuestionsResponse(BaseModel):
+    documentId: str

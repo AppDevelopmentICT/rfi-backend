@@ -6,6 +6,8 @@ from typing import Optional
 from app.config import OLLAMA_MODEL
 from app.services.rfi.core import parse_excel_bytes, auto_fill_bytes
 from app.schemas.excel_schema import ErrorResponse
+from app.schemas.ai_schema import SaveQuestionsRequest, SaveQuestionsResponse
+from app.services.knowledge.storage import document_store
 
 
 ERROR_RESPONSES = {
@@ -53,6 +55,20 @@ async def read_uploaded_excel(
         return parse_excel_bytes(file_bytes)
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"Failed to parse Excel: {e}")
+
+
+@router.post(
+    "/save",
+    summary="Save parsed questions",
+    description="Save questions from column picker to document store. Returns a documentId for subsequent AI calls.",
+    response_model=SaveQuestionsResponse,
+)
+async def save_questions(req: SaveQuestionsRequest):
+    doc_id = document_store.save_document(
+        data={},
+        questions=[q.model_dump() for q in req.questions],
+    )
+    return SaveQuestionsResponse(documentId=doc_id)
 
 
 
