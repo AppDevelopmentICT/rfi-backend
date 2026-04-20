@@ -13,9 +13,7 @@ router = APIRouter(prefix="/api/v1/ai", tags=["AI"])
 
 @router.post("/generate-all", response_model=GenerateAllResponse)
 async def generate_all(req: GenerateAllRequest, user: dict = Depends(get_current_user)):
-    doc = document_store.get_document(req.documentId)
-    if not doc:
-        pass
+    document_store.get_document(req.documentId)
 
     results = []
     for q in req.questions:
@@ -33,10 +31,11 @@ async def generate_all(req: GenerateAllRequest, user: dict = Depends(get_current
 @router.post("/regenerate", response_model=RegenerateResponse)
 async def regenerate(req: RegenerateRequest, user: dict = Depends(get_current_user)):
     doc = document_store.get_document(req.documentId)
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+
     question_text = ""
-    
-    if doc:
-        for q in doc["questions"]:
+    for q in doc["questions"]:
             if q["id"] == req.questionId:
                 question_text = q["question"]
                 break
