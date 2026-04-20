@@ -42,3 +42,11 @@ urllib3==2.6.3
 uvicorn==0.44.0
 watchfiles==1.1.1
 websockets==16.0
+SQLAlchemy==2.0.30
+psycopg2-binary==2.9.9
+pgvector==0.2.5
+langchain==0.2.14
+langchain-community==0.2.12
+langchain-ollama==0.1.1
+langchain-postgres==0.0.12
+psycopg[binary]==3.2.1

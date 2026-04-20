@@ -5,7 +5,7 @@ from typing import Optional
 from openpyxl import load_workbook
 from openpyxl.styles import Alignment
 
-from app.services.ollama_service import ask_ollama
+from app.services.external.ollama import ask_ollama
 
 
 def parse_excel_bytes(file_bytes: bytes) -> dict:
@@ -64,7 +64,7 @@ def _classify_columns(
     if num_rows == 0:
         return [], []
 
-    # user-specified overrides
+
     header_lower_map = {h.strip().lower(): i for i, h in enumerate(headers)}
 
     if context_columns and fill_columns:
@@ -72,9 +72,9 @@ def _classify_columns(
         fill = [header_lower_map[c.strip().lower()] for c in fill_columns if c.strip().lower() in header_lower_map]
         return ctx, fill
 
-    # auto-detect
-    fill_count = {}   # col_idx -> number of empty cells
-    filled_count = {} # col_idx -> number of non-empty cells
+
+    fill_count = {}
+    filled_count = {}
 
     for col_idx in range(len(headers)):
         empty = 0
@@ -97,17 +97,17 @@ def _classify_columns(
 
         if has_empties:
             fill_indices.append(col_idx)
-            # also treat as context if it has substantial data (>50%)
+
             if fill_ratio > 0.5:
                 ctx_indices.append(col_idx)
         else:
-            # fully filled — context only
+
             ctx_indices.append(col_idx)
 
-    # if user specified only context_columns, auto-detect fill
+
     if context_columns:
         ctx_indices = [header_lower_map[c.strip().lower()] for c in context_columns if c.strip().lower() in header_lower_map]
-    # if user specified only fill_columns, auto-detect context
+
     if fill_columns:
         fill_indices = [header_lower_map[c.strip().lower()] for c in fill_columns if c.strip().lower() in header_lower_map]
 
@@ -169,16 +169,16 @@ async def auto_fill_bytes(
         if not ctx_indices or not fill_indices:
             continue
 
-        # iterate rows and fill empty cells
+
         for row_idx, row in enumerate(data_rows, start=2):
             context_prompt = _build_context_prompt(headers, row, ctx_indices)
             if not context_prompt.strip():
-                continue  # no context data in this row, skip
+                continue
 
             for col_idx in fill_indices:
                 existing = row[col_idx] if col_idx < len(row) else None
                 if existing is not None and str(existing).strip() != "":
-                    continue  # already has data, skip
+                    continue
 
                 col_header = headers[col_idx]
                 answer = await ask_ollama(
@@ -200,7 +200,7 @@ async def auto_fill_bytes(
                     }
                 )
 
-    # save to in-memory buffer
+
     output_buf = io.BytesIO()
     wb.save(output_buf)
     wb.close()
@@ -221,7 +221,7 @@ def flatten_sheets_to_questions(sheets_data: dict) -> list:
         headers = content.get("headers", [])
         data = content.get("data", [])
 
-        # Find the question column
+
         question_key = None
         for h in headers:
             if "question" in h.lower():
@@ -229,7 +229,7 @@ def flatten_sheets_to_questions(sheets_data: dict) -> list:
                 break
         
         if not question_key and headers:
-            # Fallback to first column if no 'Question' header found
+
             question_key = headers[0]
 
         if not question_key:

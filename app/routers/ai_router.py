@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from app.core.security import get_current_user
-from app.services.ollama_service import ask_ollama
-from app.services.document_store import document_store
+from app.services.external.ollama import ask_ollama
+from app.services.knowledge.storage import document_store
 from app.schemas.ai_schema import (
     GenerateAllRequest, 
     GenerateAllResponse, 

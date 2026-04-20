@@ -4,10 +4,10 @@ import io
 from typing import Optional
 
 from app.config import OLLAMA_MODEL
-from app.services.rfi_service import parse_excel_bytes, auto_fill_bytes
+from app.services.rfi.core import parse_excel_bytes, auto_fill_bytes
 from app.schemas.excel_schema import ErrorResponse
 
-# ─── Error responses for OpenAPI docs ────────────────────────────────
+
 ERROR_RESPONSES = {
     404: {
         "model": ErrorResponse,
@@ -26,7 +26,7 @@ ERROR_RESPONSES = {
 router = APIRouter(prefix="/api/rfi", tags=["RFI/RFP"])
 
 
-# ─── POST /api/rfi/read — upload Excel and get parsed data ──────────
+
 @router.post(
     "/read",
     summary="Read Uploaded Excel",
@@ -55,7 +55,7 @@ async def read_uploaded_excel(
         raise HTTPException(status_code=502, detail=f"Failed to parse Excel: {e}")
 
 
-# ─── POST /api/rfi/auto-fill — upload Excel, fill with LLM, download ─
+
 @router.post(
     "/auto-fill",
     summary="Auto-Fill Uploaded Excel with LLM",
@@ -99,7 +99,7 @@ async def auto_fill_uploaded_excel(
         description="Comma-separated column names for the LLM to fill (e.g. 'Answer,Remark'). If omitted, auto-detected.",
     ),
 ):
-    # ── validate file ───────────────────────────────────────────────
+
     if not file.filename or not file.filename.endswith((".xlsx", ".xls")):
         raise HTTPException(
             status_code=422,
@@ -110,7 +110,7 @@ async def auto_fill_uploaded_excel(
     if not file_bytes:
         raise HTTPException(status_code=404, detail="Uploaded file is empty")
 
-    # ── parse optional column lists ─────────────────────────────────
+
     ctx_cols = (
         [c.strip() for c in context_columns.split(",") if c.strip()]
         if context_columns
@@ -122,7 +122,7 @@ async def auto_fill_uploaded_excel(
         else None
     )
 
-    # ── run auto-fill ───────────────────────────────────────────────
+
     try:
         result = await auto_fill_bytes(
             file_bytes,
@@ -141,7 +141,7 @@ async def auto_fill_uploaded_excel(
             detail="No empty cells found to fill. Either all cells already have data, or no context/fill columns could be detected. Try specifying context_columns and fill_columns explicitly.",
         )
 
-    # ── return filled file as download ──────────────────────────────
+
     output_filename = file.filename.rsplit(".", 1)[0] + "_answered.xlsx"
 
     return StreamingResponse(

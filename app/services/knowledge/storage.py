@@ -3,14 +3,14 @@ from typing import Dict, Any, Optional
 
 class DocumentStore:
     def __init__(self):
-        # Maps document_id (str) -> { "sheets": dict, "questions": list }
+
         self._store: Dict[str, Any] = {}
 
     def save_document(self, data: Dict[str, Any], questions: list) -> str:
         doc_id = str(uuid.uuid4())
         self._store[doc_id] = {
-            "data": data, # Raw parsed sheets
-            "questions": questions # Flattened Question objects
+            "data": data,
+            "questions": questions
         }
         return doc_id
 
@@ -25,5 +25,5 @@ class DocumentStore:
                     return True
         return False
 
-# Global singleton
+
 document_store = DocumentStore()

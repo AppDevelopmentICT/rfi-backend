@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 from app.config import OLLAMA_MODEL
 
 
-# ─── Shared Error Schema ────────────────────────────────────────────
+
 
 class ErrorResponse(BaseModel):
     """Standard error envelope returned by every error response."""
@@ -17,7 +17,7 @@ class ErrorResponse(BaseModel):
         }
 
 
-# ─── Sheet Data (used by both example and real APIs) ────────────────
+
 
 class SheetData(BaseModel):
     """One sheet's content: headers list + rows as dicts."""
@@ -53,7 +53,7 @@ class ExcelReadResponse(BaseModel):
         }
 
 
-# ─── Filled Cell ────────────────────────────────────────────────────
+
 
 class FilledCell(BaseModel):
     """One cell that was filled by the LLM."""
@@ -75,7 +75,7 @@ class FilledCell(BaseModel):
         }
 
 
-# ─── Auto-Fill Response (example API, returns JSON) ─────────────────
+
 
 class AutoFillResponse(BaseModel):
     """Response for the example POST /api/example/auto-fill (JSON body)."""
@@ -94,7 +94,7 @@ class AutoFillResponse(BaseModel):
     )
 
 
-# ─── Auto-Fill Request Payload (real API) ────────────────────────────
+
 
 class AutoFillRequest(BaseModel):
     """

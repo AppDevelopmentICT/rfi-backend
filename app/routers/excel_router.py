@@ -1,11 +1,11 @@
 from fastapi import APIRouter, HTTPException
-from app.services.excel_service import read_all_sheets, auto_fill_sheets
+from app.services.rfi.excel import read_all_sheets, auto_fill_sheets
 from app.schemas.excel_schema import (
     AutoFillResponse,
     ErrorResponse,
 )
 
-# ─── Shared error responses shown in OpenAPI docs ────────────────────
+
 ERROR_RESPONSES = {
     404: {
         "model": ErrorResponse,

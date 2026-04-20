@@ -3,7 +3,7 @@ from openpyxl import load_workbook
 from openpyxl.styles import Alignment
 
 from app.config import SOURCE_FILE, FILES_DIR
-from app.services.ollama_service import ask_ollama
+from app.services.external.ollama import ask_ollama
 
 
 def _load_workbook():
@@ -58,7 +58,7 @@ async def auto_fill_sheets() -> dict:
             str(h).strip() if h is not None else "" for h in all_rows[0]
         ]
 
-        # find the question column
+
         question_col = None
         for i, h in enumerate(headers):
             if "question" in h.lower():
@@ -68,20 +68,20 @@ async def auto_fill_sheets() -> dict:
         if question_col is None:
             continue
 
-        # find every column that needs filling
+
         fill_cols = []
         for i, h in enumerate(headers):
             if i == question_col:
                 continue
             low = h.lower()
-            if low in ("no", "no.", "#", "number", ""):
+            if low in ("no", "no.", "
                 continue
             fill_cols.append(i)
 
         if not fill_cols:
             continue
 
-        # iterate rows and fill empty cells
+
         for row_idx, row in enumerate(all_rows[1:], start=2):
             question = row[question_col]
             if not question or str(question).strip() == "":
@@ -90,7 +90,7 @@ async def auto_fill_sheets() -> dict:
             for col_idx in fill_cols:
                 existing = row[col_idx] if col_idx < len(row) else None
                 if existing is not None and str(existing).strip() != "":
-                    continue  # already answered, skip
+                    continue
 
                 col_header = headers[col_idx]
                 answer = await ask_ollama(str(question).strip(), col_header)

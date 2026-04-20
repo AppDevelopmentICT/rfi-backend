@@ -3,7 +3,7 @@ from typing import Optional
 import httpx
 from app.config import OLLAMA_API, OLLAMA_MODEL
 
-# Words the LLM might use instead of a clean Yes/No
+
 _YES_SYNONYMS = {
     "capable", "supported", "available", "compliant", "included",
     "provided", "enabled", "compatible", "implemented", "offered",
@@ -21,22 +21,22 @@ def _normalize_boolean(text: str) -> str | None:
     """If text looks like a boolean/capability answer, normalize to Yes/No/N/A."""
     lower = text.lower().strip().rstrip(".,;:!").strip()
 
-    # exact match
+
     if lower in ("yes", "no", "n/a"):
         return lower.capitalize() if lower != "n/a" else "N/A"
 
-    # synonym match
+
     if lower in _YES_SYNONYMS:
         return "Yes"
     if lower in _NO_SYNONYMS:
         return "No"
 
-    # starts with Yes/No + explanation (e.g. "Yes, it supports...")
+
     m = re.match(r"^(yes|no)\b[.,;:\-\u2014\u2013\s]", lower)
     if m:
         return m.group(1).capitalize()
 
-    # "Capable/No" or "Yes/No" style
+
     m = re.match(r"^(\w+)\s*/\s*(\w+)$", lower)
     if m:
         w1, w2 = m.group(1).lower(), m.group(2).lower()
@@ -49,21 +49,21 @@ def _normalize_boolean(text: str) -> str | None:
         if w2 in _NO_SYNONYMS or w2 == "no":
             return "No"
 
-    return None  # not a boolean answer
+    return None
 
 
 def _clean_response(text: str) -> str:
     """Strip thinking tags, markdown formatting, and normalize output."""
-    # Remove <think>...</think> blocks (qwen3 thinking mode)
+
     text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)
 
-    # Remove markdown bold markers
+
     text = re.sub(r"\*\*(.+?)\*\*", r"\1", text)
 
-    # Remove markdown bullet points
+
     text = re.sub(r"^\s*[-*\u2022]\s+", "", text, flags=re.MULTILINE)
 
-    # Remove leading labels like "Why?", "Answer:", "Response:", etc.
+
     text = re.sub(
         r"^\s*(Why\??|Answer:?|Response:?|Note:?)\s*",
         "",
@@ -73,19 +73,19 @@ def _clean_response(text: str) -> str:
 
     text = text.strip()
 
-    # Try to normalize to a single consistent word
+
     normalized = _normalize_boolean(text)
     if normalized is not None:
         return normalized
 
-    # For multi-word answers, clean up leading "Yes—"/"No—" preamble
+
     text = re.sub(r"^\s*(Yes|No)\s*[\u2014\u2013\-:,]\s*", "", text, flags=re.IGNORECASE)
 
-    # Strip conversational filler from the start of explanations
+
     filler_pattern = r"^\s*(Here is a simple explanation:?|Here is the answer:?|The explanation is:?|This means that|Basically,?|Simply put,?)\s*"
     text = re.sub(filler_pattern, "", text, flags=re.IGNORECASE)
     
-    # Capitalize the first letter if it got stripped by the regex
+
     if text:
         text = text[0].upper() + text[1:]
 

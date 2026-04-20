@@ -11,7 +11,7 @@ from app.config import API_AUTH_SECRET
 
 
 REQUEST_LOGS: Dict[str, List[float]] = defaultdict(list)
-RATE_LIMIT_STASH_TIME = 60 # 1 minute
+RATE_LIMIT_STASH_TIME = 60
 MAX_REQUESTS_PER_MINUTE = 60
 
 class RateLimitMiddleware(BaseHTTPMiddleware):

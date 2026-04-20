@@ -1,6 +1,6 @@
 from fastapi import APIRouter, File, HTTPException, UploadFile, Depends
-from app.services.rfi_service import parse_excel_bytes, flatten_sheets_to_questions
-from app.services.document_store import document_store
+from app.services.rfi.core import parse_excel_bytes, flatten_sheets_to_questions
+from app.services.knowledge.storage import document_store
 from app.schemas.ai_schema import UploadDocumentResponse
 from app.core.security import get_current_user
 
