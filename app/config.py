@@ -27,6 +27,7 @@ API_AUTH_SECRET = os.getenv("API_AUTH_SECRET", "change-me-in-production")
 
 
 os.environ["OLLAMA_BASE_URL"] = OLLAMA_API
+os.environ["OLLAMA_HOST"] = OLLAMA_API
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
