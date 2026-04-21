@@ -21,6 +21,7 @@ async def _run_ingestion(
     db: Session,
     minio_key: Optional[str] = None,
     source: str = "upload",
+    minio_etag: Optional[str] = None,
 ):
     """Core ingestion logic shared by both upload and sync paths."""
     logger.info(f"Starting Langchain ingestion pipeline for {filename}")
@@ -29,6 +30,7 @@ async def _run_ingestion(
         filename=filename,
         status="processing",
         minio_key=minio_key,
+        minio_etag=minio_etag,
         source=source,
     )
     db.add(new_doc)
@@ -103,10 +105,11 @@ async def process_document_pipeline(
     db: Session,
     minio_key: Optional[str] = None,
     source: str = "upload",
+    minio_etag: Optional[str] = None,
 ):
     """Ingest from an UploadFile (HTTP upload path)."""
     file_bytes = await file.read()
-    return await _run_ingestion(file_bytes, file.filename, db, minio_key, source)
+    return await _run_ingestion(file_bytes, file.filename, db, minio_key, source, minio_etag)
 
 
 async def process_document_pipeline_from_bytes(
@@ -115,7 +118,8 @@ async def process_document_pipeline_from_bytes(
     db: Session,
     minio_key: Optional[str] = None,
     source: str = "minio",
+    minio_etag: Optional[str] = None,
 ):
     """Ingest from raw bytes (MinIO sync path)."""
-    return await _run_ingestion(file_bytes, filename, db, minio_key, source)
+    return await _run_ingestion(file_bytes, filename, db, minio_key, source, minio_etag)
 
