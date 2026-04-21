@@ -22,6 +22,13 @@ LANGCHAIN_DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psyco
 DOCLING_API = os.getenv("DOCLING_API", "http://localhost:5001")
 
 
+MINIO_ENDPOINT = os.getenv("MINIO_ENDPOINT", "localhost:9000")
+MINIO_ACCESS_KEY = os.getenv("MINIO_ACCESS_KEY", "")
+MINIO_SECRET_KEY = os.getenv("MINIO_SECRET_KEY", "")
+MINIO_BUCKET = os.getenv("MINIO_BUCKET", "rfi")
+MINIO_SECURE = os.getenv("MINIO_SECURE", "false").lower() == "true"
+
+
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
 API_AUTH_SECRET = os.getenv("API_AUTH_SECRET", "change-me-in-production")
 
