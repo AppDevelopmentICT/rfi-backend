@@ -1,6 +1,13 @@
 import httpx
 import logging
-from app.config import DOCLING_API
+from app.config import (
+    DOCLING_API,
+    DOCLING_OCR_LANG,
+    DOCLING_INCLUDE_IMAGES,
+    DOCLING_TABLE_MODE,
+    DOCLING_DOCUMENT_TIMEOUT,
+    DOCLING_ABORT_ON_ERROR,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -11,34 +18,46 @@ async def parse_document(file_bytes: bytes, filename: str) -> str:
     files = {
         'files': (filename, file_bytes, 'application/octet-stream')
     }
+
+    data = {
+        'to_formats': ['md'],
+        'do_ocr': 'true',
+        'ocr_lang': DOCLING_OCR_LANG,
+        'do_table_structure': 'true',
+        'table_mode': DOCLING_TABLE_MODE,
+        'include_images': str(DOCLING_INCLUDE_IMAGES).lower(),
+        'abort_on_error': str(DOCLING_ABORT_ON_ERROR).lower(),
+    }
     
     try:
-        async with httpx.AsyncClient(timeout=120.0) as client:
-            response = await client.post(endpoint, files=files)
+        async with httpx.AsyncClient(timeout=DOCLING_DOCUMENT_TIMEOUT) as client:
+            response = await client.post(endpoint, files=files, data=data)
             if response.status_code != 200:
                 logger.error(f"Docling Error: {response.text}")
                 raise Exception(f"Docling returned status {response.status_code}")
             
             try:
-                data = response.json()
-                logger.info(f"Docling response keys: {list(data.keys())}")
-                
+                result = response.json()
 
-                if "results" in data and isinstance(data["results"], list) and len(data["results"]) > 0:
+                doc = result.get("document", {})
+                md = doc.get("md_content")
+                if md:
+                    return md
+
+                if "results" in result and isinstance(result["results"], list):
                     texts = []
-                    for result in data["results"]:
-                        content = result.get("markdown") or result.get("text", "")
+                    for r in result["results"]:
+                        content = r.get("markdown") or r.get("text", "")
                         if content:
                             texts.append(content)
                     if texts:
                         return "\n\n".join(texts)
-                
-                content = data.get("markdown") or data.get("text")
+
+                content = result.get("markdown") or result.get("text")
                 if content:
                     return content
-                
 
-                return str(data)
+                return str(result)
             except Exception as e:
                 logger.warning(f"Failed to parse Docling JSON: {e}. Returning raw text.")
                 return response.text

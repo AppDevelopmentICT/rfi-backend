@@ -20,6 +20,11 @@ LANGCHAIN_DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psyco
 
 
 DOCLING_API = os.getenv("DOCLING_API", "http://localhost:5001")
+DOCLING_OCR_LANG = [lang.strip() for lang in os.getenv("DOCLING_OCR_LANG", "en,id").split(",") if lang.strip()]
+DOCLING_INCLUDE_IMAGES = os.getenv("DOCLING_INCLUDE_IMAGES", "false").lower() == "true"
+DOCLING_TABLE_MODE = os.getenv("DOCLING_TABLE_MODE", "fast")
+DOCLING_DOCUMENT_TIMEOUT = float(os.getenv("DOCLING_DOCUMENT_TIMEOUT", "180"))
+DOCLING_ABORT_ON_ERROR = os.getenv("DOCLING_ABORT_ON_ERROR", "true").lower() == "true"
 
 
 MINIO_ENDPOINT = os.getenv("MINIO_ENDPOINT", "localhost:9000")
