@@ -3,7 +3,6 @@ import logging
 from app.config import (
     DOCLING_API,
     DOCLING_OCR_LANG,
-    DOCLING_INCLUDE_IMAGES,
     DOCLING_TABLE_MODE,
     DOCLING_DOCUMENT_TIMEOUT,
     DOCLING_ABORT_ON_ERROR,
@@ -21,11 +20,13 @@ async def parse_document(file_bytes: bytes, filename: str) -> str:
 
     data = {
         'to_formats': ['md'],
+        'image_export_mode': 'embedded',
+        'pipeline_type': 'standard',
         'do_ocr': 'true',
+        'ocr_engine': 'tesseract',
         'ocr_lang': DOCLING_OCR_LANG,
         'do_table_structure': 'true',
         'table_mode': DOCLING_TABLE_MODE,
-        'include_images': str(DOCLING_INCLUDE_IMAGES).lower(),
         'abort_on_error': str(DOCLING_ABORT_ON_ERROR).lower(),
     }
     

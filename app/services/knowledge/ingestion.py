@@ -91,7 +91,12 @@ async def _run_ingestion(
         db.commit()
         logger.info(f"Successfully processed and stored {filename}!")
         
-        return {"status": "success", "document_id": new_doc.id, "chunks_processed": len(chunks)}
+        return {
+            "status": "success",
+            "document_id": new_doc.id,
+            "chunks_processed": len(chunks),
+            "docling_markdown": parsed_text,
+        }
         
     except Exception as e:
         logger.error(f"Ingestion pipeline failed for {filename}: {e}")
