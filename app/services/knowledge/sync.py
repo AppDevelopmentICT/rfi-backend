@@ -1,16 +1,17 @@
+import asyncio
 import logging
 from typing import Dict, Any, List
 from sqlalchemy.orm import Session
 from sqlalchemy import text
-from app.db.database import Document
+from app.db.database import Document, SessionLocal
 from app.services.external.minio_client import list_bucket_objects, download_object
 from app.services.knowledge.ingestion import process_document_pipeline_from_bytes
 from app.config import LANGCHAIN_DATABASE_URL
 
 logger = logging.getLogger(__name__)
 
-# Supported file extensions for knowledge base ingestion
 SUPPORTED_EXTENSIONS = {".pdf", ".docx", ".txt", ".md", ".doc"}
+MAX_CONCURRENT_INGESTS = 5
 
 
 def _get_file_extension(filename: str) -> str:
@@ -91,63 +92,81 @@ async def sync_knowledge_base(db: Session) -> Dict[str, Any]:
     updated_files = []
     errors = []
 
-    # 4. Ingest new files
-    for key in new_keys:
-        try:
-            logger.info(f"Ingesting new file from MinIO: {key}")
-            file_bytes = download_object(key)
-            filename = key.rsplit("/", 1)[-1] if "/" in key else key
-            etag = minio_keys[key].get("etag", "")
+    async def _ingest_new(key: str, semaphore: asyncio.Semaphore):
+        async with semaphore:
+            try:
+                logger.info(f"Ingesting new file from MinIO: {key}")
+                file_bytes = download_object(key)
+                filename = key.rsplit("/", 1)[-1] if "/" in key else key
+                etag = minio_keys[key].get("etag", "")
 
-            result = await process_document_pipeline_from_bytes(
-                file_bytes=file_bytes,
-                filename=filename,
-                db=db,
-                minio_key=key,
-                source="minio",
-                minio_etag=etag,
-            )
-            added_files.append({
-                "key": key,
-                "filename": filename,
-                "document_id": result["document_id"],
-                "chunks_processed": result["chunks_processed"],
-            })
-        except Exception as e:
-            logger.error(f"Failed to ingest '{key}': {e}")
-            errors.append({"key": key, "error": str(e)})
+                result = await process_document_pipeline_from_bytes(
+                    file_bytes=file_bytes,
+                    filename=filename,
+                    minio_key=key,
+                    source="minio",
+                    minio_etag=etag,
+                )
+                return {"type": "added", "data": {
+                    "key": key,
+                    "filename": filename,
+                    "document_id": result["document_id"],
+                    "chunks_processed": result["chunks_processed"],
+                }}
+            except Exception as e:
+                logger.error(f"Failed to ingest '{key}': {e}")
+                return {"type": "error", "data": {"key": key, "error": str(e)}}
 
-    # 4b. Re-ingest updated files (delete old vectors first, then re-ingest)
-    for key in updated_keys:
-        try:
-            existing_doc = existing_keys[key]
-            logger.info(f"Re-ingesting updated file from MinIO: {key} (etag changed)")
-            _delete_document_vectors(existing_doc.id, db)
-            db.delete(existing_doc)
-            db.commit()
+    async def _reingest_updated(key: str, semaphore: asyncio.Semaphore):
+        async with semaphore:
+            try:
+                existing_doc = existing_keys[key]
+                logger.info(f"Re-ingesting updated file from MinIO: {key} (etag changed)")
+                task_db = SessionLocal()
+                try:
+                    _delete_document_vectors(existing_doc.id, task_db)
+                    doc_to_delete = task_db.query(Document).filter(Document.id == existing_doc.id).first()
+                    if doc_to_delete:
+                        task_db.delete(doc_to_delete)
+                    task_db.commit()
+                finally:
+                    task_db.close()
 
-            file_bytes = download_object(key)
-            filename = key.rsplit("/", 1)[-1] if "/" in key else key
-            etag = minio_keys[key].get("etag", "")
+                file_bytes = download_object(key)
+                filename = key.rsplit("/", 1)[-1] if "/" in key else key
+                etag = minio_keys[key].get("etag", "")
 
-            result = await process_document_pipeline_from_bytes(
-                file_bytes=file_bytes,
-                filename=filename,
-                db=db,
-                minio_key=key,
-                source="minio",
-                minio_etag=etag,
-            )
-            updated_files.append({
-                "key": key,
-                "filename": filename,
-                "document_id": result["document_id"],
-                "chunks_processed": result["chunks_processed"],
-            })
-        except Exception as e:
-            logger.error(f"Failed to re-ingest updated file '{key}': {e}")
-            db.rollback()
-            errors.append({"key": key, "error": str(e)})
+                result = await process_document_pipeline_from_bytes(
+                    file_bytes=file_bytes,
+                    filename=filename,
+                    minio_key=key,
+                    source="minio",
+                    minio_etag=etag,
+                )
+                return {"type": "updated", "data": {
+                    "key": key,
+                    "filename": filename,
+                    "document_id": result["document_id"],
+                    "chunks_processed": result["chunks_processed"],
+                }}
+            except Exception as e:
+                logger.error(f"Failed to re-ingest updated file '{key}': {e}")
+                return {"type": "error", "data": {"key": key, "error": str(e)}}
+
+    semaphore = asyncio.Semaphore(MAX_CONCURRENT_INGESTS)
+
+    new_tasks = [_ingest_new(k, semaphore) for k in new_keys]
+    update_tasks = [_reingest_updated(k, semaphore) for k in updated_keys]
+
+    results = await asyncio.gather(*(new_tasks + update_tasks))
+
+    for r in results:
+        if r["type"] == "added":
+            added_files.append(r["data"])
+        elif r["type"] == "updated":
+            updated_files.append(r["data"])
+        elif r["type"] == "error":
+            errors.append(r["data"])
     
     # 5. Hard delete removed files
     for key in removed_keys:

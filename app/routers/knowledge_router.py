@@ -15,7 +15,6 @@ router = APIRouter(prefix="/api/v1/knowledge", tags=["Knowledge Base"])
 @router.post("/ingest")
 async def ingest_document(
     file: UploadFile = File(..., description="A file to upload into the Knowledge Base (PDF, DOCX, TXT)"),
-    db: Session = Depends(get_db),
     user: dict = Depends(get_current_user)
 ):
     """
@@ -30,8 +29,7 @@ async def ingest_document(
         )
 
     try:
-
-        result = await process_document_pipeline(file, db)
+        result = await process_document_pipeline(file)
         return result
     except Exception as e:
         logger.error(f"Failed to process and ingest document {file.filename}: {str(e)}")
@@ -56,7 +54,7 @@ async def sync_from_minio(
 
 
 @router.get("/documents")
-async def list_documents(
+def list_documents(
     db: Session = Depends(get_db),
     user: dict = Depends(get_current_user)
 ):
@@ -82,7 +80,7 @@ async def list_documents(
 
 
 @router.delete("/documents/{document_id}")
-async def delete_document(
+def delete_document(
     document_id: int,
     db: Session = Depends(get_db),
     user: dict = Depends(get_current_user)
