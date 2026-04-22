@@ -71,3 +71,18 @@ def download_object(key: str) -> bytes:
         if response:
             response.close()
             response.release_conn()
+
+
+def delete_object(key: str) -> bool:
+    client = get_minio_client()
+
+    try:
+        client.remove_object(MINIO_BUCKET, key)
+        logger.info(f"Deleted '{key}' from MinIO bucket '{MINIO_BUCKET}'")
+        return True
+    except S3Error as e:
+        logger.error(f"MinIO S3Error deleting '{key}': {e}")
+        raise
+    except Exception as e:
+        logger.error(f"Error deleting '{key}' from MinIO: {e}")
+        raise

@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 from app.services.knowledge.ingestion import process_document_pipeline
 from app.services.knowledge.sync import sync_knowledge_base
+from app.services.external.minio_client import delete_object as minio_delete_object
 from app.db.database import get_db, Document
 from app.core.security import get_current_user
 import logging
@@ -86,13 +87,12 @@ async def delete_document(
     db: Session = Depends(get_db),
     user: dict = Depends(get_current_user)
 ):
-    """Hard delete a document and all its vector chunks."""
+    """Hard delete a document, its vector chunks, and its MinIO object."""
     doc = db.query(Document).filter(Document.id == document_id).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
 
     try:
-        # Delete vector chunks
         result = db.execute(
             text(
                 "DELETE FROM langchain_pg_embedding "
@@ -102,7 +102,12 @@ async def delete_document(
         )
         deleted_chunks = result.rowcount
 
-        # Delete document record
+        if doc.minio_key:
+            try:
+                minio_delete_object(doc.minio_key)
+            except Exception as minio_err:
+                logger.warning(f"MinIO delete failed for '{doc.minio_key}': {minio_err}")
+
         db.delete(doc)
         db.commit()
 
