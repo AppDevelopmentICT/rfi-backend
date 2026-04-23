@@ -8,6 +8,7 @@ from app.db.database import get_db, Document
 from app.core.security import get_current_user
 from app.schemas.knowledge_schema import SortField, SortDirection
 from typing import List
+from pydantic import BaseModel
 import logging
 import math
 
@@ -157,4 +158,54 @@ def delete_document(
         db.rollback()
         logger.error(f"Failed to delete document {document_id}: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+class BulkDeleteRequest(BaseModel):
+    document_ids: List[int]
+
+
+@router.post("/documents/bulk-delete")
+def bulk_delete_documents(
+    req: BulkDeleteRequest,
+    db: Session = Depends(get_db),
+    user: dict = Depends(get_current_user),
+):
+    """Bulk delete documents, their vector chunks, and MinIO objects."""
+    deleted = 0
+    failed = []
+
+    for doc_id in req.document_ids:
+        doc = db.query(Document).filter(Document.id == doc_id).first()
+        if not doc:
+            failed.append({"id": doc_id, "error": "not found"})
+            continue
+
+        try:
+            db.execute(
+                text(
+                    "DELETE FROM langchain_pg_embedding "
+                    "WHERE cmetadata->>'document_id' = :doc_id"
+                ),
+                {"doc_id": str(doc_id)},
+            )
+
+            if doc.minio_key:
+                try:
+                    minio_delete_object(doc.minio_key)
+                except Exception as minio_err:
+                    logger.warning(f"MinIO delete failed for '{doc.minio_key}': {minio_err}")
+
+            db.delete(doc)
+            deleted += 1
+        except Exception as e:
+            failed.append({"id": doc_id, "error": str(e)})
+            logger.error(f"Failed to delete document {doc_id}: {e}")
+
+    if deleted > 0:
+        db.commit()
+    else:
+        db.rollback()
+
+    logger.info(f"Bulk deleted {deleted} documents, {len(failed)} failed")
+    return {"deleted": deleted, "failed": failed}
 
