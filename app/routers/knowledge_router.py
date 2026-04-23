@@ -1,4 +1,4 @@
-from fastapi import APIRouter, File, HTTPException, UploadFile, Depends
+from fastapi import APIRouter, File, HTTPException, UploadFile, Depends, Query, Body
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from app.services.knowledge.ingestion import process_document_pipeline
@@ -6,7 +6,10 @@ from app.services.knowledge.sync import sync_knowledge_base
 from app.services.external.minio_client import delete_object as minio_delete_object
 from app.db.database import get_db, Document
 from app.core.security import get_current_user
+from app.schemas.knowledge_schema import SortField, SortDirection
+from typing import List
 import logging
+import math
 
 logger = logging.getLogger(__name__)
 
@@ -55,12 +58,43 @@ async def sync_from_minio(
 
 @router.get("/documents")
 def list_documents(
+    search: str = Query("", description="Search query for filename, source, or status"),
+    sort_by: SortField = Query(SortField.created_at, description="Field to sort by"),
+    sort_dir: SortDirection = Query(SortDirection.desc, description="Sort direction"),
+    page: int = Query(1, ge=1, description="Page number"),
+    per_page: int = Query(20, ge=1, le=100, description="Items per page"),
     db: Session = Depends(get_db),
     user: dict = Depends(get_current_user)
 ):
-    """List all documents in the knowledge base."""
+    """List documents with search, sort, and pagination."""
     try:
-        docs = db.query(Document).order_by(Document.id.desc()).all()
+        query = db.query(Document)
+
+        if search.strip():
+            pattern = f"%{search.strip()}%"
+            query = query.filter(
+                Document.filename.ilike(pattern)
+                | Document.source.ilike(pattern)
+                | Document.status.ilike(pattern)
+            )
+
+        total = query.count()
+
+        sort_column = getattr(Document, sort_by.value, Document.created_at)
+        if sort_dir == SortDirection.desc:
+            sort_column = sort_column.desc()
+        else:
+            sort_column = sort_column.asc()
+
+        docs = (
+            query.order_by(sort_column)
+            .offset((page - 1) * per_page)
+            .limit(per_page)
+            .all()
+        )
+
+        total_pages = math.ceil(total / per_page) if total > 0 else 1
+
         return {
             "documents": [
                 {
@@ -69,10 +103,14 @@ def list_documents(
                     "status": doc.status,
                     "source": doc.source or "upload",
                     "minio_key": doc.minio_key,
+                    "created_at": doc.created_at.isoformat() if doc.created_at else None,
                 }
                 for doc in docs
             ],
-            "total": len(docs),
+            "total": total,
+            "page": page,
+            "per_page": per_page,
+            "total_pages": total_pages,
         }
     except Exception as e:
         logger.error(f"Failed to list documents: {str(e)}")
