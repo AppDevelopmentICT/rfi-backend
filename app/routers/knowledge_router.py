@@ -1,16 +1,18 @@
 from fastapi import APIRouter, File, HTTPException, UploadFile, Depends, Query, Body
+from fastapi.responses import Response
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from app.services.knowledge.ingestion import process_document_pipeline
 from app.services.knowledge.sync import sync_knowledge_base
-from app.services.external.minio_client import delete_object as minio_delete_object
+from app.services.external.minio_client import delete_object as minio_delete_object, download_object
 from app.db.database import get_db, Document
 from app.core.security import get_current_user
 from app.schemas.knowledge_schema import SortField, SortDirection
-from typing import List
+from typing import List, Dict
 from pydantic import BaseModel
 import logging
 import math
+import mimetypes
 
 logger = logging.getLogger(__name__)
 
@@ -208,4 +210,40 @@ def bulk_delete_documents(
 
     logger.info(f"Bulk deleted {deleted} documents, {len(failed)} failed")
     return {"deleted": deleted, "failed": failed}
+
+
+@router.get("/download/{filename}")
+def download_document(
+    filename: str,
+    db: Session = Depends(get_db),
+    user: dict = Depends(get_current_user),
+):
+    """Download a knowledge base document by filename."""
+    doc = db.query(Document).filter(Document.filename == filename).first()
+    if not doc:
+        raise HTTPException(status_code=404, detail=f"Document '{filename}' not found")
+
+    if not doc.minio_key:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Document '{filename}' has no MinIO storage key. It may have been uploaded without a file reference.",
+        )
+
+    try:
+        file_bytes = download_object(doc.minio_key)
+    except Exception as e:
+        logger.error(f"Failed to download '{filename}' from MinIO: {e}")
+        raise HTTPException(status_code=502, detail=f"Failed to retrieve file from storage: {e}")
+
+    content_type, _ = mimetypes.guess_type(filename)
+    if not content_type:
+        content_type = "application/octet-stream"
+
+    return Response(
+        content=file_bytes,
+        media_type=content_type,
+        headers={
+            "Content-Disposition": f'attachment; filename="{filename}"',
+        },
+    )
 
