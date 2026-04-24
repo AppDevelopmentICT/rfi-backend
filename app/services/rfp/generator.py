@@ -75,7 +75,8 @@ def _build_prompt(
 async def _retrieve_knowledge_async(query: str) -> str:
     """Run knowledge retrieval in a thread pool so it doesn't block the event loop."""
     loop = asyncio.get_event_loop()
-    return await loop.run_in_executor(None, _retrieve_knowledge_context, query)
+    context, _ = await loop.run_in_executor(None, _retrieve_knowledge_context, query)
+    return context
 
 
 async def stream_technical_content(

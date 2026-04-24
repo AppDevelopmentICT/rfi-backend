@@ -17,8 +17,13 @@ class GenerateAllRequest(BaseModel):
     documentId: str
     questions: list[Question]
 
+class GenerateResult(BaseModel):
+    id: str
+    answer: str
+    sources: list[str] = []
+
 class GenerateAllResponse(BaseModel):
-    results: list[dict[str, str]]
+    results: list[GenerateResult]
 
 class RegenerateRequest(BaseModel):
     documentId: str
@@ -28,6 +33,7 @@ class RegenerateRequest(BaseModel):
 class RegenerateResponse(BaseModel):
     id: str
     answer: str
+    sources: list[str] = []
 
 class SaveQuestionsRequest(BaseModel):
     questions: list[Question]

@@ -6,6 +6,7 @@ from app.services.knowledge.storage import document_store
 from app.schemas.ai_schema import (
     GenerateAllRequest, 
     GenerateAllResponse, 
+    GenerateResult,
     RegenerateRequest, 
     RegenerateResponse
 )
@@ -22,7 +23,7 @@ async def generate_all(req: GenerateAllRequest, user: dict = Depends(get_current
     for q in req.questions:
         try:
             # Retrieve knowledge base context once per question
-            knowledge_context = _retrieve_knowledge_context(q.question)
+            knowledge_context, sources = _retrieve_knowledge_context(q.question)
 
             if knowledge_context:
                 logger.info(f"Retrieved knowledge context for question: {q.question[:80]}...")
@@ -48,7 +49,7 @@ async def generate_all(req: GenerateAllRequest, user: dict = Depends(get_current
 
             document_store.update_question_answer(req.documentId, q.id, combined_answer)
             
-            results.append({"id": q.id, "answer": combined_answer})
+            results.append({"id": q.id, "answer": combined_answer, "sources": sources})
         except Exception as e:
             logger.error(f"Failed to generate answer for question {q.id}: {e}")
             results.append({"id": q.id, "answer": f"Error: {e}"})
@@ -75,7 +76,7 @@ async def regenerate(req: RegenerateRequest, user: dict = Depends(get_current_us
 
     try:
         # Retrieve knowledge base context
-        knowledge_context = _retrieve_knowledge_context(question_text)
+        knowledge_context, sources = _retrieve_knowledge_context(question_text)
 
         if knowledge_context:
             logger.info(f"Retrieved knowledge context for regeneration: {question_text[:80]}...")
@@ -97,6 +98,6 @@ async def regenerate(req: RegenerateRequest, user: dict = Depends(get_current_us
         combined_answer = f"{yes_no_answer} — {why_answer}" if why_answer else yes_no_answer
 
         document_store.update_question_answer(req.documentId, req.questionId, combined_answer)
-        return {"id": req.questionId, "answer": combined_answer}
+        return {"id": req.questionId, "answer": combined_answer, "sources": sources}
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"AI generation failed: {e}")

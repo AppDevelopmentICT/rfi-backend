@@ -189,11 +189,12 @@ def _clean_response(text: str, force_boolean: bool = False) -> str:
     return text.strip()
 
 
-def _retrieve_knowledge_context(question: str, top_k: int = 5) -> str:
+def _retrieve_knowledge_context(question: str, top_k: int = 5) -> tuple[str, list[str]]:
     """Retrieve relevant chunks from the PGVector knowledge base.
 
-    Returns a formatted string of relevant document excerpts, or empty
-    string if no knowledge base is available or no results found.
+    Returns a tuple of (context_string, source_filenames).
+    source_filenames contains unique document source names from metadata.
+    If no results or failure, returns ("", []).
     """
     try:
         from app.services.knowledge.ingestion import _get_vector_store
@@ -201,7 +202,7 @@ def _retrieve_knowledge_context(question: str, top_k: int = 5) -> str:
         results = vector_store.similarity_search(question, k=top_k)
 
         if not results:
-            return ""
+            return "", []
 
         context_parts = []
         for i, doc in enumerate(results, 1):
@@ -210,11 +211,15 @@ def _retrieve_knowledge_context(question: str, top_k: int = 5) -> str:
                 f"[Document: {source}]\n{doc.page_content.strip()}"
             )
 
-        return "\n\n---\n\n".join(context_parts)
+        sources = list(dict.fromkeys(
+            doc.metadata.get("source", "Unknown") for doc in results
+        ))
+
+        return "\n\n---\n\n".join(context_parts), sources
 
     except Exception as e:
         logger.warning(f"Knowledge base retrieval failed: {e}")
-        return ""
+        return "", []
 
 
 async def ask_ollama(
@@ -237,7 +242,7 @@ async def ask_ollama(
 
     # Retrieve knowledge base context if not provided
     if knowledge_context is None:
-        knowledge_context = _retrieve_knowledge_context(question)
+        knowledge_context, _ = _retrieve_knowledge_context(question)
 
     # Build the prompt with knowledge context
     prompt_parts = []
