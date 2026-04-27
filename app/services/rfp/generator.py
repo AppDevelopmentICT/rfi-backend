@@ -31,14 +31,20 @@ FLUSH_INTERVAL = 0.15
 
 def _build_system_prompt() -> str:
     return (
-        "You are a technical writer for RFP proposals. "
-        "Write Chapter 3: Technical Content. "
-        "Rules: professional tone, specific to the product given, "
-        "cover architecture/implementation/integration/security/scalability/maintenance, "
-        "flowing prose (2-4 paragraphs per area), no preamble, no markdown headers, "
-        "write as the vendor submitting the proposal. "
-        "IMPORTANT: You MUST address EVERY technology, service, and requirement mentioned in the Description section. "
-        "Do not skip any item the client has listed."
+        "You are a senior technical architect writing Chapter 3 (Technical Content) of a vendor RFP response.\n"
+        "\nABSOLUTE RULES (VIOLATION = FAILURE):\n"
+        "1. START IMMEDIATELY. Do NOT write any introduction, preamble, or meta-text. Begin with the first technical area.\n"
+        "2. Every technical claim MUST include a SPECIFIC number, spec, or detail from the REFERENCE DOCS. "
+        "Generic claims without supporting data are FORBIDDEN.\n"
+        "3. Every technology/service from the Description MUST appear. Missing one = incomplete proposal.\n"
+        "4. For each service explain: (a) technical specs from docs, (b) how it serves THIS project's requirements, "
+        "(c) how it integrates with other services.\n"
+        "5. If the project involves migration, describe the migration approach.\n"
+        "6. Explicitly map the proposed architecture to each stated objective.\n"
+        "7. Use bold inline labels like **Area Name.** — no markdown headers, no bullet lists.\n"
+        "8. Write flowing prose with transitions between areas. 2-4 paragraphs per area.\n"
+        "9. End with one summary paragraph linking all areas to the stated objectives.\n"
+        "10. Professional, persuasive vendor tone. English only."
     )
 
 
@@ -68,9 +74,22 @@ def _build_prompt(
         parts.append(f"Context:\n{additional_context}")
 
     parts.append(
-        "Write the full Chapter 3: Technical Content for this RFP. "
-        "Reference the documentation above when describing capabilities. "
-        "Ensure every service, technology, and requirement from the Description is covered in dedicated sections."
+        "Write the full Chapter 3: Technical Content for this RFP.\n"
+        "MANDATORY — follow these rules exactly:\n"
+        "- Do NOT start with an introduction. Begin directly with the first technical area.\n"
+        "- Every sentence about a service MUST contain at least one SPECIFIC detail from REFERENCE DOCS "
+        "(number, percentage, version, spec, SLA, limit, etc). Generic sentences are FORBIDDEN.\n"
+        "- For each service: (1) state the spec from docs, (2) explain why it fits this project, "
+        "(3) describe integration with other services.\n"
+        "- If migration is mentioned, describe the migration strategy and approach.\n"
+        "- End with one paragraph mapping the architecture to each stated objective.\n\n"
+        "EXAMPLE of expected specificity level (adapt to the actual product, do NOT copy):\n"
+        "**Storage.** The platform delivers 99.999999999% data durability across multiple availability zones, "
+        "supporting storage tiers from hot to cold archival. For this project, the hot tier will host active "
+        "assets while the intelligent tiering automatically optimizes costs based on access patterns, and the "
+        "cold tier serves compliance retention requirements. Block storage volumes provisioned at up to 16,000 IOPS "
+        "and 1,000 MB/s throughput back compute instances, while shared file storage provides concurrent access "
+        "across multiple instances."
     )
 
     return "\n\n".join(parts)
@@ -127,9 +146,9 @@ async def stream_technical_content(
         "system": system_prompt,
         "stream": True,
         "options": {
-            "temperature": 0.4,
-            "num_predict": 4096,
-            "num_ctx": 8192,       # large enough for knowledge context + prompt
+            "temperature": 0.2,
+            "num_predict": 8192,
+            "num_ctx": 16384,
             "num_batch": 512,
             "num_thread": 8,
         },
