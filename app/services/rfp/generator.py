@@ -36,7 +36,9 @@ def _build_system_prompt() -> str:
         "Rules: professional tone, specific to the product given, "
         "cover architecture/implementation/integration/security/scalability/maintenance, "
         "flowing prose (2-4 paragraphs per area), no preamble, no markdown headers, "
-        "write as the vendor submitting the proposal."
+        "write as the vendor submitting the proposal. "
+        "IMPORTANT: You MUST address EVERY technology, service, and requirement mentioned in the Description section. "
+        "Do not skip any item the client has listed."
     )
 
 
@@ -66,7 +68,9 @@ def _build_prompt(
         parts.append(f"Context:\n{additional_context}")
 
     parts.append(
-        "Write the full Chapter 3: Technical Content for this RFP."
+        "Write the full Chapter 3: Technical Content for this RFP. "
+        "Reference the documentation above when describing capabilities. "
+        "Ensure every service, technology, and requirement from the Description is covered in dedicated sections."
     )
 
     return "\n\n".join(parts)
@@ -125,9 +129,9 @@ async def stream_technical_content(
         "options": {
             "temperature": 0.4,
             "num_predict": 4096,
-            "num_ctx": 2048,       # smaller context window = faster inference
-            "num_batch": 512,      # larger batch = faster prompt processing
-            "num_thread": 8,       # use more CPU threads
+            "num_ctx": 8192,       # large enough for knowledge context + prompt
+            "num_batch": 512,
+            "num_thread": 8,
         },
     }
 
