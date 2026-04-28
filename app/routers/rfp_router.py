@@ -1,8 +1,9 @@
 import json
 import logging
 
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Query
-from app.config import API_AUTH_SECRET
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Query, HTTPException
+from fastapi.responses import JSONResponse
+from app.config import API_AUTH_SECRET, OLLAMA_API, OLLAMA_MODEL
 from app.schemas.rfp_schema import GenerateTechnicalContentRequest
 from app.services.rfp.generator import stream_technical_content, stream_adjust_content
 
@@ -105,3 +106,71 @@ async def ws_generate_technical(
             await websocket.close()
         except Exception:
             pass
+
+
+async def _classify_prompt_with_ollama(prompt: str) -> dict:
+    """Use Ollama to classify if a prompt is vague or specific."""
+    import httpx
+
+    system_prompt = (
+        "You are an assistant that classifies user prompts for RFP document editing. "
+        "Determine if the prompt is 'vague' or 'specific'.\n\n"
+        "Vague: ONLY single emotional words with zero context ('too bad', 'ugly', 'not good').\n\n"
+        "Specific: ANY prompt that mentions a section/topic, language, length, format, or action. "
+        "Examples: 'do it', 'migration', 'semuanya', 'make it shorter', 'make it in korean', "
+        "'all of them', 'make it in points', 'too long' are ALL specific when context exists.\n\n"
+        "CRITICAL RULES:\n"
+        "1. If the prompt contains ANY technical term, section name, or action word → classify as 'specific'.\n"
+        "2. If the prompt is a command like 'do it', 'apply', 'execute', 'yes', 'ok' → classify as 'specific'.\n"
+        "3. Single words like 'semuanya', 'all', 'migration', 'security' in a follow-up context → 'specific'.\n"
+        "4. ONLY classify as 'vague' if there is truly zero actionable information AND no prior context exists.\n"
+        "5. When in doubt, classify as 'specific' and execute.\n\n"
+        "If vague (rare), generate exactly ONE (1) short clarifying question. "
+        "Use ENGLISH or INDONESIAN matching the user's language.\n\n"
+        "Respond ONLY with JSON: {\"classification\": \"vague\"|\"specific\", \"questions\": []}"
+    )
+
+    user_prompt = f"Classify this prompt:\n\n\"{prompt}\""
+
+    payload = {
+        "model": OLLAMA_MODEL,
+        "prompt": user_prompt,
+        "system": system_prompt,
+        "stream": False,
+        "options": {
+            "temperature": 0.2,
+            "num_predict": 256,
+        },
+    }
+
+    try:
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            response = await client.post(f"{OLLAMA_API}/api/generate", json=payload)
+            response.raise_for_status()
+            data = response.json()
+            result_text = data.get("response", "")
+
+            import re
+            json_match = re.search(r'\{[^}]*\}', result_text)
+            if json_match:
+                return json.loads(json_match.group())
+            return {"classification": "vague", "questions": ["Can you specify what needs improvement?"]}
+    except Exception as e:
+        logger.error(f"Error classifying prompt: {e}")
+        return {"classification": "vague", "questions": ["Can you specify what changes you'd like?"]}
+
+
+@router.post("/classify-adjust-prompt")
+async def classify_adjust_prompt(body: dict):
+    """Classify a user's adjustment prompt as vague or specific.
+
+    Returns:
+        - classification: "vague" or "specific"
+        - questions: list of clarifying questions (if vague)
+    """
+    prompt = body.get("prompt", "").strip()
+    if not prompt:
+        raise HTTPException(status_code=400, detail="Prompt is required")
+
+    result = await _classify_prompt_with_ollama(prompt)
+    return JSONResponse(content=result)
