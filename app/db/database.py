@@ -69,6 +69,7 @@ class RFIProject(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     filename = Column(String, index=True)
+    slug = Column(String, unique=True, nullable=True, index=True)
     json_data = Column(JSONB, nullable=True)
     status = Column(String, default="generating")
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
@@ -131,6 +132,7 @@ def init_db():
                 CREATE TABLE IF NOT EXISTS rfi_projects (
                     id SERIAL PRIMARY KEY,
                     filename VARCHAR,
+                    slug VARCHAR UNIQUE,
                     json_data JSONB,
                     status VARCHAR DEFAULT 'generating',
                     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
@@ -138,6 +140,12 @@ def init_db():
                 )
             """))
             conn.execute(text("CREATE INDEX IF NOT EXISTS ix_rfi_projects_user_id ON rfi_projects(user_id)"))
+            conn.execute(text(
+                "ALTER TABLE rfi_projects ADD COLUMN IF NOT EXISTS slug VARCHAR"
+            ))
+            conn.execute(text(
+                "CREATE UNIQUE INDEX IF NOT EXISTS ix_rfi_projects_slug ON rfi_projects(slug) WHERE slug IS NOT NULL"
+            ))
             conn.execute(text(
                 "ALTER TABLE rfi_projects ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()"
             ))

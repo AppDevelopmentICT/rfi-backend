@@ -1,6 +1,7 @@
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile, Depends, Request, BackgroundTasks
 from fastapi.responses import StreamingResponse, JSONResponse
 import io
+import re
 import uuid
 from datetime import datetime, timedelta, timezone
 from typing import Optional
@@ -23,6 +24,70 @@ LOCK_TIMEOUT = timedelta(minutes=30)
 
 def _caller_ip(request: Request) -> str | None:
     return request.client.host if request.client else None
+
+
+def _split_filename(filename: str) -> tuple[str, str]:
+    if "." not in filename:
+        return filename, ""
+    stem, extension = filename.rsplit(".", 1)
+    return stem, f".{extension}"
+
+
+def _slugify(value: str) -> str:
+    slug = re.sub(r"[^a-zA-Z0-9]+", "-", value.strip().lower()).strip("-")
+    return slug or "document"
+
+
+def _unique_document_identity(
+    db: Session,
+    filename: str,
+    *,
+    exclude_project_id: int | None = None,
+) -> tuple[str, str]:
+    stem, extension = _split_filename(filename)
+    extension = extension or ".xlsx"
+    base_slug = _slugify(stem)
+    candidate_slug = base_slug
+    candidate_stem = stem
+    suffix = 1
+
+    while True:
+        query = db.query(RFIProject).filter(RFIProject.slug == candidate_slug)
+        if exclude_project_id is not None:
+            query = query.filter(RFIProject.id != exclude_project_id)
+        if query.first() is None:
+            return f"{candidate_stem}{extension}", candidate_slug
+        candidate_slug = f"{base_slug}-{suffix}"
+        candidate_stem = f"{stem}-{suffix}"
+        suffix += 1
+
+
+def _ensure_project_slug(db: Session, doc: RFIProject) -> RFIProject:
+    if doc.slug:
+        return doc
+    doc.filename, doc.slug = _unique_document_identity(
+        db,
+        doc.filename or f"document-{doc.id}.xlsx",
+        exclude_project_id=doc.id,
+    )
+    db.commit()
+    db.refresh(doc)
+    return doc
+
+
+def _get_project_by_key(db: Session, document_key: str) -> RFIProject | None:
+    query = db.query(RFIProject).options(
+        joinedload(RFIProject.user),
+        joinedload(RFIProject.editing_user),
+    )
+    doc = None
+    if document_key.isdigit():
+        doc = query.filter(RFIProject.id == int(document_key)).first()
+    if doc is None:
+        doc = query.filter(RFIProject.slug == document_key).first()
+    if doc is not None:
+        doc = _ensure_project_slug(db, doc)
+    return doc
 
 
 def _user_payload(user: User | None) -> dict | None:
@@ -73,8 +138,9 @@ def _project_payload(doc: RFIProject, current_user: CurrentUser | None = None) -
         and doc.editing_user_id != current_user.id
     )
     return {
-        "documentId": str(doc.id),
+        "documentId": doc.slug or str(doc.id),
         "id": doc.id,
+        "slug": doc.slug,
         "fileName": doc.filename,
         "filename": doc.filename,
         "excelData": doc.json_data,
@@ -121,6 +187,7 @@ async def list_rfi_documents(
         .all()
     )
     for doc in docs:
+        _ensure_project_slug(db, doc)
         _release_expired_lock(db, doc)
     return [_project_payload(doc, user) for doc in docs]
 
@@ -140,22 +207,18 @@ async def list_my_rfi_documents(
         .all()
     )
     for doc in docs:
+        _ensure_project_slug(db, doc)
         _release_expired_lock(db, doc)
     return [_project_payload(doc, user) for doc in docs]
 
 
-@router.get("/{document_id}")
+@router.get("/{document_key}")
 async def get_rfi_document(
-    document_id: int,
+    document_key: str,
     db: Session = Depends(get_db),
     user: CurrentUser = Depends(get_current_user),
 ):
-    doc = (
-        db.query(RFIProject)
-        .options(joinedload(RFIProject.user), joinedload(RFIProject.editing_user))
-        .filter(RFIProject.id == document_id)
-        .first()
-    )
+    doc = _get_project_by_key(db, document_key)
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
     _release_expired_lock(db, doc)
@@ -234,8 +297,14 @@ async def autofill_rfi_document(
     ctx_cols = [c.strip() for c in context_columns.split(",") if c.strip()] if context_columns else None
     fill_cols = [c.strip() for c in fill_columns.split(",") if c.strip()] if fill_columns else None
     
+    filename, slug = _unique_document_identity(
+        db,
+        file.filename.rsplit(".", 1)[0] + "_answered.xlsx",
+    )
+
     gen_doc = RFIProject(
-        filename=file.filename.rsplit(".", 1)[0] + "_answered.xlsx",
+        filename=filename,
+        slug=slug,
         status="generating",
         user_id=user.id if not user.is_service_account else None
     )
@@ -265,7 +334,7 @@ async def autofill_rfi_document(
         _caller_ip(request)
     )
 
-    return {"documentId": str(gen_doc.id), "status": "generating"}
+    return {"documentId": gen_doc.slug, "status": "generating", "fileName": gen_doc.filename}
 
 class UpdateCellRequest(BaseModel):
     sheet: str
@@ -278,19 +347,14 @@ class SaveRfiRequest(BaseModel):
     excelData: dict
 
 
-@router.post("/{document_id}/lock")
+@router.post("/{document_key}/lock")
 async def lock_rfi_document(
-    document_id: int,
+    document_key: str,
     request: Request,
     db: Session = Depends(get_db),
     user: CurrentUser = Depends(get_current_user),
 ):
-    doc = (
-        db.query(RFIProject)
-        .options(joinedload(RFIProject.editing_user), joinedload(RFIProject.user))
-        .filter(RFIProject.id == document_id)
-        .first()
-    )
+    doc = _get_project_by_key(db, document_key)
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
 
@@ -319,19 +383,14 @@ async def lock_rfi_document(
     return _project_payload(doc, user)
 
 
-@router.delete("/{document_id}/lock")
+@router.delete("/{document_key}/lock")
 async def unlock_rfi_document(
-    document_id: int,
+    document_key: str,
     request: Request,
     db: Session = Depends(get_db),
     user: CurrentUser = Depends(get_current_user),
 ):
-    doc = (
-        db.query(RFIProject)
-        .options(joinedload(RFIProject.editing_user), joinedload(RFIProject.user))
-        .filter(RFIProject.id == document_id)
-        .first()
-    )
+    doc = _get_project_by_key(db, document_key)
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
     if doc.editing_user_id and doc.editing_user_id != user.id and not user.is_admin:
@@ -358,15 +417,15 @@ async def unlock_rfi_document(
     )
     return _project_payload(doc, user)
 
-@router.put("/{document_id}/update-cell")
+@router.put("/{document_key}/update-cell")
 async def update_rfi_cell(
-    document_id: int,
+    document_key: str,
     req: UpdateCellRequest,
     request: Request,
     db: Session = Depends(get_db),
     user: CurrentUser = Depends(get_current_user),
 ):
-    doc = db.query(RFIProject).filter(RFIProject.id == document_id).first()
+    doc = _get_project_by_key(db, document_key)
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
     _require_lock_owner(db, doc, user)
@@ -398,20 +457,15 @@ async def update_rfi_cell(
     return {"status": "ok"}
 
 
-@router.post("/{document_id}/save")
+@router.post("/{document_key}/save")
 async def save_rfi_document(
-    document_id: int,
+    document_key: str,
     req: SaveRfiRequest,
     request: Request,
     db: Session = Depends(get_db),
     user: CurrentUser = Depends(get_current_user),
 ):
-    doc = (
-        db.query(RFIProject)
-        .options(joinedload(RFIProject.editing_user), joinedload(RFIProject.user))
-        .filter(RFIProject.id == document_id)
-        .first()
-    )
+    doc = _get_project_by_key(db, document_key)
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
     _require_lock_owner(db, doc, user)
@@ -436,20 +490,20 @@ async def save_rfi_document(
     return _project_payload(doc, user)
 
 
-@router.get("/{document_id}/timeline")
+@router.get("/{document_key}/timeline")
 async def get_rfi_timeline(
-    document_id: int,
+    document_key: str,
     db: Session = Depends(get_db),
     user: CurrentUser = Depends(get_current_user),
 ):
-    doc = db.query(RFIProject).filter(RFIProject.id == document_id).first()
+    doc = _get_project_by_key(db, document_key)
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
 
     logs = (
         db.query(AuditLog)
         .options(joinedload(AuditLog.user))
-        .filter(AuditLog.rfi_project_id == document_id)
+        .filter(AuditLog.rfi_project_id == doc.id)
         .order_by(desc(AuditLog.created_at))
         .all()
     )
@@ -465,14 +519,14 @@ async def get_rfi_timeline(
         for log in logs
     ]
 
-@router.get("/{document_id}/download")
+@router.get("/{document_key}/download")
 async def download_rfi(
-    document_id: int,
+    document_key: str,
     request: Request,
     db: Session = Depends(get_db),
     user: CurrentUser = Depends(get_current_user),
 ):
-    doc = db.query(RFIProject).filter(RFIProject.id == document_id).first()
+    doc = _get_project_by_key(db, document_key)
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
     
