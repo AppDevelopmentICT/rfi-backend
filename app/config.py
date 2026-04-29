@@ -1,4 +1,6 @@
 import os
+from typing import Optional
+
 from dotenv import load_dotenv
 
 
@@ -35,6 +37,29 @@ MINIO_SECURE = os.getenv("MINIO_SECURE", "false").lower() == "true"
 
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
 API_AUTH_SECRET = os.getenv("API_AUTH_SECRET", "change-me-in-production")
+
+
+POCKETBASE_URL = os.getenv("POCKETBASE_URL", "http://127.0.0.1:8090")
+
+# Comma-separated domains (e.g. infracom-tech.com). Empty or * = no restriction.
+_ALLOWED_EMAIL_DOMAINS_RAW = os.getenv("ALLOWED_EMAIL_DOMAINS", "infracom-tech.com").strip()
+if not _ALLOWED_EMAIL_DOMAINS_RAW or _ALLOWED_EMAIL_DOMAINS_RAW == "*":
+    ALLOWED_EMAIL_DOMAIN_SET: Optional[frozenset] = None
+else:
+    ALLOWED_EMAIL_DOMAIN_SET = frozenset(
+        d.strip().lower()
+        for d in _ALLOWED_EMAIL_DOMAINS_RAW.split(",")
+        if d.strip()
+    )
+
+
+def is_email_domain_allowed(email: Optional[str]) -> bool:
+    if ALLOWED_EMAIL_DOMAIN_SET is None:
+        return True
+    if not email or "@" not in email:
+        return False
+    domain = email.rsplit("@", 1)[-1].strip().lower()
+    return domain in ALLOWED_EMAIL_DOMAIN_SET
 
 
 os.environ["OLLAMA_BASE_URL"] = OLLAMA_API

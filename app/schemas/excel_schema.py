@@ -60,7 +60,8 @@ class FilledCell(BaseModel):
     sheet: str = Field(..., description="Sheet name")
     row: int = Field(..., description="1-indexed row number")
     column: str = Field(..., description="Column header name that was filled")
-    context: str = Field(..., description="The context data from filled columns used as LLM input")
+    context: Optional[str] = Field(default=None, description="The context data from filled columns used as LLM input")
+    question: Optional[str] = Field(default=None, description="Question text used by legacy example auto-fill")
     answer: str = Field(..., description="LLM-generated answer")
 
     class Config:

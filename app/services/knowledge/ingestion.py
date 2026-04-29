@@ -74,6 +74,7 @@ async def _run_ingestion(
     minio_key: Optional[str] = None,
     source: str = "upload",
     minio_etag: Optional[str] = None,
+    uploaded_by_user_id: Optional[int] = None,
 ):
     logger.info(f"Starting Langchain ingestion pipeline for {filename}")
 
@@ -85,6 +86,7 @@ async def _run_ingestion(
             minio_key=minio_key,
             minio_etag=minio_etag,
             source=source,
+            uploaded_by_user_id=uploaded_by_user_id,
         )
         short_db.add(new_doc)
         short_db.commit()
@@ -142,9 +144,12 @@ async def process_document_pipeline(
     minio_key: Optional[str] = None,
     source: str = "upload",
     minio_etag: Optional[str] = None,
+    uploaded_by_user_id: Optional[int] = None,
 ):
     file_bytes = await file.read()
-    return await _run_ingestion(file_bytes, file.filename, minio_key, source, minio_etag)
+    return await _run_ingestion(
+        file_bytes, file.filename, minio_key, source, minio_etag, uploaded_by_user_id
+    )
 
 
 async def process_document_pipeline_from_bytes(
@@ -153,6 +158,9 @@ async def process_document_pipeline_from_bytes(
     minio_key: Optional[str] = None,
     source: str = "minio",
     minio_etag: Optional[str] = None,
+    uploaded_by_user_id: Optional[int] = None,
 ):
-    return await _run_ingestion(file_bytes, filename, minio_key, source, minio_etag)
+    return await _run_ingestion(
+        file_bytes, filename, minio_key, source, minio_etag, uploaded_by_user_id
+    )
 

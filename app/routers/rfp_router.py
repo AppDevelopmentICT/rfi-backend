@@ -3,7 +3,8 @@ import logging
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Query, HTTPException
 from fastapi.responses import JSONResponse
-from app.config import API_AUTH_SECRET, OLLAMA_API, OLLAMA_MODEL
+from app.config import OLLAMA_API, OLLAMA_MODEL
+from app.core.security import verify_bearer_any
 from app.schemas.rfp_schema import GenerateTechnicalContentRequest
 from app.services.rfp.generator import stream_technical_content, stream_adjust_content
 
@@ -28,7 +29,7 @@ async def ws_generate_technical(
       6. Repeat step 4-5 as many times as needed
       7. Client disconnects when done
     """
-    if token != API_AUTH_SECRET:
+    if not await verify_bearer_any(token):
         await websocket.close(code=4001, reason="Unauthorized")
         return
 
