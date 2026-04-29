@@ -111,6 +111,7 @@ async def ws_generate_technical(
 async def _classify_prompt_with_ollama(prompt: str) -> dict:
     """Use Ollama to classify if a prompt is vague or specific."""
     import httpx
+    import re
 
     system_prompt = (
         "You are an assistant that classifies user prompts for RFP document editing. "
@@ -145,18 +146,29 @@ async def _classify_prompt_with_ollama(prompt: str) -> dict:
 
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
+            logger.info(f"Calling Ollama at {OLLAMA_API}/api/generate with model {OLLAMA_MODEL}")
             response = await client.post(f"{OLLAMA_API}/api/generate", json=payload)
             response.raise_for_status()
             data = response.json()
             result_text = data.get("response", "")
+            logger.info(f"Ollama response: {result_text[:200]}")
 
-            import re
-            json_match = re.search(r'\{[^}]*\}', result_text)
+            json_match = re.search(r'\{.*\}', result_text, re.DOTALL)
             if json_match:
                 return json.loads(json_match.group())
+            logger.warning("No JSON found in Ollama response")
             return {"classification": "vague", "questions": ["Can you specify what needs improvement?"]}
+    except httpx.ConnectError as e:
+        logger.error(f"Cannot connect to Ollama at {OLLAMA_API}: {e}")
+        return {"classification": "vague", "questions": ["Can you specify what changes you'd like?"]}
+    except httpx.HTTPStatusError as e:
+        logger.error(f"Ollama HTTP error: {e.response.status_code} - {e.response.text}")
+        return {"classification": "vague", "questions": ["Can you specify what changes you'd like?"]}
+    except json.JSONDecodeError as e:
+        logger.error(f"Failed to parse Ollama JSON response: {e}")
+        return {"classification": "vague", "questions": ["Can you specify what changes you'd like?"]}
     except Exception as e:
-        logger.error(f"Error classifying prompt: {e}")
+        logger.error(f"Unexpected error classifying prompt: {e}", exc_info=True)
         return {"classification": "vague", "questions": ["Can you specify what changes you'd like?"]}
 
 
