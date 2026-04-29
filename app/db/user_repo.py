@@ -8,7 +8,7 @@ def upsert_user_from_pb_record(record: dict) -> User:
     pb_id = str(record["id"])
     email = (record.get("email") or "").strip()
     name = record.get("name") or ""
-    avatar = record.get("avatar")
+    avatar = record.get("avatar") or record.get("avatarUrl")
     avatar_url = avatar if isinstance(avatar, str) else None
     verified = bool(record.get("verified", False))
 

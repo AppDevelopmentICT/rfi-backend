@@ -63,6 +63,18 @@ class Document(Base):
     uploaded_by = relationship("User", back_populates="documents_uploaded")
     audit_logs = relationship("AuditLog", back_populates="document")
 
+class RFIProject(Base):
+    __tablename__ = "rfi_projects"
+
+    id = Column(Integer, primary_key=True, index=True)
+    filename = Column(String, index=True)
+    json_data = Column(JSONB, nullable=True)
+    status = Column(String, default="generating")
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+
+    user = relationship("User")
+
 
 class AuditLog(Base):
     __tablename__ = "audit_logs"
@@ -102,6 +114,20 @@ def init_db():
             conn.execute(text(
                 "ALTER TABLE documents ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT NOW()"
             ))
+            conn.commit()
+            
+        with engine.connect() as conn:
+            conn.execute(text("""
+                CREATE TABLE IF NOT EXISTS rfi_projects (
+                    id SERIAL PRIMARY KEY,
+                    filename VARCHAR,
+                    json_data JSONB,
+                    status VARCHAR DEFAULT 'generating',
+                    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+                    user_id INTEGER REFERENCES users(id) ON DELETE SET NULL
+                )
+            """))
+            conn.execute(text("CREATE INDEX IF NOT EXISTS ix_rfi_projects_user_id ON rfi_projects(user_id)"))
             conn.commit()
 
         with engine.connect() as conn:

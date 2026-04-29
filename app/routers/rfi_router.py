@@ -1,144 +1,68 @@
-from fastapi import APIRouter, File, Form, HTTPException, UploadFile
-from fastapi.responses import StreamingResponse
+from fastapi import APIRouter, File, Form, HTTPException, UploadFile, Depends, Request, BackgroundTasks
+from fastapi.responses import StreamingResponse, JSONResponse
 import io
+import uuid
 from typing import Optional
+from sqlalchemy.orm import Session
+from sqlalchemy.orm.attributes import flag_modified
+import openpyxl
 
 from app.config import OLLAMA_MODEL
 from app.services.rfi.core import parse_excel_bytes, auto_fill_bytes
 from app.schemas.excel_schema import ErrorResponse
-from app.schemas.ai_schema import SaveQuestionsRequest, SaveQuestionsResponse
-from app.services.knowledge.storage import document_store
-
-
-ERROR_RESPONSES = {
-    404: {
-        "model": ErrorResponse,
-        "description": "No valid Excel file was provided",
-    },
-    422: {
-        "model": ErrorResponse,
-        "description": "Excel file has no fillable data or invalid columns specified",
-    },
-    502: {
-        "model": ErrorResponse,
-        "description": "Ollama LLM service is unreachable or returned an error",
-    },
-}
+from app.db.database import get_db, RFIProject, SessionLocal
+from app.core.security import get_current_user, CurrentUser
+from app.services.audit_service import log_audit
+from pydantic import BaseModel
 
 router = APIRouter(prefix="/api/v1/rfi", tags=["RFI/RFP"])
 
+def _caller_ip(request: Request) -> str | None:
+    return request.client.host if request.client else None
 
-
-@router.post(
-    "/read",
-    summary="Read Uploaded Excel",
-    description=(
-        "Upload an `.xlsx` file and receive all sheets parsed as JSON.\n\n"
-        "**No file is stored on the server** — processing is fully in-memory."
-    ),
-    responses={404: ERROR_RESPONSES[404]},
-)
-async def read_uploaded_excel(
-    file: UploadFile = File(..., description="The .xlsx file to parse"),
+@router.post("/upload-and-read")
+async def upload_and_read_rfi(
+    request: Request,
+    file: UploadFile = File(...),
 ):
     if not file.filename or not file.filename.endswith((".xlsx", ".xls")):
-        raise HTTPException(
-            status_code=422,
-            detail="Only .xlsx or .xls files are accepted",
-        )
-
+        raise HTTPException(status_code=422, detail="Only .xlsx or .xls files are accepted")
+    
     file_bytes = await file.read()
     if not file_bytes:
         raise HTTPException(status_code=404, detail="Uploaded file is empty")
 
     try:
-        return parse_excel_bytes(file_bytes)
+        json_data = parse_excel_bytes(file_bytes)
+        temp_id = str(uuid.uuid4())
+        
+        return {"documentId": temp_id, "fileName": file.filename, "excelData": json_data}
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"Failed to parse Excel: {e}")
 
-
-@router.post(
-    "/save",
-    summary="Save parsed questions",
-    description="Save questions from column picker to document store. Returns a documentId for subsequent AI calls.",
-    response_model=SaveQuestionsResponse,
-)
-async def save_questions(req: SaveQuestionsRequest):
-    doc_id = document_store.save_document(
-        data={},
-        questions=[q.model_dump() for q in req.questions],
-    )
-    return SaveQuestionsResponse(documentId=doc_id)
-
-
-
-@router.post(
-    "/auto-fill",
-    summary="Auto-Fill Uploaded Excel with LLM",
-    description=(
-        "Upload an `.xlsx` file and let the LLM fill every empty cell.\n\n"
-        "**Column detection is fully dynamic:**\n"
-        "- Context columns (input to LLM) = columns where >50% of rows have data\n"
-        "- Fill columns (LLM output) = columns that have empty cells\n\n"
-        "You can optionally override with `context_columns` and `fill_columns`.\n\n"
-        "**Payload (multipart form):**\n"
-        "| Field | Type | Required | Description |\n"
-        "|---|---|---|---|\n"
-        "| `file` | UploadFile | ✅ | The `.xlsx` file |\n"
-        "| `model` | string | ❌ | Ollama model name (default: `mistral:7b`) |\n"
-        "| `context_columns` | string | ❌ | Comma-separated column names to use as LLM context |\n"
-        "| `fill_columns` | string | ❌ | Comma-separated column names for LLM to fill |\n\n"
-        "**Returns** the filled `.xlsx` file as a download."
-    ),
-    responses={
-        200: {
-            "content": {"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {}},
-            "description": "The filled Excel file as a download",
-        },
-        404: ERROR_RESPONSES[404],
-        422: ERROR_RESPONSES[422],
-        502: ERROR_RESPONSES[502],
-    },
-)
-async def auto_fill_uploaded_excel(
-    file: UploadFile = File(..., description="The .xlsx file to auto-fill"),
-    model: Optional[str] = Form(
-        default=None,
-        description=f"Ollama model name (default: {OLLAMA_MODEL})",
-    ),
-    context_columns: Optional[str] = Form(
-        default=None,
-        description="Comma-separated column names to use as context/input for the LLM (e.g. 'Question,Category'). If omitted, auto-detected.",
-    ),
-    fill_columns: Optional[str] = Form(
-        default=None,
-        description="Comma-separated column names for the LLM to fill (e.g. 'Answer,Remark'). If omitted, auto-detected.",
-    ),
+@router.get("/{document_id}")
+async def get_rfi_document(
+    document_id: int,
+    db: Session = Depends(get_db),
+    user: CurrentUser = Depends(get_current_user),
 ):
-
-    if not file.filename or not file.filename.endswith((".xlsx", ".xls")):
-        raise HTTPException(
-            status_code=422,
-            detail="Only .xlsx or .xls files are accepted",
-        )
-
-    file_bytes = await file.read()
-    if not file_bytes:
-        raise HTTPException(status_code=404, detail="Uploaded file is empty")
+    doc = db.query(RFIProject).filter(RFIProject.id == document_id).first()
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+    return {"documentId": str(doc.id), "fileName": doc.filename, "excelData": doc.json_data, "status": doc.status}
 
 
-    ctx_cols = (
-        [c.strip() for c in context_columns.split(",") if c.strip()]
-        if context_columns
-        else None
-    )
-    fill_cols = (
-        [c.strip() for c in fill_columns.split(",") if c.strip()]
-        if fill_columns
-        else None
-    )
-
-
+async def run_autofill_task(
+    project_id: int,
+    file_bytes: bytes,
+    original_filename: str,
+    model: Optional[str],
+    ctx_cols: Optional[list],
+    fill_cols: Optional[list],
+    user_id: int,
+    ip_address: str
+):
+    db = SessionLocal()
     try:
         result = await auto_fill_bytes(
             file_bytes,
@@ -146,26 +70,167 @@ async def auto_fill_uploaded_excel(
             context_columns=ctx_cols,
             fill_columns=fill_cols,
         )
-    except ConnectionError as e:
-        raise HTTPException(status_code=502, detail=f"Ollama service unreachable: {e}")
+        if result["results"]:
+            generated_json = parse_excel_bytes(result["filled_bytes"])
+            project = db.query(RFIProject).filter(RFIProject.id == project_id).first()
+            if project:
+                project.json_data = generated_json
+                project.status = "completed"
+                flag_modified(project, "json_data")
+                db.commit()
+
+                log_audit(
+                    db,
+                    user_id=user_id,
+                    action="rfi.autofill",
+                    resource_type="rfi_project",
+                    document_id=project_id,
+                    details={"generated_id": project_id},
+                    ip_address=ip_address,
+                )
+        else:
+            project = db.query(RFIProject).filter(RFIProject.id == project_id).first()
+            if project:
+                project.status = "failed"
+                project.json_data = {"error": "No empty cells found to fill."}
+                db.commit()
     except Exception as e:
-        raise HTTPException(status_code=502, detail=f"Unexpected error: {e}")
+        project = db.query(RFIProject).filter(RFIProject.id == project_id).first()
+        if project:
+            project.status = "failed"
+            project.json_data = {"error": str(e)}
+            db.commit()
+    finally:
+        db.close()
 
-    if not result["results"]:
-        raise HTTPException(
-            status_code=422,
-            detail="No empty cells found to fill. Either all cells already have data, or no context/fill columns could be detected. Try specifying context_columns and fill_columns explicitly.",
-        )
+@router.post("/auto-fill")
+async def autofill_rfi_document(
+    request: Request,
+    background_tasks: BackgroundTasks,
+    file: UploadFile = File(..., description="The .xlsx file to auto-fill"),
+    model: Optional[str] = Form(default=None),
+    context_columns: Optional[str] = Form(default=None),
+    fill_columns: Optional[str] = Form(default=None),
+    db: Session = Depends(get_db),
+    user: CurrentUser = Depends(get_current_user),
+):
+    file_bytes = await file.read()
+    if not file_bytes:
+        raise HTTPException(status_code=404, detail="Uploaded file is empty")
 
+    ctx_cols = [c.strip() for c in context_columns.split(",") if c.strip()] if context_columns else None
+    fill_cols = [c.strip() for c in fill_columns.split(",") if c.strip()] if fill_columns else None
+    
+    gen_doc = RFIProject(
+        filename=file.filename.rsplit(".", 1)[0] + "_answered.xlsx",
+        status="generating",
+        user_id=user.id if not user.is_service_account else None
+    )
+    db.add(gen_doc)
+    db.commit()
+    db.refresh(gen_doc)
 
-    output_filename = file.filename.rsplit(".", 1)[0] + "_answered.xlsx"
-
-    return StreamingResponse(
-        io.BytesIO(result["filled_bytes"]),
-        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        headers={
-            "Content-Disposition": f'attachment; filename="{output_filename}"',
-            "X-AutoFill-Message": result["message"],
-        },
+    background_tasks.add_task(
+        run_autofill_task,
+        gen_doc.id,
+        file_bytes,
+        file.filename,
+        model,
+        ctx_cols,
+        fill_cols,
+        user.id if not user.is_service_account else None,
+        _caller_ip(request)
     )
 
+    return {"documentId": str(gen_doc.id), "status": "generating"}
+
+class UpdateCellRequest(BaseModel):
+    sheet: str
+    rowIdx: int
+    column: str
+    value: str
+
+@router.put("/{document_id}/update-cell")
+async def update_rfi_cell(
+    document_id: int,
+    req: UpdateCellRequest,
+    request: Request,
+    db: Session = Depends(get_db),
+    user: CurrentUser = Depends(get_current_user),
+):
+    doc = db.query(RFIProject).filter(RFIProject.id == document_id).first()
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+    
+    json_data = doc.json_data
+    if not json_data or req.sheet not in json_data:
+        raise HTTPException(status_code=404, detail="Sheet not found")
+    
+    sheet_data = json_data[req.sheet]["data"]
+    if req.rowIdx < 0 or req.rowIdx >= len(sheet_data):
+        raise HTTPException(status_code=400, detail="Invalid row index")
+    
+    sheet_data[req.rowIdx][req.column] = req.value
+    doc.json_data = json_data
+    flag_modified(doc, "json_data")
+    db.commit()
+    
+    log_audit(
+        db,
+        user_id=user.id if not user.is_service_account else None,
+        action="rfi.update_cell",
+        resource_type="rfi",
+        document_id=doc.id,
+        details={"sheet": req.sheet, "rowIdx": req.rowIdx, "column": req.column},
+        ip_address=_caller_ip(request),
+    )
+
+    return {"status": "ok"}
+
+@router.get("/{document_id}/download")
+async def download_rfi(
+    document_id: int,
+    request: Request,
+    db: Session = Depends(get_db),
+    user: CurrentUser = Depends(get_current_user),
+):
+    doc = db.query(RFIProject).filter(RFIProject.id == document_id).first()
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+    
+    if doc.status != "completed" or not doc.json_data:
+        raise HTTPException(status_code=400, detail="Document is not ready for download")
+    
+    wb = openpyxl.Workbook()
+    wb.remove(wb.active)
+    
+    for sheet_name, sheet_content in doc.json_data.items():
+        if sheet_name == "error":
+            continue
+        ws = wb.create_sheet(title=sheet_name[:31])
+        headers = sheet_content.get("headers", [])
+        data = sheet_content.get("data", [])
+        ws.append(headers)
+        for row in data:
+            row_values = [row.get(h, "") for h in headers]
+            ws.append(row_values)
+            
+    output = io.BytesIO()
+    wb.save(output)
+    output.seek(0)
+    
+    log_audit(
+        db,
+        user_id=user.id if not user.is_service_account else None,
+        action="rfi.export",
+        resource_type="rfi",
+        document_id=doc.id,
+        details={"filename": doc.filename},
+        ip_address=_caller_ip(request),
+    )
+
+    return StreamingResponse(
+        output,
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": f'attachment; filename="{doc.filename}"'}
+    )
