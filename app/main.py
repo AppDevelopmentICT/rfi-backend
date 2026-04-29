@@ -15,6 +15,8 @@ from app.routers.ai_router import router as ai_router
 from app.routers.knowledge_router import router as knowledge_router
 from app.routers.rfp_router import router as rfp_router
 from app.routers.dashboard_router import router as dashboard_router
+from app.routers.auth_router import router as auth_router
+from app.routers.admin_router import router as admin_router
 from app.core.security import RateLimitMiddleware
 from app.core.logging_middleware import LoggingMiddleware
 from app.config import ALLOWED_ORIGINS
@@ -75,3 +77,5 @@ app.include_router(ai_router)
 app.include_router(knowledge_router)
 app.include_router(rfp_router)
 app.include_router(dashboard_router)
+app.include_router(auth_router)
+app.include_router(admin_router)

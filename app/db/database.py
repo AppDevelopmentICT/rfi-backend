@@ -37,9 +37,10 @@ class User(Base):
     name = Column(String(500))
     avatar_url = Column(String(2048))
     verified = Column(Boolean, default=False)
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    is_admin = Column(Boolean, default=False, nullable=False)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated_at = Column(
-        DateTime,
+        DateTime(timezone=True),
         default=lambda: datetime.now(timezone.utc),
         onupdate=lambda: datetime.now(timezone.utc),
     )
@@ -57,7 +58,7 @@ class Document(Base):
     minio_key = Column(String, nullable=True, index=True)
     minio_etag = Column(String, nullable=True)
     source = Column(String, default="upload")
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     uploaded_by_user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
 
     uploaded_by = relationship("User", back_populates="documents_uploaded")
@@ -70,10 +71,18 @@ class RFIProject(Base):
     filename = Column(String, index=True)
     json_data = Column(JSONB, nullable=True)
     status = Column(String, default="generating")
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc),
+    )
     user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    editing_user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    lock_acquired_at = Column(DateTime(timezone=True), nullable=True)
 
-    user = relationship("User")
+    user = relationship("User", foreign_keys=[user_id])
+    editing_user = relationship("User", foreign_keys=[editing_user_id])
 
 
 class AuditLog(Base):
@@ -84,9 +93,10 @@ class AuditLog(Base):
     action = Column(String(160), nullable=False)
     resource_type = Column(String(120), nullable=False)
     document_id = Column(Integer, ForeignKey("documents.id", ondelete="SET NULL"), nullable=True)
+    rfi_project_id = Column(Integer, ForeignKey("rfi_projects.id", ondelete="SET NULL"), nullable=True)
     details = Column(JSONB)
     ip_address = Column(String(45))
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), index=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), index=True)
 
     user = relationship("User", back_populates="audit_logs")
     document = relationship("Document", back_populates="audit_logs")
@@ -128,6 +138,18 @@ def init_db():
                 )
             """))
             conn.execute(text("CREATE INDEX IF NOT EXISTS ix_rfi_projects_user_id ON rfi_projects(user_id)"))
+            conn.execute(text(
+                "ALTER TABLE rfi_projects ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfi_projects ADD COLUMN IF NOT EXISTS editing_user_id INTEGER REFERENCES users(id) ON DELETE SET NULL"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfi_projects ADD COLUMN IF NOT EXISTS lock_acquired_at TIMESTAMP WITH TIME ZONE"
+            ))
+            conn.execute(text(
+                "CREATE INDEX IF NOT EXISTS ix_rfi_projects_editing_user_id ON rfi_projects(editing_user_id)"
+            ))
             conn.commit()
 
         with engine.connect() as conn:
@@ -139,10 +161,14 @@ def init_db():
                     name VARCHAR(500),
                     avatar_url VARCHAR(2048),
                     verified BOOLEAN DEFAULT FALSE,
+                    is_admin BOOLEAN NOT NULL DEFAULT FALSE,
                     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
                     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
                 )
             """))
+            conn.execute(text(
+                "ALTER TABLE users ADD COLUMN IF NOT EXISTS is_admin BOOLEAN NOT NULL DEFAULT FALSE"
+            ))
             conn.execute(text(
                 "CREATE INDEX IF NOT EXISTS ix_users_pocketbase_id ON users(pocketbase_id)"
             ))
@@ -156,11 +182,15 @@ def init_db():
                     action VARCHAR(160) NOT NULL,
                     resource_type VARCHAR(120) NOT NULL,
                     document_id INTEGER REFERENCES documents(id) ON DELETE SET NULL,
+                    rfi_project_id INTEGER REFERENCES rfi_projects(id) ON DELETE SET NULL,
                     details JSONB,
                     ip_address VARCHAR(45),
                     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
                 )
             """))
+            conn.execute(text(
+                "ALTER TABLE audit_logs ADD COLUMN IF NOT EXISTS rfi_project_id INTEGER REFERENCES rfi_projects(id) ON DELETE SET NULL"
+            ))
             conn.execute(text(
                 "CREATE INDEX IF NOT EXISTS ix_audit_logs_user_id ON audit_logs(user_id)"
             ))
@@ -169,6 +199,12 @@ def init_db():
             ))
             conn.execute(text(
                 "CREATE INDEX IF NOT EXISTS ix_audit_logs_created_at ON audit_logs(created_at)"
+            ))
+            conn.execute(text(
+                "CREATE INDEX IF NOT EXISTS ix_audit_logs_action_created_at ON audit_logs(action, created_at)"
+            ))
+            conn.execute(text(
+                "CREATE INDEX IF NOT EXISTS ix_audit_logs_rfi_project_id ON audit_logs(rfi_project_id)"
             ))
             conn.commit()
 

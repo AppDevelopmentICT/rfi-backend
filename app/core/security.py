@@ -50,6 +50,7 @@ class CurrentUser:
     pocketbase_id: Optional[str]
     email: Optional[str]
     name: Optional[str]
+    is_admin: bool
     is_service_account: bool
 
 
@@ -107,6 +108,7 @@ async def exchange_pocketbase_token(token: str) -> CurrentUser:
         pocketbase_id=user_row.pocketbase_id,
         email=user_row.email,
         name=user_row.name or None,
+        is_admin=bool(user_row.is_admin),
         is_service_account=False,
     )
 
@@ -127,9 +129,16 @@ async def get_current_user(
             pocketbase_id=None,
             email=None,
             name=None,
+            is_admin=True,
             is_service_account=True,
         )
     return await exchange_pocketbase_token(token)
+
+
+def require_admin(user: CurrentUser = Depends(get_current_user)) -> CurrentUser:
+    if not user.is_admin:
+        raise HTTPException(status_code=403, detail="Admin access required")
+    return user
 
 
 async def verify_bearer_any(token: Optional[str]) -> bool:

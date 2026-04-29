@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 from sqlalchemy import desc
-from app.db.database import get_db, Document, AuditLog, RFIProject
+from app.core.time import iso_utc
+from app.db.database import get_db, AuditLog, RFIProject
 from app.core.security import get_current_user, CurrentUser
 from pydantic import BaseModel
 from typing import List, Optional
@@ -16,9 +17,9 @@ async def get_dashboard_stats(
     if user.is_service_account:
         return {"total_rfi": 0, "generated_rfi": 0, "active_documents": 0}
 
-    total_rfi = 0 # No longer saving uploaded to DB
+    total_rfi = db.query(RFIProject).filter(RFIProject.user_id == user.id).count()
     generated_rfi = db.query(RFIProject).filter(RFIProject.user_id == user.id, RFIProject.status == "completed").count()
-    active_documents = db.query(Document).filter(Document.uploaded_by_user_id == user.id).count()
+    active_documents = db.query(RFIProject).filter(RFIProject.user_id == user.id).count()
 
     return {
         "total_rfi": total_rfi,
@@ -44,7 +45,7 @@ async def get_dashboard_history(
             "action": log.action,
             "resource_type": log.resource_type,
             "details": log.details,
-            "created_at": log.created_at.isoformat()
+            "created_at": iso_utc(log.created_at)
         })
     return result
 
