@@ -1,20 +1,21 @@
+import html
 import json
 import logging
 import re
 from datetime import datetime, timedelta, timezone
 from typing import Any, Optional
 
-from fastapi import APIRouter, Depends, Request, WebSocket, WebSocketDisconnect, Query, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Depends, Request, WebSocket, WebSocketDisconnect, Query, HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from sqlalchemy import asc, desc, func
+from sqlalchemy import desc, func
 from sqlalchemy.orm import Session, joinedload
 from sqlalchemy.orm.attributes import flag_modified
 
 from app.config import OLLAMA_API, OLLAMA_MODEL
 from app.core.security import CurrentUser, get_current_user, verify_bearer_any
 from app.core.time import iso_utc
-from app.db.database import AuditLog, RFPProject, User, get_db
+from app.db.database import AuditLog, RFPProject, SessionLocal, User, get_db
 from app.schemas.rfp_schema import GenerateTechnicalContentRequest
 from app.services.audit_service import log_audit
 from app.services.rfp.generator import stream_technical_content, stream_adjust_content
@@ -39,6 +40,12 @@ class SaveRFPProjectRequest(BaseModel):
 class AppendRFPChatRequest(BaseModel):
     role: str
     content: str
+
+
+class QueueRFPGenerationRequest(BaseModel):
+    adjust: bool = False
+    content: Optional[str] = None
+    additionalContext: Optional[str] = None
 
 
 def _caller_ip(request: Request) -> str | None:
@@ -163,6 +170,132 @@ def _project_payload(project: RFPProject, current_user: CurrentUser | None = Non
     }
 
 
+def _simple_markdown_to_html(content: str) -> str:
+    """Small fallback renderer for background jobs.
+
+    The live browser path uses the frontend markdown renderer. Background jobs
+    run without a browser, so save readable HTML instead of losing the result.
+    """
+    blocks: list[str] = []
+    for raw_block in re.split(r"\n\s*\n", content.strip()):
+        block = raw_block.strip()
+        if not block:
+            continue
+        escaped = html.escape(block).replace("\n", "<br />")
+        blocks.append(f"<p>{escaped}</p>")
+    return "\n".join(blocks)
+
+
+async def _run_rfp_generation_background(
+    project_id: int,
+    *,
+    user_id: Optional[int],
+    ip_address: Optional[str],
+    adjust: bool,
+    content: Optional[str],
+    additional_context: Optional[str],
+):
+    db = SessionLocal()
+    try:
+        project = (
+            db.query(RFPProject)
+            .options(joinedload(RFPProject.user))
+            .filter(RFPProject.id == project_id, RFPProject.is_deleted.is_(False))
+            .first()
+        )
+        if not project:
+            return
+
+        generator = (
+            stream_adjust_content(
+                product=project.product,
+                content=content or project.content or "",
+                additional_context=additional_context,
+            )
+            if adjust
+            else stream_technical_content(product=project.product)
+        )
+
+        full_content = ""
+        warnings: list[str] = []
+        async for message in generator:
+            message_type = message.get("type")
+            if message_type == "chunk":
+                full_content += str(message.get("content") or "")
+            elif message_type == "warning":
+                warnings.append(str(message.get("message") or ""))
+            elif message_type == "complete":
+                full_content = str(message.get("fullContent") or full_content)
+            elif message_type == "error":
+                project.status = "failed"
+                project.updated_at = datetime.now(timezone.utc)
+                project.editing_user_id = None
+                project.lock_acquired_at = None
+                db.commit()
+                log_audit(
+                    db,
+                    user_id=user_id,
+                    action="rfp.background_generate_failed",
+                    resource_type="rfp_project",
+                    rfp_project_id=project.id,
+                    details={
+                        "product": project.product,
+                        "project_name": project.project_name,
+                        "message": message.get("message"),
+                    },
+                    ip_address=ip_address,
+                )
+                return
+
+        if full_content.strip():
+            messages = list(project.chat_messages or [])
+            messages.append(
+                {
+                    "role": "assistant",
+                    "content": (
+                        "Background generation completed "
+                        f"({len(full_content):,} characters)"
+                    ),
+                    "user": None,
+                    "created_at": datetime.now(timezone.utc).isoformat(),
+                }
+            )
+            project.content = _simple_markdown_to_html(full_content)
+            project.chat_messages = messages
+            project.status = "completed"
+            project.updated_at = datetime.now(timezone.utc)
+            project.editing_user_id = None
+            project.lock_acquired_at = None
+            flag_modified(project, "chat_messages")
+            db.commit()
+
+            log_audit(
+                db,
+                user_id=user_id,
+                action="rfp.background_generate_completed",
+                resource_type="rfp_project",
+                rfp_project_id=project.id,
+                details={
+                    "product": project.product,
+                    "project_name": project.project_name,
+                    "adjust": adjust,
+                    "warnings": warnings,
+                },
+                ip_address=ip_address,
+            )
+    except Exception as exc:
+        logger.error(f"Background RFP generation failed: {exc}", exc_info=True)
+        project = db.query(RFPProject).filter(RFPProject.id == project_id).first()
+        if project:
+            project.status = "failed"
+            project.updated_at = datetime.now(timezone.utc)
+            project.editing_user_id = None
+            project.lock_acquired_at = None
+            db.commit()
+    finally:
+        db.close()
+
+
 @router.post("/projects")
 async def create_rfp_project(
     req: CreateRFPProjectRequest,
@@ -186,7 +319,9 @@ async def create_rfp_project(
         .first()
     )
     if existing:
-        return _project_payload(_ensure_project_slug(db, existing), user)
+        payload = _project_payload(_ensure_project_slug(db, existing), user)
+        payload["created"] = False
+        return payload
 
     project = RFPProject(
         product=product,
@@ -210,7 +345,9 @@ async def create_rfp_project(
         details={"product": product, "project_name": project_name},
         ip_address=_caller_ip(request),
     )
-    return _project_payload(project, user)
+    payload = _project_payload(project, user)
+    payload["created"] = True
+    return payload
 
 
 @router.get("/list")
@@ -411,6 +548,58 @@ async def append_rfp_chat(
             "project_name": project.project_name,
         },
         ip_address=_caller_ip(request),
+    )
+    return _project_payload(project, user)
+
+
+@router.post("/projects/{project_key}/generate-background")
+async def queue_rfp_generation_background(
+    project_key: str,
+    req: QueueRFPGenerationRequest,
+    request: Request,
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(get_db),
+    user: CurrentUser = Depends(get_current_user),
+):
+    project = _get_project_by_key(db, project_key)
+    if not project:
+        raise HTTPException(status_code=404, detail="RFP project not found")
+    if req.adjust and not (req.content or "").strip():
+        raise HTTPException(status_code=422, detail="content is required when adjust=true")
+    if project.editing_user_id and project.editing_user_id != user.id and not user.is_admin:
+        holder_name = project.editing_user.name if project.editing_user else "Another user"
+        raise HTTPException(status_code=409, detail=f"{holder_name} is still updating the file")
+
+    project.status = "generating"
+    project.editing_user_id = user.id if not user.is_service_account else None
+    project.lock_acquired_at = datetime.now(timezone.utc)
+    project.updated_at = datetime.now(timezone.utc)
+    db.commit()
+    db.refresh(project)
+
+    log_audit(
+        db,
+        user_id=user.id if not user.is_service_account else None,
+        action="rfp.background_generate_started",
+        resource_type="rfp_project",
+        rfp_project_id=project.id,
+        details={
+            "product": project.product,
+            "project_name": project.project_name,
+            "adjust": req.adjust,
+            "additionalContext": (req.additionalContext or "")[:500],
+        },
+        ip_address=_caller_ip(request),
+    )
+
+    background_tasks.add_task(
+        _run_rfp_generation_background,
+        project.id,
+        user_id=user.id if not user.is_service_account else None,
+        ip_address=_caller_ip(request),
+        adjust=req.adjust,
+        content=req.content,
+        additional_context=req.additionalContext,
     )
     return _project_payload(project, user)
 
