@@ -31,20 +31,16 @@ FLUSH_INTERVAL = 0.15
 
 def _build_system_prompt() -> str:
     return (
-        "You are a senior technical architect writing Chapter 3 (Technical Content) of a vendor RFP response.\n"
-        "\nABSOLUTE RULES (VIOLATION = FAILURE):\n"
-        "1. START IMMEDIATELY. Do NOT write any introduction, preamble, or meta-text. Begin with the first technical area.\n"
-        "2. Every technical claim MUST include a SPECIFIC number, spec, or detail from the REFERENCE DOCS. "
-        "Generic claims without supporting data are FORBIDDEN.\n"
-        "3. Every technology/service from the Description MUST appear. Missing one = incomplete proposal.\n"
-        "4. For each service explain: (a) technical specs from docs, (b) how it serves THIS project's requirements, "
-        "(c) how it integrates with other services.\n"
-        "5. If the project involves migration, describe the migration approach.\n"
-        "6. Explicitly map the proposed architecture to each stated objective.\n"
-        "7. Use bold inline labels like **Area Name.** — no markdown headers, no bullet lists.\n"
-        "8. Write flowing prose with transitions between areas. 2-4 paragraphs per area.\n"
-        "9. End with one summary paragraph linking all areas to the stated objectives.\n"
-        "10. Professional, persuasive vendor tone. English only."
+        "Anda adalah arsitek teknis senior yang menulis Bab 3 proposal RFP: Detail Produk.\n"
+        "\nATURAN WAJIB:\n"
+        "1. Tulis seluruh jawaban dalam Bahasa Indonesia yang profesional dan persuasif.\n"
+        "2. Fokus hanya pada Bab 3, yaitu detail produk, kapabilitas, arsitektur, integrasi, implementasi, dan manfaat teknis.\n"
+        "3. Gunakan struktur bernomor seperti 3.1, 3.2, 3.3, dan seterusnya.\n"
+        "4. Dasarkan klaim teknis pada REFERENCE DOCS untuk produk yang diminta jika tersedia.\n"
+        "5. Jangan mengarang spesifikasi. Jika detail tidak ada di dokumen referensi, tulis: Belum tersedia di basis pengetahuan.\n"
+        "6. Jika tidak ada REFERENCE DOCS, tetap bantu membuat draf umum, tetapi jangan menyebutnya bersumber dari knowledge base.\n"
+        "7. Jangan menulis pembuka meta seperti 'Berikut adalah'. Mulai langsung dari bagian 3.1.\n"
+        "8. Output hanya isi Bab 3, tanpa penutup di luar dokumen."
     )
 
 
@@ -63,6 +59,12 @@ def _build_prompt(
             f"{knowledge_context}\n"
             "=== END ==="
         )
+    else:
+        parts.append(
+            "=== REFERENCE DOCS ===\n"
+            "Belum tersedia di basis pengetahuan untuk produk ini.\n"
+            "=== END ==="
+        )
 
     parts.append(f"Product: {product}")
 
@@ -74,32 +76,26 @@ def _build_prompt(
         parts.append(f"Context:\n{additional_context}")
 
     parts.append(
-        "Write the full Chapter 3: Technical Content for this RFP.\n"
-        "MANDATORY — follow these rules exactly:\n"
-        "- Do NOT start with an introduction. Begin directly with the first technical area.\n"
-        "- Every sentence about a service MUST contain at least one SPECIFIC detail from REFERENCE DOCS "
-        "(number, percentage, version, spec, SLA, limit, etc). Generic sentences are FORBIDDEN.\n"
-        "- For each service: (1) state the spec from docs, (2) explain why it fits this project, "
-        "(3) describe integration with other services.\n"
-        "- If migration is mentioned, describe the migration strategy and approach.\n"
-        "- End with one paragraph mapping the architecture to each stated objective.\n\n"
-        "EXAMPLE of expected specificity level (adapt to the actual product, do NOT copy):\n"
-        "**Storage.** The platform delivers 99.999999999% data durability across multiple availability zones, "
-        "supporting storage tiers from hot to cold archival. For this project, the hot tier will host active "
-        "assets while the intelligent tiering automatically optimizes costs based on access patterns, and the "
-        "cold tier serves compliance retention requirements. Block storage volumes provisioned at up to 16,000 IOPS "
-        "and 1,000 MB/s throughput back compute instances, while shared file storage provides concurrent access "
-        "across multiple instances."
+        "Tulis Bab 3 lengkap untuk proposal RFP ini.\n"
+        "WAJIB:\n"
+        "- Mulai langsung dari 3.1, tanpa pengantar meta.\n"
+        "- Gunakan Bahasa Indonesia.\n"
+        "- Jelaskan detail produk, fitur utama, arsitektur/komponen, integrasi, keamanan, implementasi, dan manfaat.\n"
+        "- Gunakan informasi dari REFERENCE DOCS bila tersedia.\n"
+        "- Jika detail tidak tersedia di REFERENCE DOCS, tulis 'Belum tersedia di basis pengetahuan' pada bagian yang relevan.\n"
+        "- Jangan menyebut bab 1, bab 2, bab 4, atau bab 5 kecuali hanya sebagai konteks singkat."
     )
 
     return "\n\n".join(parts)
 
 
-async def _retrieve_knowledge_async(query: str) -> str:
+async def _retrieve_knowledge_async(query: str, product: Optional[str]) -> tuple[str, list[str]]:
     """Run knowledge retrieval in a thread pool so it doesn't block the event loop."""
     loop = asyncio.get_event_loop()
-    context, _ = await loop.run_in_executor(None, _retrieve_knowledge_context, query)
-    return context
+    return await loop.run_in_executor(
+        None,
+        lambda: _retrieve_knowledge_context(query, product=product),
+    )
 
 
 async def stream_technical_content(
@@ -125,7 +121,13 @@ async def stream_technical_content(
     if project_description:
         knowledge_query += f". {project_description}"
 
-    knowledge_context = await _retrieve_knowledge_async(knowledge_query)
+    knowledge_context, sources = await _retrieve_knowledge_async(knowledge_query, product)
+
+    if not sources:
+        yield {
+            "type": "warning",
+            "message": f"Tidak ada dokumen pengetahuan untuk produk '{product}'. Hasil dapat tidak akurat.",
+        }
 
     prompt = _build_prompt(
         product=product,
@@ -223,11 +225,10 @@ async def stream_technical_content(
 
 def _build_adjust_system_prompt() -> str:
     return (
-        "You are a technical writer refining an RFP Chapter 3: Technical Content. "
-        "The user has provided their current draft and adjustment instructions. "
-        "Rules: keep the same professional tone, apply the requested changes precisely, "
-        "preserve parts that don't need changing, improve clarity and flow, "
-        "no preamble, no markdown headers, output only the revised full chapter."
+        "Anda adalah penulis teknis yang menyempurnakan Bab 3 RFP: Detail Produk. "
+        "Gunakan Bahasa Indonesia, terapkan instruksi pengguna secara tepat, "
+        "pertahankan bagian yang tidak perlu diubah, dan output hanya Bab 3 yang sudah direvisi. "
+        "Jika detail tidak tersedia di dokumen referensi, tulis: Belum tersedia di basis pengetahuan."
     )
 
 
@@ -235,9 +236,15 @@ def _build_adjust_prompt(
     product: str,
     content: str,
     additional_context: Optional[str],
+    knowledge_context: Optional[str],
 ) -> str:
     parts: list[str] = [
         f"Product: {product}",
+        (
+            "=== REFERENCE DOCS ===\n"
+            f"{knowledge_context or 'Belum tersedia di basis pengetahuan untuk produk ini.'}\n"
+            "=== END ==="
+        ),
         f"=== CURRENT DRAFT ===\n{content}\n=== END DRAFT ===",
     ]
 
@@ -246,7 +253,7 @@ def _build_adjust_prompt(
     else:
         parts.append("Improve and refine this chapter. Fix any issues and enhance clarity.")
 
-    parts.append("Output the full revised Chapter 3.")
+    parts.append("Output seluruh Bab 3 yang sudah direvisi dalam Bahasa Indonesia.")
 
     return "\n\n".join(parts)
 
@@ -261,10 +268,20 @@ async def stream_adjust_content(
     Streams the revised chapter token by token with buffering.
     """
     system_prompt = _build_adjust_system_prompt()
+    knowledge_context, sources = await _retrieve_knowledge_async(
+        f"Technical proposal refinement for {product}. {additional_context or ''}",
+        product,
+    )
+    if not sources:
+        yield {
+            "type": "warning",
+            "message": f"Tidak ada dokumen pengetahuan untuk produk '{product}'. Hasil dapat tidak akurat.",
+        }
     prompt = _build_adjust_prompt(
         product=product,
         content=content,
         additional_context=additional_context,
+        knowledge_context=knowledge_context,
     )
 
     full_content = ""

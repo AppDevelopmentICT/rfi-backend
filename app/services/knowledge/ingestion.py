@@ -75,6 +75,7 @@ async def _run_ingestion(
     source: str = "upload",
     minio_etag: Optional[str] = None,
     uploaded_by_user_id: Optional[int] = None,
+    product: Optional[str] = None,
 ):
     logger.info(f"Starting Langchain ingestion pipeline for {filename}")
 
@@ -87,6 +88,7 @@ async def _run_ingestion(
             minio_etag=minio_etag,
             source=source,
             uploaded_by_user_id=uploaded_by_user_id,
+            product=product,
         )
         short_db.add(new_doc)
         short_db.commit()
@@ -102,7 +104,7 @@ async def _run_ingestion(
 
         base_doc = LCDocument(
             page_content=parsed_text,
-            metadata={"source": filename, "document_id": doc_id}
+            metadata={"source": filename, "document_id": doc_id, "product": product}
         )
 
         text_splitter = RecursiveCharacterTextSplitter(
@@ -145,10 +147,11 @@ async def process_document_pipeline(
     source: str = "upload",
     minio_etag: Optional[str] = None,
     uploaded_by_user_id: Optional[int] = None,
+    product: Optional[str] = None,
 ):
     file_bytes = await file.read()
     return await _run_ingestion(
-        file_bytes, file.filename, minio_key, source, minio_etag, uploaded_by_user_id
+        file_bytes, file.filename, minio_key, source, minio_etag, uploaded_by_user_id, product
     )
 
 
@@ -159,8 +162,9 @@ async def process_document_pipeline_from_bytes(
     source: str = "minio",
     minio_etag: Optional[str] = None,
     uploaded_by_user_id: Optional[int] = None,
+    product: Optional[str] = None,
 ):
     return await _run_ingestion(
-        file_bytes, filename, minio_key, source, minio_etag, uploaded_by_user_id
+        file_bytes, filename, minio_key, source, minio_etag, uploaded_by_user_id, product
     )
 

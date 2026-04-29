@@ -4,6 +4,7 @@ from sqlalchemy import (
     Column,
     Integer,
     String,
+    Text,
     DateTime,
     Boolean,
     ForeignKey,
@@ -58,6 +59,7 @@ class Document(Base):
     minio_key = Column(String, nullable=True, index=True)
     minio_etag = Column(String, nullable=True)
     source = Column(String, default="upload")
+    product = Column(String, nullable=True, index=True)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     uploaded_by_user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
 
@@ -81,9 +83,42 @@ class RFIProject(Base):
     user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     editing_user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     lock_acquired_at = Column(DateTime(timezone=True), nullable=True)
+    is_deleted = Column(Boolean, default=False, nullable=False, index=True)
+    deleted_at = Column(DateTime(timezone=True), nullable=True)
+    deleted_by_user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
 
     user = relationship("User", foreign_keys=[user_id])
     editing_user = relationship("User", foreign_keys=[editing_user_id])
+    deleted_by = relationship("User", foreign_keys=[deleted_by_user_id])
+
+
+class RFPProject(Base):
+    __tablename__ = "rfp_projects"
+
+    id = Column(Integer, primary_key=True, index=True)
+    slug = Column(String, unique=True, nullable=True, index=True)
+    product = Column(String, nullable=False, index=True)
+    project_name = Column(String, nullable=True)
+    project_description = Column(Text, nullable=True)
+    content = Column(Text, nullable=True)
+    chat_messages = Column(JSONB, nullable=True, default=list)
+    status = Column(String, default="draft")
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc),
+    )
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    editing_user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    lock_acquired_at = Column(DateTime(timezone=True), nullable=True)
+    is_deleted = Column(Boolean, default=False, nullable=False, index=True)
+    deleted_at = Column(DateTime(timezone=True), nullable=True)
+    deleted_by_user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+
+    user = relationship("User", foreign_keys=[user_id])
+    editing_user = relationship("User", foreign_keys=[editing_user_id])
+    deleted_by = relationship("User", foreign_keys=[deleted_by_user_id])
 
 
 class AuditLog(Base):
@@ -95,6 +130,7 @@ class AuditLog(Base):
     resource_type = Column(String(120), nullable=False)
     document_id = Column(Integer, ForeignKey("documents.id", ondelete="SET NULL"), nullable=True)
     rfi_project_id = Column(Integer, ForeignKey("rfi_projects.id", ondelete="SET NULL"), nullable=True)
+    rfp_project_id = Column(Integer, ForeignKey("rfp_projects.id", ondelete="SET NULL"), nullable=True)
     details = Column(JSONB)
     ip_address = Column(String(45))
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), index=True)
@@ -123,7 +159,13 @@ def init_db():
                 "ALTER TABLE documents ADD COLUMN IF NOT EXISTS minio_etag VARCHAR"
             ))
             conn.execute(text(
+                "ALTER TABLE documents ADD COLUMN IF NOT EXISTS product VARCHAR"
+            ))
+            conn.execute(text(
                 "ALTER TABLE documents ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT NOW()"
+            ))
+            conn.execute(text(
+                "CREATE INDEX IF NOT EXISTS ix_documents_product ON documents(product)"
             ))
             conn.commit()
             
@@ -158,6 +200,95 @@ def init_db():
             conn.execute(text(
                 "CREATE INDEX IF NOT EXISTS ix_rfi_projects_editing_user_id ON rfi_projects(editing_user_id)"
             ))
+            conn.execute(text(
+                "ALTER TABLE rfi_projects ADD COLUMN IF NOT EXISTS is_deleted BOOLEAN NOT NULL DEFAULT FALSE"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfi_projects ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMP WITH TIME ZONE"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfi_projects ADD COLUMN IF NOT EXISTS deleted_by_user_id INTEGER REFERENCES users(id) ON DELETE SET NULL"
+            ))
+            conn.execute(text(
+                "CREATE INDEX IF NOT EXISTS ix_rfi_projects_is_deleted ON rfi_projects(is_deleted)"
+            ))
+            conn.commit()
+
+        with engine.connect() as conn:
+            conn.execute(text("""
+                CREATE TABLE IF NOT EXISTS rfp_projects (
+                    id SERIAL PRIMARY KEY,
+                    slug VARCHAR UNIQUE,
+                    product VARCHAR NOT NULL,
+                    project_name VARCHAR,
+                    project_description TEXT,
+                    content TEXT,
+                    chat_messages JSONB DEFAULT '[]'::jsonb,
+                    status VARCHAR DEFAULT 'draft',
+                    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+                    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+                    user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+                    editing_user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+                    lock_acquired_at TIMESTAMP WITH TIME ZONE
+                )
+            """))
+            conn.execute(text(
+                "ALTER TABLE rfp_projects ADD COLUMN IF NOT EXISTS slug VARCHAR"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfp_projects ADD COLUMN IF NOT EXISTS product VARCHAR NOT NULL DEFAULT 'Unassigned'"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfp_projects ALTER COLUMN product DROP DEFAULT"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfp_projects ADD COLUMN IF NOT EXISTS project_name VARCHAR"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfp_projects ADD COLUMN IF NOT EXISTS project_description TEXT"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfp_projects ADD COLUMN IF NOT EXISTS content TEXT"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfp_projects ADD COLUMN IF NOT EXISTS chat_messages JSONB DEFAULT '[]'::jsonb"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfp_projects ADD COLUMN IF NOT EXISTS status VARCHAR DEFAULT 'draft'"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfp_projects ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfp_projects ADD COLUMN IF NOT EXISTS editing_user_id INTEGER REFERENCES users(id) ON DELETE SET NULL"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfp_projects ADD COLUMN IF NOT EXISTS lock_acquired_at TIMESTAMP WITH TIME ZONE"
+            ))
+            conn.execute(text(
+                "CREATE UNIQUE INDEX IF NOT EXISTS ix_rfp_projects_slug ON rfp_projects(slug) WHERE slug IS NOT NULL"
+            ))
+            conn.execute(text(
+                "CREATE INDEX IF NOT EXISTS ix_rfp_projects_product ON rfp_projects(product)"
+            ))
+            conn.execute(text(
+                "CREATE INDEX IF NOT EXISTS ix_rfp_projects_user_id ON rfp_projects(user_id)"
+            ))
+            conn.execute(text(
+                "CREATE INDEX IF NOT EXISTS ix_rfp_projects_editing_user_id ON rfp_projects(editing_user_id)"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfp_projects ADD COLUMN IF NOT EXISTS is_deleted BOOLEAN NOT NULL DEFAULT FALSE"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfp_projects ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMP WITH TIME ZONE"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfp_projects ADD COLUMN IF NOT EXISTS deleted_by_user_id INTEGER REFERENCES users(id) ON DELETE SET NULL"
+            ))
+            conn.execute(text(
+                "CREATE INDEX IF NOT EXISTS ix_rfp_projects_is_deleted ON rfp_projects(is_deleted)"
+            ))
             conn.commit()
 
         with engine.connect() as conn:
@@ -191,6 +322,7 @@ def init_db():
                     resource_type VARCHAR(120) NOT NULL,
                     document_id INTEGER REFERENCES documents(id) ON DELETE SET NULL,
                     rfi_project_id INTEGER REFERENCES rfi_projects(id) ON DELETE SET NULL,
+                    rfp_project_id INTEGER REFERENCES rfp_projects(id) ON DELETE SET NULL,
                     details JSONB,
                     ip_address VARCHAR(45),
                     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -198,6 +330,9 @@ def init_db():
             """))
             conn.execute(text(
                 "ALTER TABLE audit_logs ADD COLUMN IF NOT EXISTS rfi_project_id INTEGER REFERENCES rfi_projects(id) ON DELETE SET NULL"
+            ))
+            conn.execute(text(
+                "ALTER TABLE audit_logs ADD COLUMN IF NOT EXISTS rfp_project_id INTEGER REFERENCES rfp_projects(id) ON DELETE SET NULL"
             ))
             conn.execute(text(
                 "CREATE INDEX IF NOT EXISTS ix_audit_logs_user_id ON audit_logs(user_id)"
@@ -213,6 +348,9 @@ def init_db():
             ))
             conn.execute(text(
                 "CREATE INDEX IF NOT EXISTS ix_audit_logs_rfi_project_id ON audit_logs(rfi_project_id)"
+            ))
+            conn.execute(text(
+                "CREATE INDEX IF NOT EXISTS ix_audit_logs_rfp_project_id ON audit_logs(rfp_project_id)"
             ))
             conn.commit()
 

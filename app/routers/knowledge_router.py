@@ -1,7 +1,7 @@
-from fastapi import APIRouter, File, HTTPException, UploadFile, Depends, Query, Request
+from fastapi import APIRouter, File, Form, HTTPException, UploadFile, Depends, Query, Request
 from fastapi.responses import Response
 from sqlalchemy.orm import Session
-from sqlalchemy import text
+from sqlalchemy import func, text
 from app.services.knowledge.ingestion import process_document_pipeline
 from app.services.knowledge.sync import sync_knowledge_base
 from app.services.external.minio_client import delete_object as minio_delete_object, download_object
@@ -28,6 +28,7 @@ def _caller_ip(request: Request) -> str | None:
 async def ingest_document(
     request: Request,
     file: UploadFile = File(..., description="A file to upload into the Knowledge Base (PDF, DOCX, TXT)"),
+    product: str = Form(..., description="Product name this document belongs to"),
     db: Session = Depends(get_db),
     user: CurrentUser = Depends(get_current_user),
 ):
@@ -38,6 +39,9 @@ async def ingest_document(
             status_code=422,
             detail="File has no filename associated.",
         )
+    product_name = product.strip()
+    if not product_name:
+        raise HTTPException(status_code=422, detail="Product name is required")
 
     uid = None if user.is_service_account else user.id
 
@@ -45,6 +49,7 @@ async def ingest_document(
         result = await process_document_pipeline(
             file,
             uploaded_by_user_id=uid,
+            product=product_name,
         )
         did = result.get("document_id")
         if did is not None:
@@ -54,12 +59,35 @@ async def ingest_document(
                 action="knowledge.ingest",
                 resource_type="document",
                 document_id=int(did),
-                details={"filename": file.filename},
+                details={"filename": file.filename, "product": product_name},
                 ip_address=_caller_ip(request),
             )
         return result
     except Exception as e:
         logger.error(f"Failed to process and ingest document {file.filename}: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/products")
+def list_products(
+    db: Session = Depends(get_db),
+    user: CurrentUser = Depends(get_current_user),
+):
+    """List distinct product names from the knowledge base."""
+    try:
+        rows = (
+            db.query(Document.product, func.count(Document.id))
+            .filter(Document.product.isnot(None), func.length(func.trim(Document.product)) > 0)
+            .group_by(Document.product)
+            .order_by(func.lower(Document.product))
+            .all()
+        )
+        return [
+            {"name": product, "document_count": count}
+            for product, count in rows
+        ]
+    except Exception as e:
+        logger.error(f"Failed to list products: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -89,6 +117,7 @@ async def sync_from_minio(
 @router.get("/documents")
 def list_documents(
     search: str = Query("", description="Search query for filename, source, or status"),
+    product: str = Query("", description="Optional product filter"),
     sort_by: SortField = Query(SortField.created_at, description="Field to sort by"),
     sort_dir: SortDirection = Query(SortDirection.desc, description="Sort direction"),
     page: int = Query(1, ge=1, description="Page number"),
@@ -106,7 +135,11 @@ def list_documents(
                 Document.filename.ilike(pattern)
                 | Document.source.ilike(pattern)
                 | Document.status.ilike(pattern)
+                | Document.product.ilike(pattern)
             )
+
+        if product.strip():
+            query = query.filter(func.lower(Document.product) == product.strip().lower())
 
         total = query.count()
 
@@ -132,6 +165,7 @@ def list_documents(
                     "filename": doc.filename,
                     "status": doc.status,
                     "source": doc.source or "upload",
+                    "product": doc.product,
                     "minio_key": doc.minio_key,
                     "uploaded_by_user_id": doc.uploaded_by_user_id,
                     "created_at": doc.created_at.isoformat() if doc.created_at else None,

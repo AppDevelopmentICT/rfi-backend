@@ -75,11 +75,18 @@ def _ensure_project_slug(db: Session, doc: RFIProject) -> RFIProject:
     return doc
 
 
-def _get_project_by_key(db: Session, document_key: str) -> RFIProject | None:
+def _get_project_by_key(
+    db: Session,
+    document_key: str,
+    *,
+    include_deleted: bool = False,
+) -> RFIProject | None:
     query = db.query(RFIProject).options(
         joinedload(RFIProject.user),
         joinedload(RFIProject.editing_user),
     )
+    if not include_deleted:
+        query = query.filter(RFIProject.is_deleted.is_(False))
     doc = None
     if document_key.isdigit():
         doc = query.filter(RFIProject.id == int(document_key)).first()
@@ -183,6 +190,7 @@ async def list_rfi_documents(
     docs = (
         db.query(RFIProject)
         .options(joinedload(RFIProject.user), joinedload(RFIProject.editing_user))
+        .filter(RFIProject.is_deleted.is_(False))
         .order_by(desc(RFIProject.updated_at), desc(RFIProject.created_at))
         .all()
     )
@@ -202,7 +210,7 @@ async def list_my_rfi_documents(
     docs = (
         db.query(RFIProject)
         .options(joinedload(RFIProject.user), joinedload(RFIProject.editing_user))
-        .filter(RFIProject.user_id == user.id)
+        .filter(RFIProject.user_id == user.id, RFIProject.is_deleted.is_(False))
         .order_by(desc(RFIProject.updated_at), desc(RFIProject.created_at))
         .all()
     )
@@ -566,3 +574,35 @@ async def download_rfi(
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         headers={"Content-Disposition": f'attachment; filename="{doc.filename}"'}
     )
+
+
+@router.delete("/{document_key}")
+async def soft_delete_rfi_document(
+    document_key: str,
+    request: Request,
+    db: Session = Depends(get_db),
+    user: CurrentUser = Depends(get_current_user),
+):
+    doc = _get_project_by_key(db, document_key)
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+    if doc.user_id and doc.user_id != user.id and not user.is_admin:
+        raise HTTPException(status_code=403, detail="You do not have permission to delete this document")
+
+    doc.is_deleted = True
+    doc.deleted_at = datetime.now(timezone.utc)
+    doc.deleted_by_user_id = user.id if not user.is_service_account else None
+    doc.editing_user_id = None
+    doc.lock_acquired_at = None
+    db.commit()
+
+    log_audit(
+        db,
+        user_id=user.id if not user.is_service_account else None,
+        action="rfi.soft_delete",
+        resource_type="rfi_project",
+        rfi_project_id=doc.id,
+        details={"filename": doc.filename, "slug": doc.slug},
+        ip_address=_caller_ip(request),
+    )
+    return {"status": "deleted", "documentId": doc.slug or str(doc.id)}

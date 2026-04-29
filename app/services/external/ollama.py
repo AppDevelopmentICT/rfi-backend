@@ -189,7 +189,11 @@ def _clean_response(text: str, force_boolean: bool = False) -> str:
     return text.strip()
 
 
-def _retrieve_knowledge_context(question: str, top_k: int = 5) -> tuple[str, list[str]]:
+def _retrieve_knowledge_context(
+    question: str,
+    top_k: int = 5,
+    product: Optional[str] = None,
+) -> tuple[str, list[str]]:
     """Retrieve relevant chunks from the PGVector knowledge base.
 
     Returns a tuple of (context_string, source_filenames).
@@ -199,7 +203,8 @@ def _retrieve_knowledge_context(question: str, top_k: int = 5) -> tuple[str, lis
     try:
         from app.services.knowledge.ingestion import _get_vector_store
         vector_store = _get_vector_store()
-        results = vector_store.similarity_search(question, k=top_k)
+        search_kwargs = {"filter": {"product": product}} if product else {}
+        results = vector_store.similarity_search(question, k=top_k, **search_kwargs)
 
         if not results:
             return "", []

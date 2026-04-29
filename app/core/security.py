@@ -17,11 +17,14 @@ logger = logging.getLogger(__name__)
 
 REQUEST_LOGS: Dict[str, List[float]] = defaultdict(list)
 RATE_LIMIT_STASH_TIME = 60
-MAX_REQUESTS_PER_MINUTE = 60
+MAX_REQUESTS_PER_MINUTE = 300
 
 
 class RateLimitMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
+        if request.method == "OPTIONS":
+            return await call_next(request)
+
         client_ip = request.client.host if request.client else "unknown"
 
         now = time.time()

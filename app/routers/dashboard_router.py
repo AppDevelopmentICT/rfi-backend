@@ -17,9 +17,16 @@ async def get_dashboard_stats(
     if user.is_service_account:
         return {"total_rfi": 0, "generated_rfi": 0, "active_documents": 0}
 
-    total_rfi = db.query(RFIProject).filter(RFIProject.user_id == user.id).count()
-    generated_rfi = db.query(RFIProject).filter(RFIProject.user_id == user.id, RFIProject.status == "completed").count()
-    active_documents = db.query(RFIProject).filter(RFIProject.user_id == user.id).count()
+    total_rfi = db.query(RFIProject).filter(RFIProject.user_id == user.id, RFIProject.is_deleted.is_(False)).count()
+    generated_rfi = db.query(RFIProject).filter(
+        RFIProject.user_id == user.id,
+        RFIProject.status == "completed",
+        RFIProject.is_deleted.is_(False),
+    ).count()
+    active_documents = db.query(RFIProject).filter(
+        RFIProject.user_id == user.id,
+        RFIProject.is_deleted.is_(False),
+    ).count()
 
     return {
         "total_rfi": total_rfi,

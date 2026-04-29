@@ -20,6 +20,7 @@ def log_audit(
     resource_type: str,
     document_id: Optional[int] = None,
     rfi_project_id: Optional[int] = None,
+    rfp_project_id: Optional[int] = None,
     details: Optional[MutableMapping[str, Any]] = None,
     ip_address: Optional[str] = None,
     commit: bool = True,
@@ -31,6 +32,7 @@ def log_audit(
             resource_type=resource_type,
             document_id=document_id,
             rfi_project_id=rfi_project_id,
+            rfp_project_id=rfp_project_id,
             details=dict(details) if details is not None else None,
             ip_address=ip_address,
         )
