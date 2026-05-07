@@ -203,8 +203,16 @@ def _retrieve_knowledge_context(
     try:
         from app.services.knowledge.ingestion import _get_vector_store
         vector_store = _get_vector_store()
-        search_kwargs = {"filter": {"product": product}} if product else {}
-        results = vector_store.similarity_search(question, k=top_k, **search_kwargs)
+
+        # Try with product filter first (exact match)
+        results = []
+        if product:
+            search_kwargs = {"filter": {"product": product}}
+            results = vector_store.similarity_search(question, k=top_k, **search_kwargs)
+
+        # Fallback: if no results with product filter, try without filter
+        if not results:
+            results = vector_store.similarity_search(question, k=top_k)
 
         if not results:
             return "", []
