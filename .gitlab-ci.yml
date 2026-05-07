@@ -64,6 +64,24 @@ deploy:
         --restart unless-stopped \
         --add-host=host.docker.internal:host-gateway \
         --publish 0.0.0.0:2250:1254 \
+        -e POCKETBASE_URL='$POCKETBASE_URL' \
+        -e DATABASE_URL='$DATABASE_URL' \
+        -e OLLAMA_API='$OLLAMA_API' \
+        -e OLLAMA_MODEL='$OLLAMA_MODEL' \
+        -e OLLAMA_EMBEDDING_MODEL='$OLLAMA_EMBEDDING_MODEL' \
+        -e DOCLING_API='$DOCLING_API' \
+        -e DOCLING_OCR_LANG='$DOCLING_OCR_LANG' \
+        -e DOCLING_TABLE_MODE='$DOCLING_TABLE_MODE' \
+        -e DOCLING_DOCUMENT_TIMEOUT='$DOCLING_DOCUMENT_TIMEOUT' \
+        -e DOCLING_ABORT_ON_ERROR='$DOCLING_ABORT_ON_ERROR' \
+        -e ALLOWED_ORIGINS='$ALLOWED_ORIGINS' \
+        -e API_AUTH_SECRET='$API_AUTH_SECRET' \
+        -e ALLOWED_EMAIL_DOMAINS='$ALLOWED_EMAIL_DOMAINS' \
+        -e MINIO_ENDPOINT='$MINIO_ENDPOINT' \
+        -e MINIO_ACCESS_KEY='$MINIO_ACCESS_KEY' \
+        -e MINIO_SECRET_KEY='$MINIO_SECRET_KEY' \
+        -e MINIO_BUCKET='$MINIO_BUCKET' \
+        -e MINIO_SECURE='$MINIO_SECURE' \
         $IMAGE_NAME:production-$CI_COMMIT_SHORT_SHA"
   only:
     - main
