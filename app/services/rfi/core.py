@@ -149,6 +149,7 @@ async def auto_fill_bytes(
     """
     wb = load_workbook(io.BytesIO(file_bytes))
     results = []
+    column_info = {}
 
     for sheet_name in wb.sheetnames:
         ws = wb[sheet_name]
@@ -168,6 +169,11 @@ async def auto_fill_bytes(
 
         if not ctx_indices or not fill_indices:
             continue
+
+        column_info[sheet_name] = {
+            "context_columns": [headers[i] for i in ctx_indices],
+            "fill_columns": [headers[i] for i in fill_indices],
+        }
 
 
         for row_idx, row in enumerate(data_rows, start=2):
@@ -210,6 +216,7 @@ async def auto_fill_bytes(
         "filled_bytes": output_buf.getvalue(),
         "message": f"Filled {len(results)} cells",
         "results": results,
+        "column_info": column_info,
     }
 
 def flatten_sheets_to_questions(sheets_data: dict) -> list:

@@ -11,7 +11,8 @@ from sqlalchemy.orm.attributes import flag_modified
 import openpyxl
 
 from app.config import OLLAMA_MODEL
-from app.services.rfi.core import parse_excel_bytes, auto_fill_bytes
+from app.services.rfi.core import parse_excel_bytes, auto_fill_bytes, _classify_columns, _build_context_prompt
+from app.services.external.ollama import ask_ollama
 from app.schemas.excel_schema import ErrorResponse
 from app.core.time import iso_utc
 from app.db.database import AuditLog, RFIProject, SessionLocal, User, get_db
@@ -253,6 +254,8 @@ async def run_autofill_task(
         )
         if result["results"]:
             generated_json = parse_excel_bytes(result["filled_bytes"])
+            if result.get("column_info"):
+                generated_json["_column_info"] = result["column_info"]
             project = db.query(RFIProject).filter(RFIProject.id == project_id).first()
             if project:
                 project.json_data = generated_json
@@ -353,6 +356,103 @@ class UpdateCellRequest(BaseModel):
 
 class SaveRfiRequest(BaseModel):
     excelData: dict
+
+
+class RegenerateRowRequest(BaseModel):
+    sheet: str
+    rowIdx: int
+    currentRow: Optional[dict] = None
+
+
+@router.post("/{document_key}/regenerate-row")
+async def regenerate_rfi_row(
+    document_key: str,
+    req: RegenerateRowRequest,
+    request: Request,
+    db: Session = Depends(get_db),
+    user: CurrentUser = Depends(get_current_user),
+):
+    doc = _get_project_by_key(db, document_key)
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    json_data = doc.json_data
+    if not json_data or req.sheet not in json_data:
+        raise HTTPException(status_code=404, detail="Sheet not found")
+
+    sheet_content = json_data[req.sheet]
+    headers = sheet_content.get("headers", [])
+    data = sheet_content.get("data", [])
+
+    if req.rowIdx < 0 or req.rowIdx >= len(data):
+        raise HTTPException(status_code=400, detail="Invalid row index")
+
+    row = dict(data[req.rowIdx])
+    if req.currentRow:
+        row.update(req.currentRow)
+
+    col_info = json_data.get("_column_info", {}).get(req.sheet)
+    if col_info:
+        fill_col_names = set(col_info.get("fill_columns", []))
+        ctx_col_names = set(col_info.get("context_columns", []))
+        fill_indices = [i for i, h in enumerate(headers) if h in fill_col_names]
+        ctx_indices = [i for i, h in enumerate(headers) if h in ctx_col_names]
+    else:
+        all_tuples = [
+            tuple(r.get(h) for h in headers) for r in data
+        ]
+        ctx_indices, fill_indices = _classify_columns(headers, all_tuples)
+
+    if not fill_indices:
+        fill_indices = list(range(len(headers)))
+    if not ctx_indices:
+        ctx_indices = list(range(len(headers)))
+
+    row_tuple = tuple(row.get(h) for h in headers)
+    context_prompt = _build_context_prompt(headers, row_tuple, ctx_indices)
+
+    if not context_prompt.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="No data found in this row to regenerate from",
+        )
+
+    updated_row = dict(row)
+
+    try:
+        for col_idx in fill_indices:
+            col_header = headers[col_idx]
+            answer = await ask_ollama(context_prompt, col_header)
+            updated_row[col_header] = answer
+
+        data[req.rowIdx] = updated_row
+        doc.json_data = json_data
+        doc.updated_at = datetime.now(timezone.utc)
+        flag_modified(doc, "json_data")
+        db.commit()
+
+        log_audit(
+            db,
+            user_id=user.id if not user.is_service_account else None,
+            action="rfi.regenerate_row",
+            resource_type="rfi",
+            rfi_project_id=doc.id,
+            details={"sheet": req.sheet, "rowIdx": req.rowIdx},
+            ip_address=_caller_ip(request),
+        )
+
+        return {
+            "sheet": req.sheet,
+            "rowIdx": req.rowIdx,
+            "updatedRow": updated_row,
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=502,
+            detail=f"AI regeneration failed: {e}",
+        )
 
 
 @router.post("/{document_key}/lock")
