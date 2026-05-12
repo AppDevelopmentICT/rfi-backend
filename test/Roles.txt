@@ -1,0 +1,180 @@
+{
+  "status": 200,
+  "message": "OK",
+  "previousPage": null,
+  "currentPage": 1,
+  "nextPage": null,
+  "total": 21,
+  "limit": 21,
+  "data": [
+    {
+      "id": "1bd41b8f-8778-4985-b553-4eeab3fe6f97",
+      "name": "Finance",
+      "created_at": "2026-03-04T03:49:40.356Z",
+      "created_by": "Super User",
+      "edited_at": "2026-03-04T03:49:40.356Z",
+      "edited_by": "Super User"
+    },
+    {
+      "id": "1bb6d6c3-2f87-453e-8dae-e8ee57ddb82c",
+      "name": "General Affair",
+      "created_at": "2025-12-11T04:32:42.149Z",
+      "created_by": "Super User",
+      "edited_at": "2025-12-11T04:32:42.149Z",
+      "edited_by": "Super User"
+    },
+    {
+      "id": "601863ba-03ad-4106-a133-52f17c3ce7dd",
+      "name": "IT Internal",
+      "created_at": "2025-11-30T14:14:31.790Z",
+      "created_by": "Super User",
+      "edited_at": "2025-11-30T14:14:31.790Z",
+      "edited_by": "Super User"
+    },
+    {
+      "id": "2f972c2b-ef46-4c06-ae3c-65a89962ce55",
+      "name": "GM Renewal & Sales Support",
+      "created_at": "2025-10-12T17:56:47.783Z",
+      "created_by": "Super User",
+      "edited_at": "2025-10-12T17:56:47.783Z",
+      "edited_by": "Super User"
+    },
+    {
+      "id": "b3b6d89c-324d-45ec-b991-280e65000f56",
+      "name": "GM Sales Enterprise",
+      "created_at": "2025-10-12T17:55:54.984Z",
+      "created_by": "Super User",
+      "edited_at": "2025-10-12T17:55:54.984Z",
+      "edited_by": "Super User"
+    },
+    {
+      "id": "59778e3b-2a21-43ee-813d-1a3039d856de",
+      "name": "GM Sales Territory",
+      "created_at": "2025-10-12T17:55:47.117Z",
+      "created_by": "Super User",
+      "edited_at": "2025-10-12T17:58:17.557Z",
+      "edited_by": "Super User"
+    },
+    {
+      "id": "1d7d3c4d-c78a-48dd-bc45-310a0c76db09",
+      "name": "Sales",
+      "created_at": "2025-10-12T17:55:24.038Z",
+      "created_by": "Super User",
+      "edited_at": "2025-10-12T17:55:24.038Z",
+      "edited_by": "Super User"
+    },
+    {
+      "id": "22e55847-9a60-4ddf-b3ef-0d6374f4ded3",
+      "name": "Sales Manager",
+      "created_at": "2025-10-12T17:55:20.374Z",
+      "created_by": "Super User",
+      "edited_at": "2025-10-12T17:55:20.374Z",
+      "edited_by": "Super User"
+    },
+    {
+      "id": "afee3101-10fe-4b2d-bf6c-107d684f1dae",
+      "name": "Manage Service",
+      "created_at": "2025-09-29T01:26:14.749Z",
+      "created_by": "Super User",
+      "edited_at": "2025-09-29T01:26:14.749Z",
+      "edited_by": "Super User"
+    },
+    {
+      "id": "d2a15ee8-6039-4217-bd0d-2ee5375b7967",
+      "name": "PM Head",
+      "created_at": "2025-09-17T09:13:10.203Z",
+      "created_by": "Super User",
+      "edited_at": "2025-09-17T09:13:10.203Z",
+      "edited_by": "Super User"
+    },
+    {
+      "id": "7fecbaf5-4ce0-4944-85ec-c4a4844896a1",
+      "name": "Pre Sales",
+      "created_at": "2025-07-27T14:59:07.374Z",
+      "created_by": "Super User",
+      "edited_at": "2025-07-27T14:59:07.374Z",
+      "edited_by": "Super User"
+    },
+    {
+      "id": "41e7656c-1533-4d93-8642-49b451c8b3b3",
+      "name": "PM",
+      "created_at": "2025-07-27T14:58:58.681Z",
+      "created_by": "Super User",
+      "edited_at": "2025-09-17T09:09:16.342Z",
+      "edited_by": "Super User"
+    },
+    {
+      "id": "90f2b13b-9871-44fc-a5d1-6382ba3dbec2",
+      "name": "Group Head",
+      "created_at": "2025-05-27T12:51:46.518Z",
+      "created_by": "Dimas Satrio Anggoro",
+      "edited_at": "2025-05-27T12:53:39.560Z",
+      "edited_by": "Dimas Satrio Anggoro"
+    },
+    {
+      "id": "b8903c7e-b361-42f7-93a7-2d862807fceb",
+      "name": "Head",
+      "created_at": "2025-05-27T12:51:31.137Z",
+      "created_by": "Dimas Satrio Anggoro",
+      "edited_at": "2025-05-27T12:51:31.137Z",
+      "edited_by": "Dimas Satrio Anggoro"
+    },
+    {
+      "id": "2a5d188f-726e-4f77-a5b5-1da27e47e2d8",
+      "name": "Staff",
+      "created_at": "2025-05-27T01:42:54.296Z",
+      "created_by": "Dimas Satrio Anggoro",
+      "edited_at": "2025-05-27T01:42:54.296Z",
+      "edited_by": "Dimas Satrio Anggoro"
+    },
+    {
+      "id": "f7977b8c-6e99-40ff-82f0-09ad1c18626a",
+      "name": "Engineer",
+      "created_at": "2025-05-27T01:30:45.804Z",
+      "created_by": "Dimas Satrio Anggoro",
+      "edited_at": "2025-05-27T01:30:45.804Z",
+      "edited_by": "Dimas Satrio Anggoro"
+    },
+    {
+      "id": "d26669d7-ffa1-4055-8ff8-fa962899d17d",
+      "name": "Super User",
+      "created_at": "2025-05-22T07:03:56.112Z",
+      "created_by": "system",
+      "edited_at": "2025-05-22T07:03:56.112Z",
+      "edited_by": "system"
+    },
+    {
+      "id": "8cfd4edb-0eed-49af-b35b-85ffa35933cb",
+      "name": "Helpdesk",
+      "created_at": "2025-05-22T07:03:56.112Z",
+      "created_by": "system",
+      "edited_at": "2025-05-22T07:03:56.112Z",
+      "edited_by": "system"
+    },
+    {
+      "id": "c402799c-94f3-4c67-9197-e304c785381c",
+      "name": "Admin",
+      "created_at": "2025-05-22T07:03:56.112Z",
+      "created_by": "system",
+      "edited_at": "2025-05-22T07:03:56.112Z",
+      "edited_by": "system"
+    },
+    {
+      "id": "6309d879-b0d6-482e-b2f8-5e6415839ad8",
+      "name": "Director",
+      "created_at": "2025-05-22T07:03:56.112Z",
+      "created_by": "system",
+      "edited_at": "2025-05-22T07:03:56.112Z",
+      "edited_by": "system"
+    },
+    {
+      "id": "ca55e0ec-507e-4649-a57a-10ae39a953fc",
+      "name": "GM Software",
+      "created_at": "2025-05-22T07:03:56.112Z",
+      "created_by": "system",
+      "edited_at": "2025-05-22T07:03:56.112Z",
+      "edited_by": "system"
+    }
+  ],
+  "data_count": 21
+}

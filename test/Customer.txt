@@ -1,0 +1,2802 @@
+{
+  "status": 200,
+  "message": "OK",
+  "previousPage": null,
+  "currentPage": 1,
+  "nextPage": null,
+  "total": 310,
+  "limit": 310,
+  "data": [
+    {
+      "id": "4a4427be-67b1-4d83-b25d-1ec21c85a8e1",
+      "customer_code": "CST-0226-004",
+      "name": "Siemens",
+      "created_at": "2026-02-24T08:22:23.795Z",
+      "created_by": "Super User",
+      "edited_at": "2026-02-24T08:22:23.795Z",
+      "edited_by": "Super User"
+    },
+    {
+      "id": "fa89c1a8-f665-415b-b855-36fedd60dedc",
+      "customer_code": "CST-0226-003",
+      "name": "PT Autocomp Systems Indonesia",
+      "created_at": "2026-02-23T08:13:49.215Z",
+      "created_by": "Riva Hazmul Fauziah",
+      "edited_at": "2026-02-23T08:13:49.215Z",
+      "edited_by": "Riva Hazmul Fauziah"
+    },
+    {
+      "id": "03f16ce5-6cca-4340-8577-d6186f79fcd5",
+      "customer_code": "CST-0226-002",
+      "name": "Oracle Databse Upgrade",
+      "created_at": "2026-02-16T07:50:57.453Z",
+      "created_by": "Kartika Rasyidah",
+      "edited_at": "2026-02-16T07:50:57.453Z",
+      "edited_by": "Kartika Rasyidah"
+    },
+    {
+      "id": "2e3c5fed-fe9a-46d1-bb17-b129caa8dd45",
+      "customer_code": "CST-0226-001",
+      "name": "JNE",
+      "created_at": "2026-02-16T07:50:26.106Z",
+      "created_by": "Kartika Rasyidah",
+      "edited_at": "2026-02-16T07:50:26.106Z",
+      "edited_by": "Kartika Rasyidah"
+    },
+    {
+      "id": "d2ba5c3c-90b3-4e80-aeb1-29708c74d9e7",
+      "customer_code": "CST-1125-001",
+      "name": "Capital One",
+      "created_at": "2025-11-21T01:02:14.392Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-11-21T01:02:14.392Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "4e8f792b-da68-4b52-8a99-31454f116553",
+      "customer_code": "CST-1025-004",
+      "name": "ICT Academy",
+      "created_at": "2025-10-16T09:09:11.784Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-10-16T09:09:11.784Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "f9afad6c-7e3f-4a17-9c3a-4833cbfd2f61",
+      "customer_code": "CST-1025-003",
+      "name": "Autocomp Systems Indonesia",
+      "created_at": "2025-10-16T04:31:30.206Z",
+      "created_by": "Dimas Satrio Anggoro",
+      "edited_at": "2025-10-16T04:31:30.206Z",
+      "edited_by": "Dimas Satrio Anggoro"
+    },
+    {
+      "id": "16f3bd12-783a-4bc0-b9d3-59b25e3de9ad",
+      "customer_code": "CST-1025-002",
+      "name": "PT Fortress Data Services",
+      "created_at": "2025-10-16T03:48:33.326Z",
+      "created_by": "Fajar Irawan",
+      "edited_at": "2025-10-16T03:48:33.326Z",
+      "edited_by": "Fajar Irawan"
+    },
+    {
+      "id": "f4984d53-9969-4b1f-ae07-9dc95ebe3fea",
+      "customer_code": "CST-1025-001",
+      "name": "Standard Chartered Bank",
+      "created_at": "2025-10-01T06:24:12.159Z",
+      "created_by": "Fajar Irawan",
+      "edited_at": "2025-10-01T06:24:12.159Z",
+      "edited_by": "Fajar Irawan"
+    },
+    {
+      "id": "05873c29-91d2-4307-8706-6113d45f14d0",
+      "customer_code": "CST-0925-074",
+      "name": "PT. XL Axiata",
+      "created_at": "2025-09-25T04:01:56.441Z",
+      "created_by": "Fajar Irawan",
+      "edited_at": "2025-09-25T04:01:56.441Z",
+      "edited_by": "Fajar Irawan"
+    },
+    {
+      "id": "edc024bc-9f9a-473a-b208-7f63a5547f66",
+      "customer_code": "CST-0925-073",
+      "name": "PT. Kereta Api Indonesia",
+      "created_at": "2025-09-25T04:01:03.488Z",
+      "created_by": "Fajar Irawan",
+      "edited_at": "2025-09-25T04:01:03.488Z",
+      "edited_by": "Fajar Irawan"
+    },
+    {
+      "id": "db124ac5-5f12-4f21-b4d2-c8e3127b9396",
+      "customer_code": "CST-0925-072",
+      "name": "Rumah Sakit Pusat Pertamina",
+      "created_at": "2025-09-19T11:06:14.300Z",
+      "created_by": "Super User",
+      "edited_at": "2025-09-19T11:06:14.300Z",
+      "edited_by": "Super User"
+    },
+    {
+      "id": "ee46bff7-55ca-40b7-bda9-8b32182ce9f4",
+      "customer_code": "CST-0925-071",
+      "name": "PT Pelabuhan Indonesia",
+      "created_at": "2025-09-17T07:27:00.774Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-17T07:27:00.774Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "0f72e8e6-b30b-4cd4-923c-3dd9943e6156",
+      "customer_code": "CST-0925-070",
+      "name": "WOM Finance",
+      "created_at": "2025-09-17T04:14:19.958Z",
+      "created_by": "Fajar Irawan",
+      "edited_at": "2025-09-17T04:14:19.958Z",
+      "edited_by": "Fajar Irawan"
+    },
+    {
+      "id": "fec78010-f67e-48fa-85da-0bdaf73d0baa",
+      "customer_code": "CST-0925-069",
+      "name": "MNC Finance",
+      "created_at": "2025-09-11T07:50:45.758Z",
+      "created_by": "Super User",
+      "edited_at": "2025-09-11T07:50:45.758Z",
+      "edited_by": "Super User"
+    },
+    {
+      "id": "bcc72334-f185-4728-8cd6-8ccb1ce4065b",
+      "customer_code": "CST-0925-068",
+      "name": "RSPP",
+      "created_at": "2025-09-04T06:45:46.506Z",
+      "created_by": "Super User",
+      "edited_at": "2025-09-04T06:45:46.506Z",
+      "edited_by": "Super User"
+    },
+    {
+      "id": "aa3e0801-03d2-4b6b-beac-79e54bd2da3e",
+      "customer_code": "CST-0925-067",
+      "name": "YugabyteDB, Inc",
+      "created_at": "2025-09-02T10:11:47.047Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:11:47.047Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "7bbc3198-beb1-45cb-801d-d1b302eaa794",
+      "customer_code": "CST-0925-066",
+      "name": "Yessly Teknologi Internasional",
+      "created_at": "2025-09-02T10:11:27.060Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:11:27.060Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "c85f5541-fe71-4a0a-9195-66b45772480f",
+      "customer_code": "CST-0925-065",
+      "name": "Yayasan Lembaga Manajemen Formasi",
+      "created_at": "2025-09-02T10:11:14.670Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:11:14.670Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "f899a574-4229-4d08-a68c-c495b0574e3e",
+      "customer_code": "CST-0925-064",
+      "name": "Wijanarko Sogen & Rekan",
+      "created_at": "2025-09-02T10:10:51.015Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:10:51.015Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "e9743503-512b-4045-969b-fcd84194b3ce",
+      "customer_code": "CST-0925-063",
+      "name": "Westcon International Indonesia",
+      "created_at": "2025-09-02T10:10:35.600Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:10:35.600Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "8163aeed-31a7-4039-bd63-628a68e5b950",
+      "customer_code": "CST-0925-062",
+      "name": "Welgrow Indopersada",
+      "created_at": "2025-09-02T10:10:23.559Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:10:23.559Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "720f784f-85b0-426e-94f6-bcc8d36f0aaf",
+      "customer_code": "CST-0925-061",
+      "name": "Virtus Technology Indonesia",
+      "created_at": "2025-09-02T10:10:02.304Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:10:02.304Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "4adc617c-d464-4a98-a96b-0675c4eede23",
+      "customer_code": "CST-0925-060",
+      "name": "Veritas Technologies Indonesia",
+      "created_at": "2025-09-02T10:09:42.360Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:09:42.360Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "5048cc2c-0531-41cf-90c2-6e828127c887",
+      "customer_code": "CST-0925-059",
+      "name": "Veritas Storage (Singapore) Pte, ltd",
+      "created_at": "2025-09-02T10:09:31.053Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:09:31.053Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "5ea82804-e19c-4126-b4aa-44474e6e0c46",
+      "customer_code": "CST-0925-058",
+      "name": "Tuntun Sekuritas Indonesia",
+      "created_at": "2025-09-02T10:09:09.112Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:09:09.112Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "bb6de269-3835-43b8-953e-78a9d3446838",
+      "customer_code": "CST-0925-057",
+      "name": "Trimegah Sekuritas Indonesia",
+      "created_at": "2025-09-02T10:08:45.181Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:08:45.181Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "c4916057-310a-491e-b10d-2ef59343338e",
+      "customer_code": "CST-0925-056",
+      "name": "Transportasi Jakarta (Tranjakarta)",
+      "created_at": "2025-09-02T10:08:26.465Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:08:26.465Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "3930419a-baca-4054-a2c4-0f8bdf2d120a",
+      "customer_code": "CST-0925-055",
+      "name": "Teravin Technovations",
+      "created_at": "2025-09-02T10:08:03.754Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:08:03.754Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "7af78257-d311-4f30-97b4-f7fa8860db0c",
+      "customer_code": "CST-0925-054",
+      "name": "Telkomsel Seluler",
+      "created_at": "2025-09-02T10:07:36.540Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:07:36.540Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "fe2cf841-f62d-4402-bb8a-7de484bf164e",
+      "customer_code": "CST-0925-053",
+      "name": "Teknologi Data Informatika",
+      "created_at": "2025-09-02T10:07:14.679Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:07:14.679Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "4717af9b-313c-42ad-8db8-f5bd6c40558c",
+      "customer_code": "CST-0925-052",
+      "name": "Tecknovatus Solusi Sejahtera",
+      "created_at": "2025-09-02T10:06:29.888Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:06:29.888Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "55b3350f-b2bd-4568-9dda-d8cbc02946f4",
+      "customer_code": "CST-0925-051",
+      "name": "Tech Data Advanced Solutions Indonesia",
+      "created_at": "2025-09-02T10:05:52.685Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:05:52.685Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "f7acfcc7-976d-473d-885b-5a8c2158d712",
+      "customer_code": "CST-0925-050",
+      "name": "System Tree Technology",
+      "created_at": "2025-09-02T10:05:21.378Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:05:21.378Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "e6c68577-ee0c-4cd9-982c-be302bf8e251",
+      "customer_code": "CST-0925-049",
+      "name": "Suzuki Finance Indonesia",
+      "created_at": "2025-09-02T10:04:40.816Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:04:40.816Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "d4889e24-e957-4df8-9164-433864d6a30b",
+      "customer_code": "CST-0925-048",
+      "name": "Summit Oto Finance",
+      "created_at": "2025-09-02T10:04:17.683Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:04:17.683Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "35b96c5b-e319-4d57-85b1-8768376529a3",
+      "customer_code": "CST-0925-047",
+      "name": "Solusi Transportasi Indonesia",
+      "created_at": "2025-09-02T10:03:59.301Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:03:59.301Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "448cfec2-65d2-450f-9d49-a37d97f4efe4",
+      "customer_code": "CST-0925-046",
+      "name": "SoftwareAG Indonesia Operations",
+      "created_at": "2025-09-02T10:03:26.890Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:03:26.890Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "ddbd3941-66c9-4e55-ae81-46f73d594391",
+      "customer_code": "CST-0925-045",
+      "name": "Sinergi Inti Perdana",
+      "created_at": "2025-09-02T10:01:08.358Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:01:08.358Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "f436f1c5-bdbe-4168-85cd-162fa0ac9c91",
+      "customer_code": "CST-0925-044",
+      "name": "Sinergi Anugerah Digital",
+      "created_at": "2025-09-02T10:00:47.913Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:00:47.913Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "1d305c5c-5e28-48f6-930f-2265b533ecff",
+      "customer_code": "CST-0925-043",
+      "name": "Sigma Solusi Integrasi",
+      "created_at": "2025-09-02T10:00:25.863Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:00:25.863Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "fea7a6e5-df8e-4e81-bacb-62847372c500",
+      "customer_code": "CST-0925-042",
+      "name": "SiCepat Expres Indonesia",
+      "created_at": "2025-09-02T10:00:03.293Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T10:00:03.293Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "041a6af1-53c5-4140-bbaf-81f2c9638966",
+      "customer_code": "CST-0925-041",
+      "name": "Sepatu Bata",
+      "created_at": "2025-09-02T09:59:40.202Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:59:40.202Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "750b55ee-7928-43c7-99d3-46c5182f6fe4",
+      "customer_code": "CST-0925-040",
+      "name": "Scandinavian Tobacoo Group",
+      "created_at": "2025-09-02T09:59:24.425Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:59:24.425Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "4d3f93f4-4eca-4504-a8a5-3fb9fbb54ab5",
+      "customer_code": "CST-0925-039",
+      "name": "Sarana Multi Infrastruktur",
+      "created_at": "2025-09-02T09:59:04.577Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:59:04.577Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "785ab078-14f8-441e-a8c5-b4d6c2e19d3b",
+      "customer_code": "CST-0925-038",
+      "name": "Sakafarma Laboratories",
+      "created_at": "2025-09-02T09:58:20.011Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:58:20.011Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "08e9485b-da5e-408c-b0c9-ab4b5db076f2",
+      "customer_code": "CST-0925-037",
+      "name": "S Net Indonesia",
+      "created_at": "2025-09-02T09:57:59.079Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:57:59.079Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "b7ca0953-d358-40c6-a01b-a1bce99549d2",
+      "customer_code": "CST-0925-036",
+      "name": "Red Hat Indonesia",
+      "created_at": "2025-09-02T09:57:38.866Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:57:38.866Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "0217f5b3-ff89-4e28-8bd6-d45104552514",
+      "customer_code": "CST-0925-035",
+      "name": "Ramady Technology",
+      "created_at": "2025-09-02T09:57:20.750Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:57:20.750Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "108f5a2b-da67-45d9-8669-561e81db518a",
+      "customer_code": "CST-0925-034",
+      "name": "Raksa Baksya Sandika",
+      "created_at": "2025-09-02T09:56:59.472Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:56:59.472Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "6e89d2df-83c8-4e88-a7a2-f07b0de39b34",
+      "customer_code": "CST-0925-033",
+      "name": "Qualita Global Teknologi",
+      "created_at": "2025-09-02T09:56:35.861Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:56:35.861Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "9ee23280-2f64-47f7-9251-525402fb05e3",
+      "customer_code": "CST-0925-032",
+      "name": "PUSINTEK",
+      "created_at": "2025-09-02T09:52:54.524Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:52:54.524Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "fde10f93-805c-4b90-af0f-d4d2a407aa61",
+      "customer_code": "CST-0925-031",
+      "name": "Pupuk Kalimantan Timur",
+      "created_at": "2025-09-02T09:51:48.799Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:51:48.799Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "2db6f399-7ccd-4d48-9199-6700174b75fa",
+      "customer_code": "CST-0925-030",
+      "name": "PT Cipta Sedaya Digital Indonesia (Berijalan)",
+      "created_at": "2025-09-02T09:51:19.078Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:51:19.078Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "e15f0d1e-c905-406c-b631-e57621b0f30e",
+      "customer_code": "CST-0925-029",
+      "name": "Prospera System Pte Ltd",
+      "created_at": "2025-09-02T09:50:12.171Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:50:12.171Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "f33be039-8ab6-4c46-b8c2-440f2e4b485d",
+      "customer_code": "CST-0925-028",
+      "name": "Precisely Software Incoporated",
+      "created_at": "2025-09-02T09:49:24.165Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:49:24.165Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "3208ebd4-8a01-4eff-bde2-68eae1bb0813",
+      "customer_code": "CST-0925-027",
+      "name": "PPM Manajemen",
+      "created_at": "2025-09-02T09:48:55.318Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:48:55.318Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "1932b901-1d34-4f9e-bdeb-0dd56e5b050f",
+      "customer_code": "CST-0925-026",
+      "name": "Pertamina",
+      "created_at": "2025-09-02T09:48:31.937Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:48:31.937Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "cdd80097-51b4-401e-a3c3-3a34cf31f455",
+      "customer_code": "CST-0925-025",
+      "name": "Perkasa Pilar Utama",
+      "created_at": "2025-09-02T09:48:14.140Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:48:14.140Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "d9e4033b-22a1-409d-b589-57c1e3d8e006",
+      "customer_code": "CST-0925-024",
+      "name": "PAM Lyonnaise Jaya",
+      "created_at": "2025-09-02T09:47:29.875Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:47:29.875Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "2dffff74-1d09-445e-8b8f-765192ce1626",
+      "customer_code": "CST-0925-023",
+      "name": "Packet Systems Indonesia",
+      "created_at": "2025-09-02T09:47:00.851Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:47:00.851Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "cf2bd510-c5ce-4132-abb7-90aba18444a6",
+      "customer_code": "CST-0925-022",
+      "name": "OTO Multiartha",
+      "created_at": "2025-09-02T09:45:41.343Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:45:41.343Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "1b8412ce-2261-4f96-a2fb-6759a2a94802",
+      "customer_code": "CST-0925-021",
+      "name": "Oracle Singapore",
+      "created_at": "2025-09-02T09:45:17.208Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-26T02:24:51.424Z",
+      "edited_by": "Dimas Satrio Anggoro"
+    },
+    {
+      "id": "0e12aaf6-3778-4adf-bf57-17d2da245dd3",
+      "customer_code": "CST-0925-020",
+      "name": "Oracle CAPAC Services UC, (Singapore Branch)",
+      "created_at": "2025-09-02T09:44:57.422Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:44:57.422Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "6edb0f2e-9096-4a83-a8a3-701f3c3c8b29",
+      "customer_code": "CST-0925-018",
+      "name": "Odoo Software Indonesia",
+      "created_at": "2025-09-02T09:43:41.703Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:43:41.703Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "fe0cc93c-450b-4ac8-bb98-0110e97c288a",
+      "customer_code": "CST-0925-017",
+      "name": "Nutanix Singapore, Pte. Ltd",
+      "created_at": "2025-09-02T09:43:21.754Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:43:21.754Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "f997c2ee-5a46-47eb-81c6-0c8d382637eb",
+      "customer_code": "CST-0925-016",
+      "name": "Nusantara Compnet Integrator",
+      "created_at": "2025-09-02T09:42:52.083Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:42:52.083Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "2343bd4b-b844-493f-b0f0-6c5e86d3eaa1",
+      "customer_code": "CST-0925-015",
+      "name": "Notaris Uun Guniarsih",
+      "created_at": "2025-09-02T09:42:23.525Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:42:23.525Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "aea7f1b5-47b1-462f-aa8a-5473b540e64b",
+      "customer_code": "CST-0925-014",
+      "name": "Multibina Pura Internasional",
+      "created_at": "2025-09-02T09:41:55.682Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:41:55.682Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "e7fda3ce-106c-4af0-a2b0-2153f18f9a9f",
+      "customer_code": "CST-0925-013",
+      "name": "MNC Sky Vision",
+      "created_at": "2025-09-02T09:41:14.562Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:41:14.562Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "4191256e-a998-4cee-84ae-6e52d27993dc",
+      "customer_code": "CST-0925-012",
+      "name": "MNC Kabel Mediacom",
+      "created_at": "2025-09-02T09:41:00.867Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:41:00.867Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "b9f04706-197e-437c-b40b-1ca3d773cec8",
+      "customer_code": "CST-0925-011",
+      "name": "Mitra Visindo Teknologi",
+      "created_at": "2025-09-02T09:40:28.086Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:40:28.086Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "eb5d668e-ea4d-4142-b2b3-a17573f7a138",
+      "customer_code": "CST-0925-010",
+      "name": "Mitra Teknologi Solusindo",
+      "created_at": "2025-09-02T09:38:57.344Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:38:57.344Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "72d1297f-cbd4-4418-87d7-6d94c339ee47",
+      "customer_code": "CST-0925-009",
+      "name": "Mitra Kreasindo",
+      "created_at": "2025-09-02T09:38:32.048Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:38:32.048Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "ce9ab793-001d-4797-9e92-c6785a8e2a9a",
+      "customer_code": "CST-0925-008",
+      "name": "Mitra Integrasi Informatika",
+      "created_at": "2025-09-02T09:38:11.983Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:38:11.983Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "a2d76fae-9d7b-4be2-8a91-3762c510cdc4",
+      "customer_code": "CST-0925-007",
+      "name": "Mitra Computa Asia",
+      "created_at": "2025-09-02T09:36:23.095Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:36:23.095Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "8ab7b51e-2241-48a1-8ea9-983fa3821a24",
+      "customer_code": "CST-0925-006",
+      "name": "Minahasa Cahaya Lestari",
+      "created_at": "2025-09-02T09:35:48.662Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:35:48.662Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "08af2b07-00ef-4f5a-90dc-4d787c46c200",
+      "customer_code": "CST-0925-005",
+      "name": "Metrodata Electronics",
+      "created_at": "2025-09-02T09:35:16.489Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:35:16.489Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "35727bf4-8608-48b0-b7eb-3610aaf965e6",
+      "customer_code": "CST-0925-004",
+      "name": "Mega Komputindo Lestari",
+      "created_at": "2025-09-02T09:34:36.871Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:34:36.871Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "14a0781b-22f2-43d4-8f09-d8f16ff78faa",
+      "customer_code": "CST-0925-003",
+      "name": "Mega Buana Teknologi",
+      "created_at": "2025-09-02T09:33:42.127Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:33:42.127Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "31017e89-e895-4fff-b8df-e7ce3e92e429",
+      "customer_code": "CST-0925-002",
+      "name": "Maybank Sekuritas Indonesia",
+      "created_at": "2025-09-02T09:33:00.670Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:33:00.670Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "851dc01b-8c37-47cc-a7f0-93a2cca35ce2",
+      "customer_code": "CST-0925-001",
+      "name": "Maybank Asset Management",
+      "created_at": "2025-09-02T09:32:38.507Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-09-02T09:32:38.507Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "62e54c0d-56ee-46ff-8a89-447ef0eedd57",
+      "customer_code": "CST-0825-191",
+      "name": "Mantra Global Konsultan",
+      "created_at": "2025-08-31T13:30:28.992Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-31T13:30:28.992Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "a05c19a6-b7eb-455e-9817-f8f4379d05ac",
+      "customer_code": "CST-0825-189",
+      "name": "Linknet",
+      "created_at": "2025-08-31T13:29:11.564Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-31T13:29:11.564Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "a1b44252-b770-4820-b430-4bd9821f27bf",
+      "customer_code": "CST-0825-188",
+      "name": "Sinergy Informasi Pratama",
+      "created_at": "2025-08-29T07:15:22.737Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-29T07:15:22.737Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "46f9ed7b-b33f-472b-a40e-8b2165cbd522",
+      "customer_code": "CST-0825-187",
+      "name": " VADS INDONESIA",
+      "created_at": "2025-08-29T07:12:22.824Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-29T07:12:22.824Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "7e7e64f6-45b6-48e2-b191-c481e2af0eeb",
+      "customer_code": "CST-0825-186",
+      "name": "Nagitec",
+      "created_at": "2025-08-29T07:11:53.912Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-29T07:11:53.912Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "a8f526d1-b078-4544-8649-8b1a2a86c8b9",
+      "customer_code": "CST-0825-184",
+      "name": "Linkar Indonesia Cendekia",
+      "created_at": "2025-08-29T04:04:27.916Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T04:04:27.916Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "9213e1c8-9a93-433b-bdb1-127cca694af8",
+      "customer_code": "CST-0825-183",
+      "name": "Lenovo Indonesia",
+      "created_at": "2025-08-29T04:03:51.169Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T04:03:51.169Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "99bf8123-05c2-409d-8383-8d8b64d650d9",
+      "customer_code": "CST-0825-182",
+      "name": "KPM Komputer",
+      "created_at": "2025-08-29T04:02:30.454Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T04:02:30.454Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "88e0346d-b6b2-4b19-bcc1-87fd7ce82ff8",
+      "customer_code": "CST-0825-181",
+      "name": "Kognitif Skema Indonesia",
+      "created_at": "2025-08-29T04:02:12.686Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T04:02:12.686Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "da1e2d22-6f2a-4cae-aaa6-aaae1669c63a",
+      "customer_code": "CST-0825-180",
+      "name": "Kliring Penjamin Efek Indonesia",
+      "created_at": "2025-08-29T04:01:42.742Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T04:01:42.742Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "b99ef174-aa8b-49f1-90e4-6947715cbb33",
+      "customer_code": "CST-0825-179",
+      "name": "Karlin Mastrindo",
+      "created_at": "2025-08-29T04:00:40.672Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T04:00:40.672Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "f0f15877-352c-44a9-b250-ee0ba96f8165",
+      "customer_code": "CST-0825-178",
+      "name": "Kapal Api Global",
+      "created_at": "2025-08-29T03:53:32.716Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:53:32.716Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "f9569564-1a0d-4bdd-98e1-3fa9ebfa3396",
+      "customer_code": "CST-0825-177",
+      "name": "Kalos Anthrope Solusi",
+      "created_at": "2025-08-29T03:53:03.690Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:53:03.690Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "9512dc19-8c5a-4d27-aceb-0d02bfcabb7f",
+      "customer_code": "CST-0825-176",
+      "name": "Kalbio Global Medika",
+      "created_at": "2025-08-29T03:49:02.404Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:49:02.404Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "7412725c-c5f8-4501-878c-12c3203f2d8a",
+      "customer_code": "CST-0825-175",
+      "name": "Jasa Raharja",
+      "created_at": "2025-08-29T03:46:47.811Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:46:47.811Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "9a5578e5-5e1b-40ac-b6ba-232f7fa2da13",
+      "customer_code": "CST-0825-174",
+      "name": "Ionpay Networks",
+      "created_at": "2025-08-29T03:46:10.418Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:46:10.418Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "82765a61-99cb-418d-9ef8-00796416ae8c",
+      "customer_code": "CST-0825-173",
+      "name": "Intisari Komputindo",
+      "created_at": "2025-08-29T03:45:04.363Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:45:04.363Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "09d24909-0f7f-4fcd-a40b-7b4f613e70b2",
+      "customer_code": "CST-0825-172",
+      "name": "Inti Corpora Teknologi",
+      "created_at": "2025-08-29T03:33:06.008Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:33:06.008Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "0bfb9687-209b-4c04-92f8-bab94b2545d0",
+      "customer_code": "CST-0825-171",
+      "name": "Integrasi Logistik Cipta Solusi",
+      "created_at": "2025-08-29T03:32:34.399Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:32:34.399Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "86f55bed-dae0-481e-8116-f6e10c16c851",
+      "customer_code": "CST-0825-170",
+      "name": "Inovasi Kredit Indonesia",
+      "created_at": "2025-08-29T03:31:51.850Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:31:51.850Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "272ffa33-4be6-48e7-b265-edc4dcb88849",
+      "customer_code": "CST-0825-169",
+      "name": "Innogene Kalbiotech Pte. Ltd",
+      "created_at": "2025-08-29T03:30:13.978Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:30:13.978Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "b4f1416d-a84a-4d26-afd2-0464a74252bd",
+      "customer_code": "CST-0825-168",
+      "name": "Inmotion Inovasi Teknologi",
+      "created_at": "2025-08-29T03:27:58.431Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:27:58.431Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "584142d3-3475-4f19-93b4-8bad6efce42b",
+      "customer_code": "CST-0825-167",
+      "name": "Informatika Mitra Sejati",
+      "created_at": "2025-08-29T03:25:26.488Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:25:26.488Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "b72d022c-43b8-46b7-b945-0d7627ac0653",
+      "customer_code": "CST-0825-166",
+      "name": "Infokom Elektrindo",
+      "created_at": "2025-08-29T03:24:43.445Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:24:43.445Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "1b7fa1fb-73d2-461d-b53f-2b13465314ac",
+      "customer_code": "CST-0825-165",
+      "name": "Info Solusindo Data Utama",
+      "created_at": "2025-08-29T03:23:16.761Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:23:16.761Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "2b54748f-7407-4b8a-8efe-38374b703c87",
+      "customer_code": "CST-0825-164",
+      "name": "Indorama Polychem Indonesia",
+      "created_at": "2025-08-29T03:22:42.636Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:22:42.636Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "4776bea0-4dfd-4ea1-ac65-0fc4c26a9d09",
+      "customer_code": "CST-0825-163",
+      "name": "Indonesia Global Solusindo",
+      "created_at": "2025-08-29T03:21:28.829Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:21:28.829Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "35597a96-d61c-40cb-a1ca-b350d93cdc4b",
+      "customer_code": "CST-0825-162",
+      "name": "Indonesia Fintopia Technology",
+      "created_at": "2025-08-29T03:20:14.608Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:20:14.608Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "3d68d759-f5d9-4dfc-8d4a-96201117cd86",
+      "customer_code": "CST-0825-161",
+      "name": "Indomining",
+      "created_at": "2025-08-29T03:18:36.705Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:18:36.705Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "8e9b33e7-2fcf-4577-b198-fb76fe6c107f",
+      "customer_code": "CST-0825-160",
+      "name": "IBM Indonesia",
+      "created_at": "2025-08-29T03:14:48.791Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:14:48.791Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "c0eed862-6dd6-467b-bd9c-ba192180d619",
+      "customer_code": "CST-0825-159",
+      "name": "Huawei Tech Investment",
+      "created_at": "2025-08-29T03:14:23.131Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:14:23.131Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "75e309be-2243-4173-9055-d7d3b6a8abfb",
+      "customer_code": "CST-0825-158",
+      "name": "Home Credit Indonesia",
+      "created_at": "2025-08-29T03:13:16.885Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:13:16.885Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "e8ce9fe4-430f-4bd4-bb96-0b110121ae24",
+      "customer_code": "CST-0825-157",
+      "name": "Hitech Indo Solusi",
+      "created_at": "2025-08-29T03:11:16.243Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:11:16.243Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "c136ccf9-3ebf-4145-a4f5-d0915adf5bfe",
+      "customer_code": "CST-0825-156",
+      "name": "Hewlett Packard Finance Indonesia",
+      "created_at": "2025-08-29T03:10:56.316Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:10:56.316Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "1d0301f1-2422-45c7-8d20-394ca1dd9546",
+      "customer_code": "CST-0825-155",
+      "name": "Hewlett Packard Enterprise Indonesia",
+      "created_at": "2025-08-29T03:10:19.517Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:10:19.517Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "a51acaf0-8513-4b03-adc0-d850d27bf0b4",
+      "customer_code": "CST-0825-154",
+      "name": "GTPlus CO., LTD",
+      "created_at": "2025-08-29T03:09:19.600Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:09:19.600Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "ec67f14f-4581-4606-8c6d-4906feb59f76",
+      "customer_code": "CST-0825-153",
+      "name": "Griya Indocitra Mandiri",
+      "created_at": "2025-08-29T03:08:33.843Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:08:33.843Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "6ad424d3-7f76-4227-a887-983b1547a866",
+      "customer_code": "CST-0825-152",
+      "name": "Granary Reka Cipta",
+      "created_at": "2025-08-29T03:06:52.659Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:06:52.659Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "04741ced-11e9-4b26-beba-3fb138e9efcb",
+      "customer_code": "CST-0825-151",
+      "name": "Gorontalo Listrik Perdana",
+      "created_at": "2025-08-29T03:05:47.800Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:05:47.800Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "76cf9461-3c4d-4699-a5ad-552896f1b4d5",
+      "customer_code": "CST-0825-150",
+      "name": "Globalindo Kreasi Wisata",
+      "created_at": "2025-08-29T03:05:27.805Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:05:27.805Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "5b487985-6c3c-465c-8206-995ae12d9307",
+      "customer_code": "CST-0825-149",
+      "name": "Global Media Visual",
+      "created_at": "2025-08-29T03:05:04.324Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:05:04.324Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "e962f34d-e230-4ff3-8b74-e54f42732e82",
+      "customer_code": "CST-0825-148",
+      "name": "Geotech System Indonesia",
+      "created_at": "2025-08-29T03:04:37.046Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:04:37.046Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "2992e3b6-72af-4c41-9f04-47c895d298b9",
+      "customer_code": "CST-0825-147",
+      "name": "Garuda Indonesia (Persero)",
+      "created_at": "2025-08-29T03:01:39.853Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:01:39.853Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "c1007c0b-73ea-48c8-83e5-0555196e4726",
+      "customer_code": "CST-0825-146",
+      "name": "Forest Indo Niaga",
+      "created_at": "2025-08-29T03:00:43.460Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T03:00:43.460Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "c6d86949-fffb-4627-87cb-61ce46d9fb41",
+      "customer_code": "CST-0825-145",
+      "name": "FIS Asia Pasific Inc",
+      "created_at": "2025-08-29T02:59:29.600Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T02:59:29.600Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "d9a331d3-e652-40ed-bb81-e54d25d29291",
+      "customer_code": "CST-0825-144",
+      "name": "Federal International Finance",
+      "created_at": "2025-08-29T02:59:03.397Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T02:59:03.397Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "98971ecc-f07d-4267-8911-3914de973822",
+      "customer_code": "CST-0825-143",
+      "name": "Fastrata Buana",
+      "created_at": "2025-08-29T02:58:23.730Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T02:58:23.730Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "72a7770f-5d3d-429d-b2e3-ae4e52462826",
+      "customer_code": "CST-0825-142",
+      "name": "Espay Debit Indonesia Koe",
+      "created_at": "2025-08-29T02:56:32.326Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T02:56:32.326Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "3ddc026a-52af-4227-839a-f12731eb78b1",
+      "customer_code": "CST-0825-141",
+      "name": "Eguardian Indonesia",
+      "created_at": "2025-08-29T02:56:01.677Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T02:56:01.677Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "eca6f5a8-364c-41b5-adf4-8d96ae6b2acb",
+      "customer_code": "CST-0825-140",
+      "name": "Duta Solusi Prima",
+      "created_at": "2025-08-29T02:45:52.523Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T02:45:52.523Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "f70f9f43-395d-43ea-a0dd-19aac35bd6cf",
+      "customer_code": "CST-0825-139",
+      "name": "Duta Sarana Inovasi",
+      "created_at": "2025-08-29T02:45:33.680Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T02:45:33.680Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "94842be5-5475-46f2-8056-2b09fea314c5",
+      "customer_code": "CST-0825-138",
+      "name": "Duta Abadi Primantara",
+      "created_at": "2025-08-29T02:43:26.305Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T02:43:26.305Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "f6b1971d-8e03-49e8-9444-33220dcf0515",
+      "customer_code": "CST-0825-137",
+      "name": "Direktorat Jendral Pajak (DJP)",
+      "created_at": "2025-08-29T02:42:51.784Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T02:42:51.784Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "6fe44dce-2cf9-4bb1-9f9a-31d1213e4883",
+      "customer_code": "CST-0825-136",
+      "name": "Dikstra Cipta Solusi",
+      "created_at": "2025-08-29T02:39:19.889Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T02:39:19.889Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "c464f56c-130b-4de3-9490-a7f662835edd",
+      "customer_code": "CST-0825-135",
+      "name": "Digital Vision Nusantara",
+      "created_at": "2025-08-29T02:35:02.045Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T02:35:02.045Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "70c0bdad-5b68-4471-8805-2883387f0a2b",
+      "customer_code": "CST-0825-134",
+      "name": "Difini Teknologi",
+      "created_at": "2025-08-29T02:33:53.525Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T02:33:53.525Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "e62fd6e5-f706-4437-a7de-ca85d69bd233",
+      "customer_code": "CST-0825-133",
+      "name": "Dell Indonesia",
+      "created_at": "2025-08-29T02:31:37.820Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T02:31:37.820Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "fdebcfbc-3e55-4510-bcc8-446b55c09eeb",
+      "customer_code": "CST-0825-132",
+      "name": "Dedikasi Teknologi Solusi",
+      "created_at": "2025-08-29T02:29:36.424Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T02:29:36.424Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "76ee3e2b-d8c0-498a-a7bb-f3575dc44c72",
+      "customer_code": "CST-0825-131",
+      "name": "CV Mandiri Mega Buana",
+      "created_at": "2025-08-29T02:19:11.480Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T02:19:11.480Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "fa59d37d-0152-4c02-ac7c-7602c34a01b1",
+      "customer_code": "CST-0825-130",
+      "name": "CV Esa Tunggal Mandiri",
+      "created_at": "2025-08-29T02:18:53.590Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T02:18:53.590Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "bfd0758c-e976-43d7-93f4-00b1cacd83c2",
+      "customer_code": "CST-0825-129",
+      "name": "CTG Plus Konsultan Indonesia",
+      "created_at": "2025-08-29T02:18:28.134Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T02:18:28.134Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "ba9a2ecf-b883-416a-adbd-b59d93276440",
+      "customer_code": "CST-0825-128",
+      "name": "Cohesity APJ PTE. LTD",
+      "created_at": "2025-08-29T02:13:51.165Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T02:13:51.165Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "251470fb-2260-4021-bd07-633303467373",
+      "customer_code": "CST-0825-127",
+      "name": "Cipta Informatika Mandiri",
+      "created_at": "2025-08-29T02:13:10.708Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T02:13:10.708Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "0d0f7826-ec83-4aa4-9cd5-61fc0154bf88",
+      "customer_code": "CST-0825-126",
+      "name": "Changhong IT (Hong Kong) Information Products Co",
+      "created_at": "2025-08-29T02:10:00.163Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T02:10:00.163Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "1e5a18c8-49ed-4b0f-94ae-26330aa18b2b",
+      "customer_code": "CST-0825-125",
+      "name": "Central Santosa Finance",
+      "created_at": "2025-08-29T02:05:20.397Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T02:05:20.397Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "dfecf880-32ec-494f-a409-44d95bd83517",
+      "customer_code": "CST-0825-124",
+      "name": "Central Data Technology",
+      "created_at": "2025-08-29T02:04:57.213Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T02:04:57.213Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "1d468c74-5716-44ab-9fba-3b4474a7afbc",
+      "customer_code": "CST-0825-123",
+      "name": "Bursa Efek Indonesia",
+      "created_at": "2025-08-29T02:04:16.241Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-29T02:04:16.241Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "c3d65c34-57af-457f-843c-0fbcbec9bf9a",
+      "customer_code": "CST-0825-122",
+      "name": "Bukit Makmur Mandiri Utama",
+      "created_at": "2025-08-28T07:21:45.006Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T07:21:45.006Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "5d1eb2c1-f530-4399-972a-1ae6aba518ce",
+      "customer_code": "CST-0825-121",
+      "name": "Bukit Asam (Persero)",
+      "created_at": "2025-08-28T07:21:26.158Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T07:21:26.158Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "b0609287-e778-4a0e-88b9-33b52e354d49",
+      "customer_code": "CST-0825-120",
+      "name": "BT Communications Indonesia",
+      "created_at": "2025-08-28T07:21:05.349Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T07:21:05.349Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "795e5f93-9742-4db4-b95d-7b3b9aca2bb2",
+      "customer_code": "CST-0825-119",
+      "name": "Bright Mobile Telecommunication",
+      "created_at": "2025-08-28T07:20:37.255Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T07:20:37.255Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "aa68a4d5-f350-40ca-a356-99ca7a761bc3",
+      "customer_code": "CST-0825-118",
+      "name": "Bintang Toedjoe",
+      "created_at": "2025-08-28T07:19:28.643Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T07:19:28.643Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "4bab0955-a459-4d70-9bee-24a37ce3093c",
+      "customer_code": "CST-0825-117",
+      "name": "Binareka Tatamandiri",
+      "created_at": "2025-08-28T07:18:45.578Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T07:18:45.578Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "c86d3330-dce0-4ba5-8e56-efafe466114a",
+      "customer_code": "CST-0825-116",
+      "name": "Berca Hardayaperkasa",
+      "created_at": "2025-08-28T07:16:49.059Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T07:16:49.059Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "1beeefd9-6e95-44e2-820c-06a631e8107a",
+      "customer_code": "CST-0825-115",
+      "name": "Belli Florist",
+      "created_at": "2025-08-28T07:16:20.009Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T07:16:20.009Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "5085f56f-895d-4a5b-a005-f083d7c4426d",
+      "customer_code": "CST-0825-114",
+      "name": "Bank Tabungan Pensiunan Nasional (BTPN)",
+      "created_at": "2025-08-28T07:12:34.475Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T07:12:34.475Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "1e6c3da1-207a-402e-a17e-6bc483a627df",
+      "customer_code": "CST-0825-113",
+      "name": "Bank Sinar Harapan Bali",
+      "created_at": "2025-08-28T07:10:31.178Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T07:10:31.178Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "04788536-deb6-404e-8586-321882179336",
+      "customer_code": "CST-0825-112",
+      "name": "Bank Sahabat Sampoerna",
+      "created_at": "2025-08-28T07:10:08.753Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T07:10:08.753Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "08de7126-3e65-4f73-b092-e1f9dd01e4a6",
+      "customer_code": "CST-0825-110",
+      "name": "Bank International Indonesia",
+      "created_at": "2025-08-28T07:05:45.415Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T07:05:45.415Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "e84dc53c-b280-4b97-b710-3b0fc320a918",
+      "customer_code": "CST-0825-109",
+      "name": "Bank Ina Perdana",
+      "created_at": "2025-08-28T07:04:48.330Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T07:04:48.330Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "b218e107-84a7-4884-922d-222e938e975b",
+      "customer_code": "CST-0825-108",
+      "name": "Bank Hibank Indonesia",
+      "created_at": "2025-08-28T06:57:29.615Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T06:57:29.615Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "15f7b6d4-784d-4d42-b7d6-fb17b2569b56",
+      "customer_code": "CST-0825-107",
+      "name": "Bank DBS Indonesia",
+      "created_at": "2025-08-28T06:57:01.447Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T06:57:01.447Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "54bb6a7c-4b1d-46c2-a68b-d8ede1156edb",
+      "customer_code": "CST-0825-106",
+      "name": "Bank Bumi Artha",
+      "created_at": "2025-08-28T06:55:50.709Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T06:55:50.709Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "29892985-b6df-469b-bb24-3dcba8322219",
+      "customer_code": "CST-0825-105",
+      "name": "Bank Bukopin",
+      "created_at": "2025-08-28T06:55:32.717Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T06:55:32.717Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "ceaad633-29bf-4bbe-b2ee-2beef61620c4",
+      "customer_code": "CST-0825-104",
+      "name": "Bank BCA Syariah",
+      "created_at": "2025-08-28T06:55:08.662Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T06:55:08.662Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "fbffcb6a-05ff-4816-aaed-5ac8c0e0761b",
+      "customer_code": "CST-0825-103",
+      "name": "Bajau Escorindo",
+      "created_at": "2025-08-28T06:54:34.768Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T06:54:34.768Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "3c29036f-c426-42cf-88be-8ccf4986f8db",
+      "customer_code": "CST-0825-102",
+      "name": "Bahana Pembinaan Usaha Indonesia (Persero)",
+      "created_at": "2025-08-28T06:53:11.098Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T06:53:11.098Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "9cd935bd-6f32-4ddc-b8b0-005c82bfba95",
+      "customer_code": "CST-0825-101",
+      "name": "Avenew Akademi Inovasi",
+      "created_at": "2025-08-28T06:52:37.744Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T06:52:37.744Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "fe3dc8b6-2a75-4ecb-a3a1-db4239482737",
+      "customer_code": "CST-0825-100",
+      "name": "Autocomp System Indonesia (Yazaki Group)",
+      "created_at": "2025-08-28T06:52:14.576Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T06:52:14.576Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "9e732659-22f0-4c4a-a451-006b53beb7bd",
+      "customer_code": "CST-0825-099",
+      "name": "Asuransi Wahana Tata",
+      "created_at": "2025-08-28T06:51:33.695Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T06:51:33.695Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "c2802e52-1f70-45fa-8597-0789d95b00be",
+      "customer_code": "CST-0825-098",
+      "name": "Asuransi Reliance Indonesia",
+      "created_at": "2025-08-28T06:51:14.127Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T06:51:14.127Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "f09a5a41-5088-490a-900b-6b233d50efce",
+      "customer_code": "CST-0825-097",
+      "name": "Asuransi Jiwa Mega Indonesia",
+      "created_at": "2025-08-28T06:49:32.789Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T06:49:32.789Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "beb4c3c8-9efd-445a-84f0-fbb0b15d966d",
+      "customer_code": "CST-0825-096",
+      "name": "Asuransi Jiwa IFG",
+      "created_at": "2025-08-28T06:49:06.755Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T06:49:06.755Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "cb1afdbe-ebc4-40dd-8182-3649b840a465",
+      "customer_code": "CST-0825-095",
+      "name": "Asuransi Jiwa BCA (BCA Life)",
+      "created_at": "2025-08-28T06:48:42.291Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T06:48:42.291Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "1fc42751-51e0-42e0-85ca-d55580f93fad",
+      "customer_code": "CST-0825-094",
+      "name": "Asuransi Jasa Indonesia",
+      "created_at": "2025-08-28T06:47:27.722Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T06:47:27.722Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "e67dd625-3414-4159-91cc-7638ce9917a2",
+      "customer_code": "CST-0825-093",
+      "name": "Asuransi Etiqa International Indonesia",
+      "created_at": "2025-08-28T06:17:55.422Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T06:17:55.422Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "76a07b5b-d889-447f-a55c-8ae14056bfee",
+      "customer_code": "CST-0825-092",
+      "name": "Asuransi Allianz Life Ind",
+      "created_at": "2025-08-28T06:17:24.101Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T06:17:24.101Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "6f733814-53ad-4dd0-b085-a675ebefe4cd",
+      "customer_code": "CST-0825-091",
+      "name": "Asuransi Adira Dinamika",
+      "created_at": "2025-08-28T06:16:52.442Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T06:16:52.442Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "017082c2-e010-4116-a0a0-19fb7f91dea5",
+      "customer_code": "CST-0825-090",
+      "name": "Astra Sedaya Finance",
+      "created_at": "2025-08-28T04:50:51.115Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T04:50:51.115Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "4deefa8c-602d-462e-93e3-c98bbcbfc89d",
+      "customer_code": "CST-0825-089",
+      "name": "ASEAN Secretariat",
+      "created_at": "2025-08-28T04:50:12.661Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T04:50:12.661Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "3ef1e5cf-6db5-4f33-995b-8c0171963d8a",
+      "customer_code": "CST-0825-088",
+      "name": "Artajasa Pembayaran Elektronis",
+      "created_at": "2025-08-28T04:49:42.332Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T04:49:42.332Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "495fa9fd-9c1f-423c-b682-8e0442a3e92f",
+      "customer_code": "CST-0825-087",
+      "name": "ANTAM",
+      "created_at": "2025-08-28T04:48:17.937Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T04:48:17.937Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "9b4331d2-131b-4e5a-a0ef-e1a52d7d2288",
+      "customer_code": "CST-0825-086",
+      "name": "Andalan Sukses Lestari",
+      "created_at": "2025-08-28T04:48:05.526Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T04:48:05.526Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "e8d24d63-bce6-42bc-a178-66644a3105a0",
+      "customer_code": "CST-0825-085",
+      "name": "Anagata Teknologi Mandiri",
+      "created_at": "2025-08-28T04:47:33.565Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T04:47:33.565Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "19f28441-1063-4c61-b614-c4dbf7449367",
+      "customer_code": "CST-0825-084",
+      "name": "Amazon.com Service LLC",
+      "created_at": "2025-08-28T04:46:40.701Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T04:46:40.701Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "ef6c4e5f-25b1-4ee7-b5c6-acc228b43c9f",
+      "customer_code": "CST-0825-083",
+      "name": "Allman Indonesia",
+      "created_at": "2025-08-28T04:45:57.008Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T04:45:57.008Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "fb6cbf9f-9552-4d16-897c-36496b9bff63",
+      "customer_code": "CST-0825-082",
+      "name": "Aliansi Teknologi Indonesia",
+      "created_at": "2025-08-28T04:45:28.742Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T04:45:28.742Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "95843181-ee50-4a8c-83d6-10bd6f46de67",
+      "customer_code": "CST-0825-081",
+      "name": "Aero System Indonesia",
+      "created_at": "2025-08-28T04:44:32.388Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T04:44:32.388Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "472f3691-69bf-46b1-af57-540b5d22a67a",
+      "customer_code": "CST-0825-080",
+      "name": "Adakom International Technology",
+      "created_at": "2025-08-28T04:39:00.724Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T04:39:00.724Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "88a1199a-43af-4c4c-825f-3b6ca71a793b",
+      "customer_code": "CST-0825-079",
+      "name": " Alamtri Power Indonesia",
+      "created_at": "2025-08-28T04:32:14.156Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T04:37:29.581Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "b73956df-e466-478c-b063-3dd1a092b7d5",
+      "customer_code": "CST-0825-078",
+      "name": " Jaya CM",
+      "created_at": "2025-08-28T04:31:23.114Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T04:31:23.114Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "fe91bf01-44fb-47c4-ac54-01d1ff9b621d",
+      "customer_code": "CST-0825-077",
+      "name": " Kayaba Indonesia",
+      "created_at": "2025-08-28T04:30:47.948Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T04:30:47.948Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "85a57a1e-ed6d-42da-b98c-68f1958f4132",
+      "customer_code": "CST-0825-076",
+      "name": " Great Giant Pineapple",
+      "created_at": "2025-08-28T04:30:13.284Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T04:30:13.284Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "ce200f09-f2b5-4e43-9b09-eefda52ccb96",
+      "customer_code": "CST-0825-075",
+      "name": " Asuransi Kredit Indonesia",
+      "created_at": "2025-08-28T04:29:34.357Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T06:50:51.945Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "6e25da00-4db9-4d59-a270-07af9b7995fa",
+      "customer_code": "CST-0825-074",
+      "name": " May Sun Yvan (Skintific)",
+      "created_at": "2025-08-28T04:21:53.650Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T04:21:53.650Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "c17f191a-7eb0-4d11-b473-0c1e1b7fe772",
+      "customer_code": "CST-0825-073",
+      "name": " Asuransi Jaminan Kredit Indonesia",
+      "created_at": "2025-08-28T04:21:06.263Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T04:21:06.263Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "bf29ce18-b8f1-4a84-967f-b7a374158c9f",
+      "customer_code": "CST-0825-072",
+      "name": " Sompo Insurance Indonesia",
+      "created_at": "2025-08-28T04:20:23.389Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T04:20:23.389Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "a67d207e-8fdd-4fd1-8f1e-239f9037e511",
+      "customer_code": "CST-0825-071",
+      "name": "PT Pertamina Drilling Services Indonesia",
+      "created_at": "2025-08-28T04:19:42.592Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T04:36:45.241Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "6f686203-9136-4264-b221-9cc7e22020f4",
+      "customer_code": "CST-0825-070",
+      "name": " Asuransi Jiwa Astra",
+      "created_at": "2025-08-28T04:18:58.280Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T04:18:58.280Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "426e3620-a33e-4550-8631-31c4cd347e6c",
+      "customer_code": "CST-0825-069",
+      "name": " Oracle Indonesia",
+      "created_at": "2025-08-28T04:18:10.038Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T04:18:10.038Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "66789108-da59-450b-b507-1ee1b2b03674",
+      "customer_code": "CST-0825-068",
+      "name": " Surya Inti Tembakau",
+      "created_at": "2025-08-28T04:14:56.987Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T04:14:56.987Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "1024507a-4d91-4869-83b7-abde6850edfd",
+      "customer_code": "CST-0825-067",
+      "name": " Trees Solutions",
+      "created_at": "2025-08-28T04:14:09.442Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T04:14:09.442Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "d54de8c9-9382-4741-82fd-aaee80067c3b",
+      "customer_code": "CST-0825-066",
+      "name": " Sisindokom Lintasbuana",
+      "created_at": "2025-08-28T04:12:13.244Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T04:12:13.244Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "4268affc-c4ff-4b2e-9db7-f2a77494a87d",
+      "customer_code": "CST-0825-065",
+      "name": " Prima Solusi Servisindo",
+      "created_at": "2025-08-28T04:10:31.688Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T04:10:31.688Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "59771fd4-e8e7-4dc7-b09b-fd3e8ee77ce5",
+      "customer_code": "CST-0825-064",
+      "name": " Ingram Micro Indonesia",
+      "created_at": "2025-08-28T04:05:42.369Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T04:05:42.369Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "aec863ef-3758-4a97-a286-0a8b34d3fe72",
+      "customer_code": "CST-0825-059",
+      "name": "KDS Indonesia",
+      "created_at": "2025-08-28T03:51:11.379Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:51:11.379Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "5fae38d3-d24a-4790-8a41-2c34f2ef5f8a",
+      "customer_code": "CST-0825-058",
+      "name": "Synnex Metrodata Technology Services",
+      "created_at": "2025-08-28T03:42:30.418Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:42:30.418Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "c25091d8-0135-4297-aab8-ce46c11d9d64",
+      "customer_code": "CST-0825-057",
+      "name": "AKR Corporindo",
+      "created_at": "2025-08-28T03:39:05.129Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:39:05.129Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "c4e790b5-14f2-46d6-a67a-13bf442e8bc9",
+      "customer_code": "CST-0825-056",
+      "name": "CV Aistech Solutindo",
+      "created_at": "2025-08-28T03:38:30.318Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:38:30.318Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "c675db25-7305-4df7-863d-50b7a9322a14",
+      "customer_code": "CST-0825-055",
+      "name": "Synnex Metrodata Indonesia",
+      "created_at": "2025-08-28T03:38:20.897Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:38:20.897Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "913518ae-aa01-4b35-8a2b-f83483833951",
+      "customer_code": "CST-0825-054",
+      "name": " Pan Solusi Indodata",
+      "created_at": "2025-08-28T03:37:11.762Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:37:11.762Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "9289d14b-8f95-46e8-bb81-50fa96339d50",
+      "customer_code": "CST-0825-053",
+      "name": "Prodia Widyahusada",
+      "created_at": "2025-08-28T03:36:58.831Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:36:58.831Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "68ffbe2f-9014-4b08-96e7-fe612c8ec5d4",
+      "customer_code": "CST-0825-052",
+      "name": "PFI Mega",
+      "created_at": "2025-08-28T03:36:24.631Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:36:24.631Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "d00399b1-a04f-4275-97e5-3973af9a739e",
+      "customer_code": "CST-0825-051",
+      "name": " Citra Sentosa Solusindo",
+      "created_at": "2025-08-28T03:35:54.051Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:35:54.051Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "98af7ee5-ffd3-4eaa-b85a-4b3b15e530fc",
+      "customer_code": "CST-0825-050",
+      "name": "BPJS Ketenagakerjaan",
+      "created_at": "2025-08-28T03:35:49.710Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:35:49.710Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "adbedced-f01f-47c1-8bb1-94dfe41e848a",
+      "customer_code": "CST-0825-049",
+      "name": "Bean Media Group Pty Ltd",
+      "created_at": "2025-08-28T03:34:01.831Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:34:01.831Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "c9a7ab24-ce99-4783-b2a2-b615a3cbf65b",
+      "customer_code": "CST-0825-048",
+      "name": " XLSmart Telecom Sejahtera  ",
+      "created_at": "2025-08-28T03:33:33.481Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:33:33.481Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "95442b7d-59c0-45a7-8bd8-a20fc8a91e8b",
+      "customer_code": "CST-0825-047",
+      "name": "Kreasi Anugerah Solusindo",
+      "created_at": "2025-08-28T03:33:28.888Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:33:28.888Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "f35995e6-0989-439e-b63b-0a8674448ef5",
+      "customer_code": "CST-0825-046",
+      "name": " Password Solusi Sistem",
+      "created_at": "2025-08-28T03:32:47.500Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:32:47.500Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "a8d28fc6-9ad1-43c8-9cb3-c731ddf6e60d",
+      "customer_code": "CST-0825-045",
+      "name": " Bank OCBC NISP  ",
+      "created_at": "2025-08-28T03:32:20.852Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:32:20.852Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "bc7e898e-5425-4bb3-a25c-0e6fbb11d358",
+      "customer_code": "CST-0825-044",
+      "name": "Bank KEB Hana Indonesia",
+      "created_at": "2025-08-28T03:30:58.920Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:30:58.920Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "5b70dfe6-73a2-4a37-a64f-11102fdd147f",
+      "customer_code": "CST-0825-043",
+      "name": " Palem Trikarya Indonesia",
+      "created_at": "2025-08-28T03:30:12.715Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:30:12.715Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "ec3e8085-9fec-487e-8457-89cd65203873",
+      "customer_code": "CST-0825-042",
+      "name": " Mitra Pinasthika Mustika Finance",
+      "created_at": "2025-08-28T03:29:49.690Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:29:49.690Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "a1f785a5-36a1-419e-a3fb-5c7ed0173d2f",
+      "customer_code": "CST-0825-041",
+      "name": "Alpabit Digital Inovasi",
+      "created_at": "2025-08-28T03:29:19.491Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:29:19.491Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "dd7686d0-8615-4533-86bc-6fe64d7426cc",
+      "customer_code": "CST-0825-040",
+      "name": " MPM Finance",
+      "created_at": "2025-08-28T03:29:05.799Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:29:05.799Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "46ed6824-c323-47c8-8449-f3df1209395d",
+      "customer_code": "CST-0825-039",
+      "name": " IDX Solusi Teknologi Informasi",
+      "created_at": "2025-08-28T03:28:42.085Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:28:42.085Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "a2be672c-3863-4fc2-83fe-656fd6541d33",
+      "customer_code": "CST-0825-038",
+      "name": "Pamapersada Nusantara",
+      "created_at": "2025-08-28T03:28:36.323Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:28:36.323Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "2dfc78bc-5b9f-4840-b1d4-718edc74e94e",
+      "customer_code": "CST-0825-037",
+      "name": " Commonwealth Bank",
+      "created_at": "2025-08-28T03:28:12.168Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:28:12.168Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "161366fc-1e89-4c73-a599-fda3e5df6726",
+      "customer_code": "CST-0825-036",
+      "name": "PT BeyondRisk",
+      "created_at": "2025-08-28T03:28:04.195Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-09-02T09:50:30.183Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "69ee5b7b-0311-44cf-8662-c558af0b81fc",
+      "customer_code": "CST-0825-035",
+      "name": " Blue Power Technology",
+      "created_at": "2025-08-28T03:27:40.719Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:27:40.719Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "e2685158-6e79-4770-a9b1-6114f7129f88",
+      "customer_code": "CST-0825-034",
+      "name": "SGMW MOTOR INDONESIA",
+      "created_at": "2025-08-28T03:27:29.051Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:27:29.051Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "6365b7b3-6604-4792-971b-4a2c3d3b19aa",
+      "customer_code": "CST-0825-033",
+      "name": "SUZUKI INDOMOBIL MOTOR",
+      "created_at": "2025-08-28T03:25:30.030Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:25:30.030Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "1a9b3aea-8662-4e5c-8e1f-70776f02b90c",
+      "customer_code": "CST-0825-032",
+      "name": "Asuransi Jiwa Manulife Indonesia",
+      "created_at": "2025-08-28T03:24:54.328Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:24:54.328Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "a2282471-4491-408b-9f40-eb9c136c5398",
+      "customer_code": "CST-0825-031",
+      "name": "Intikom Berlian Mustika",
+      "created_at": "2025-08-28T03:22:35.090Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:22:35.090Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "eb128701-f372-4d92-9e56-2d8578324362",
+      "customer_code": "CST-0825-030",
+      "name": " Trisensa Mineral Utama",
+      "created_at": "2025-08-28T03:21:23.499Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:21:23.499Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "4c78e76e-1ddb-42d2-ac50-42092b860905",
+      "customer_code": "CST-0825-029",
+      "name": "Mastersystem Infotama",
+      "created_at": "2025-08-28T03:21:18.683Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:21:18.683Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "40603d1c-7d61-41fd-b23c-e86eb885ffaf",
+      "customer_code": "CST-0825-028",
+      "name": "ECS Indo Jaya",
+      "created_at": "2025-08-28T03:20:52.232Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:20:52.232Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "078b3891-3703-4bd1-946c-79417bfacad2",
+      "customer_code": "CST-0825-027",
+      "name": "Artha Mulia Trijaya",
+      "created_at": "2025-08-28T03:20:11.022Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:20:11.022Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "abb38bf7-7ae9-46c0-8e11-b6fb54c3ca16",
+      "customer_code": "CST-0825-026",
+      "name": " Santos Jaya Abadi",
+      "created_at": "2025-08-28T03:19:36.978Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:19:36.978Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "adaa6f7e-0a19-4db0-a14e-f129412528e9",
+      "customer_code": "CST-0825-025",
+      "name": " Metrocom Global Solusi",
+      "created_at": "2025-08-28T03:18:50.708Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:18:50.708Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "52258da0-0756-41f8-baf6-1e90a623376d",
+      "customer_code": "CST-0825-024",
+      "name": " Penyelesaian Transaksi Elektronik Nasional (PTEN)",
+      "created_at": "2025-08-28T03:17:51.697Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:17:51.697Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "4d96a417-dc21-4485-9b11-96af120dcbe5",
+      "customer_code": "CST-0825-023",
+      "name": " Data Prima Solusi",
+      "created_at": "2025-08-28T03:16:51.572Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:16:51.572Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "c64efee7-38d1-4153-b55f-69f453f84f2f",
+      "customer_code": "CST-0825-022",
+      "name": "GEIC Jaya Lestari",
+      "created_at": "2025-08-28T03:16:38.360Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:16:38.360Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "888d7e9e-7a7b-492c-881b-326c1255cf09",
+      "customer_code": "CST-0825-021",
+      "name": " Bank Panin Dubai Syariah",
+      "created_at": "2025-08-28T03:16:13.061Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:16:13.061Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "c170f4b6-470c-4514-b24b-462ed81eb87c",
+      "customer_code": "CST-0825-020",
+      "name": "Indonesia Comnet Plus (Icon+)",
+      "created_at": "2025-08-28T03:16:11.671Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:16:11.671Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "7ef7fc58-4ff9-49af-8f58-5bd2184986e3",
+      "customer_code": "CST-0825-019",
+      "name": " XDC Indonesia",
+      "created_at": "2025-08-28T03:15:27.846Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:15:27.846Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "3b8723f9-a1dc-47ac-8dea-9abc82ad4210",
+      "customer_code": "CST-0825-018",
+      "name": "Mandala Multifinance",
+      "created_at": "2025-08-28T03:15:13.949Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:15:13.949Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "016e70cd-2079-471c-b610-137b2ae3f119",
+      "customer_code": "CST-0825-017",
+      "name": " Pansystems Sistim Informasindo",
+      "created_at": "2025-08-28T03:14:38.298Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:14:38.298Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "9082a653-6dec-4b45-8e9c-a721a97663b3",
+      "customer_code": "CST-0825-016",
+      "name": "Harapan Abadi Tekstil Indonesia",
+      "created_at": "2025-08-28T03:14:25.355Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:14:25.355Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "d2265587-e6be-4d16-98bf-5085f997f882",
+      "customer_code": "CST-0825-015",
+      "name": "FIS Systems Indonesia",
+      "created_at": "2025-08-28T03:13:04.677Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:13:04.677Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "cef1c430-bc1e-4854-8612-fa3c1633df6d",
+      "customer_code": "CST-0825-014",
+      "name": "Agel Langgeng",
+      "created_at": "2025-08-28T03:05:35.373Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:05:35.373Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "aa6b4696-1cdd-448e-9a1c-0af8b5b701c8",
+      "customer_code": "CST-0825-013",
+      "name": "Bank Jago",
+      "created_at": "2025-08-28T03:04:15.670Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:04:15.670Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "f7adc157-bc84-42d8-a35b-48678a919111",
+      "customer_code": "CST-0825-012",
+      "name": " Sigma Cipta Caraka",
+      "created_at": "2025-08-28T03:02:55.517Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T03:02:55.517Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "d4ac3339-e397-4e3f-b01a-143e8ee28c57",
+      "customer_code": "CST-0825-011",
+      "name": " Jasa Kodinc Informatika",
+      "created_at": "2025-08-28T02:52:59.015Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T02:52:59.015Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "5afa0427-10cd-455c-864e-2fa4994256a1",
+      "customer_code": "CST-0825-010",
+      "name": "Bank ANZ Indonesia",
+      "created_at": "2025-08-28T02:50:40.827Z",
+      "created_by": "helpdesk infraCom Technology",
+      "edited_at": "2025-08-28T02:50:40.827Z",
+      "edited_by": "helpdesk infraCom Technology"
+    },
+    {
+      "id": "2b623f23-dc70-4f40-9b86-f3c47807e6b2",
+      "customer_code": "CST-0825-009",
+      "name": "Bank IBK Indonesia",
+      "created_at": "2025-08-27T07:15:29.877Z",
+      "created_by": "Super User",
+      "edited_at": "2025-08-28T02:46:42.148Z",
+      "edited_by": "Indra Darmawan"
+    },
+    {
+      "id": "c6ca93e2-0041-479b-9955-0249fdf57181",
+      "customer_code": "CST-0825-008",
+      "name": "TIKI Jalur Nugraha Ekakurir",
+      "created_at": "2025-08-27T03:39:33.643Z",
+      "created_by": "Super User",
+      "edited_at": "2025-08-28T02:47:03.318Z",
+      "edited_by": "Indra Darmawan"
+    },
+    {
+      "id": "fafcce1e-56cd-4bae-b8c9-4766eee5b436",
+      "customer_code": "CST-0825-007",
+      "name": "Astra Credit Companies",
+      "created_at": "2025-08-26T03:28:12.645Z",
+      "created_by": "Super User",
+      "edited_at": "2025-08-26T03:28:12.645Z",
+      "edited_by": "Super User"
+    },
+    {
+      "id": "cc000ba5-b92c-4146-9c50-534ca47ab391",
+      "customer_code": "CST-0825-006",
+      "name": "Sarana Pactindo",
+      "created_at": "2025-08-26T03:14:05.636Z",
+      "created_by": "Super User",
+      "edited_at": "2025-08-28T02:54:53.423Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "78dca2c0-c8ef-45ca-a89e-9f3c3e954e13",
+      "customer_code": "CST-0825-005",
+      "name": "Bank Syariah Indonesia",
+      "created_at": "2025-08-26T02:48:17.090Z",
+      "created_by": "Dimas Prima",
+      "edited_at": "2025-08-26T02:48:17.090Z",
+      "edited_by": "Dimas Prima"
+    },
+    {
+      "id": "64a42430-2cdc-46e9-acec-17e792217c58",
+      "customer_code": "CST-0825-004",
+      "name": "Bank Rakyat Indonesia",
+      "created_at": "2025-08-25T11:47:16.276Z",
+      "created_by": "Super User",
+      "edited_at": "2025-08-28T02:55:47.729Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "eb4fed73-6b6a-4ca4-b8c7-c45574893b3c",
+      "customer_code": "CST-0825-003",
+      "name": "Adira Dinamika Multi Finance",
+      "created_at": "2025-08-20T10:13:36.890Z",
+      "created_by": "Febrina Dahlia",
+      "edited_at": "2025-08-28T04:44:02.136Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "1766e3a1-1cfe-4bec-87a3-f0186f5eec77",
+      "customer_code": "CST-0825-002",
+      "name": "Kementerian Keuangan Republik Indonesia Direktorat",
+      "created_at": "2025-08-15T03:14:59.070Z",
+      "created_by": "Dede Firmansyah",
+      "edited_at": "2025-08-28T02:57:27.964Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "1c6d5b22-462d-4d0c-bf79-d35ba8ef2b21",
+      "customer_code": "CST-0825-001",
+      "name": "Wahana Ottomitra Multi Artha",
+      "created_at": "2025-08-04T03:29:45.439Z",
+      "created_by": "Febrina Dahlia",
+      "edited_at": "2025-09-03T08:19:27.410Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "fc35a719-7250-4a3d-a421-f167dd78b4d8",
+      "customer_code": "CST-0725-001",
+      "name": "Bank Of China",
+      "created_at": "2025-07-29T01:52:42.821Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-07-29T01:52:42.821Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "61a9b23b-5bb4-431f-815e-72603706bb99",
+      "customer_code": "CST-20250708-001",
+      "name": "DBS Vickers Securities Indonesia",
+      "created_at": "2025-07-08T02:28:06.825Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T03:01:36.329Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "77dbfd96-784a-4f1e-9c05-10abe2437782",
+      "customer_code": "CST-20250702-001",
+      "name": "Lembaga Pembiayaan Ekspor Indonesia (EXIMBANK)",
+      "created_at": "2025-07-02T03:17:37.633Z",
+      "created_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri",
+      "edited_at": "2025-08-28T03:02:27.024Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "9908d9f1-cabd-416a-bfc1-f309a7804681",
+      "customer_code": "CST-20250617-001",
+      "name": "MSIG Life Insurance Indonesia",
+      "created_at": "2025-06-17T02:34:09.373Z",
+      "created_by": "Dimas Prima",
+      "edited_at": "2025-06-17T02:34:09.373Z",
+      "edited_by": "Dimas Prima"
+    },
+    {
+      "id": "8277da3a-dd4a-4e12-b081-53a27f15ffa5",
+      "customer_code": "CST-20250606-001",
+      "name": "Bank ICBC Indonesia",
+      "created_at": "2025-06-06T13:56:13.510Z",
+      "created_by": "Jacintha Cordelie",
+      "edited_at": "2025-08-28T03:02:57.936Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "21071faf-e52c-4e08-a42c-e684aa9a7255",
+      "customer_code": "CST-20250605-004",
+      "name": "Bank Central Asia",
+      "created_at": "2025-06-05T07:00:13.077Z",
+      "created_by": "Reynaldi Reynaldi",
+      "edited_at": "2025-08-28T06:56:22.219Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "76cb1753-66b2-4d7a-a81b-1dac969f79f3",
+      "customer_code": "CST-20250605-002",
+      "name": "Gudang Garam",
+      "created_at": "2025-06-05T04:42:36.905Z",
+      "created_by": "Reynaldi Reynaldi",
+      "edited_at": "2025-06-05T04:42:36.905Z",
+      "edited_by": "Reynaldi Reynaldi"
+    },
+    {
+      "id": "75f44bc4-3d1c-49be-8267-7edd4642525f",
+      "customer_code": "CST-20250605-001",
+      "name": "Bank Sinarmas",
+      "created_at": "2025-06-05T04:04:47.516Z",
+      "created_by": "Reynaldi Reynaldi",
+      "edited_at": "2025-08-28T03:03:54.244Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "7cb19e73-ab10-4fb3-ab3b-05ed6b5c97c9",
+      "customer_code": "CST-20250604-016",
+      "name": "Allo Bank Indonesia",
+      "created_at": "2025-06-04T14:47:38.702Z",
+      "created_by": "Jacintha Cordelie",
+      "edited_at": "2025-09-03T08:51:39.604Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "7614cf22-8f62-43ab-a957-76cfe7ccac96",
+      "customer_code": "CST-20250604-015",
+      "name": "Bank BTPN Syariah",
+      "created_at": "2025-06-04T14:43:52.518Z",
+      "created_by": "Jacintha Cordelie",
+      "edited_at": "2025-06-04T14:43:52.518Z",
+      "edited_by": "Jacintha Cordelie"
+    },
+    {
+      "id": "12e629a1-d9f4-457b-b858-a8366bc97d69",
+      "customer_code": "CST-20250604-014",
+      "name": "Bank UOB Indonesia",
+      "created_at": "2025-06-04T14:36:58.180Z",
+      "created_by": "muhammad alfintsani",
+      "edited_at": "2025-08-28T03:07:12.157Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "6122aaf8-d7b5-42b9-9a0b-dbdd4f270fd4",
+      "customer_code": "CST-20250604-013",
+      "name": "Kalbe Farma",
+      "created_at": "2025-06-04T14:36:40.201Z",
+      "created_by": "muhammad alfintsani",
+      "edited_at": "2025-06-04T14:36:40.201Z",
+      "edited_by": "muhammad alfintsani"
+    },
+    {
+      "id": "210766e4-d51c-4099-a6d5-b0d28fe3cba8",
+      "customer_code": "CST-20250604-012",
+      "name": "Dhanistha Surya Nusantara",
+      "created_at": "2025-06-04T14:31:38.528Z",
+      "created_by": "Jacintha Cordelie",
+      "edited_at": "2025-08-28T03:07:46.776Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "737bbac1-09bd-4e03-85bf-0af1d3f92726",
+      "customer_code": "CST-20250604-011",
+      "name": "Bank Permata",
+      "created_at": "2025-06-04T14:18:02.797Z",
+      "created_by": "Lelono Prasetyo",
+      "edited_at": "2025-08-28T03:08:03.455Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "21503fa1-42c6-49d7-9807-3a766483307c",
+      "customer_code": "CST-20250604-009",
+      "name": "Bank Neo Commerce",
+      "created_at": "2025-06-04T14:00:39.977Z",
+      "created_by": "Lelono Prasetyo",
+      "edited_at": "2025-08-28T03:09:04.479Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "9a78fcf6-1d61-4034-9392-dffe35b47adc",
+      "customer_code": "CST-20250604-008",
+      "name": "Surya Madistrindo",
+      "created_at": "2025-06-04T13:57:50.145Z",
+      "created_by": "Lelono Prasetyo",
+      "edited_at": "2025-08-28T03:09:52.471Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "41a20cd0-60b3-45c8-bdbe-816f7d1a22be",
+      "customer_code": "CST-20250604-007",
+      "name": "Bank Mandiri (Persero)",
+      "created_at": "2025-06-04T10:51:31.974Z",
+      "created_by": "Lelono Prasetyo",
+      "edited_at": "2025-08-28T03:10:38.203Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "ecee887c-4b1b-48d1-ab3f-44ef68543b9a",
+      "customer_code": "CST-20250604-006",
+      "name": "KAS (Mandiri Inhealth)",
+      "created_at": "2025-06-04T10:50:12.673Z",
+      "created_by": "Lelono Prasetyo",
+      "edited_at": "2025-09-03T08:26:51.120Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "f3bb59a5-5641-4372-a023-dee09b74eafe",
+      "customer_code": "CST-20250604-005",
+      "name": "OK Bank Indonesia",
+      "created_at": "2025-06-04T10:40:25.934Z",
+      "created_by": "Lelono Prasetyo",
+      "edited_at": "2025-09-03T08:33:54.702Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "d10627c6-ca15-4036-8357-5682914c6ca8",
+      "customer_code": "CST-20250604-004",
+      "name": "KB Data Systems Indonesia",
+      "created_at": "2025-06-04T10:12:57.027Z",
+      "created_by": "Bangkit Setyantoro",
+      "edited_at": "2025-06-04T10:12:57.027Z",
+      "edited_by": "Bangkit Setyantoro"
+    },
+    {
+      "id": "10f9bacf-1a34-4118-bf69-fa2342fac9cc",
+      "customer_code": "CST-20250604-003",
+      "name": "Rintis Sejahtera",
+      "created_at": "2025-06-04T10:09:46.597Z",
+      "created_by": "Bangkit Setyantoro",
+      "edited_at": "2025-08-28T03:12:42.168Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "ff21b6f4-298d-4d32-8c48-32a907207cfd",
+      "customer_code": "CST-20250604-002",
+      "name": "Bank Danamon Indonesia",
+      "created_at": "2025-06-04T10:01:30.960Z",
+      "created_by": "Bangkit Setyantoro",
+      "edited_at": "2025-08-28T03:13:10.130Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "d25b6e14-1ec6-4b14-a68b-1365b52759a6",
+      "customer_code": "CST-20250604-001",
+      "name": "Bank Tabungan Negara",
+      "created_at": "2025-06-04T07:11:27.506Z",
+      "created_by": "Lelono Prasetyo",
+      "edited_at": "2025-08-28T03:13:41.296Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "8c442e25-eb29-4962-9644-157dd277bca8",
+      "customer_code": "CST-20250602-001",
+      "name": "Bank test",
+      "created_at": "2025-06-02T08:09:45.881Z",
+      "created_by": "Super User",
+      "edited_at": "2025-06-02T08:09:45.881Z",
+      "edited_by": "Super User"
+    },
+    {
+      "id": "1ecb6b4e-788a-498f-b396-2e22b8611cc1",
+      "customer_code": "CST-20250526-001",
+      "name": "Bank Negara Indonesia",
+      "created_at": "2025-05-26T18:26:30.817Z",
+      "created_by": "Super User",
+      "edited_at": "2025-09-03T08:38:54.354Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "46b20d49-601c-4c33-b377-50acddbed720",
+      "customer_code": "CST-20250522-026",
+      "name": "Bank Digital BCA",
+      "created_at": "2025-05-22T07:30:17.497Z",
+      "created_by": "Dimas Satrio Anggoro",
+      "edited_at": "2025-08-28T03:30:32.443Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "6d93cc08-66cb-4c9e-92ee-9a9a60862b85",
+      "customer_code": "CST-20250522-024",
+      "name": "Kustodian Sentral Efek Indonesia (KSEI)",
+      "created_at": "2025-05-22T07:27:40.302Z",
+      "created_by": "Dimas Satrio Anggoro",
+      "edited_at": "2025-08-28T03:31:13.494Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "fe1a168a-929f-46a8-887e-e5e3aacf649c",
+      "customer_code": "CST-20250522-022",
+      "name": "Buana Capital Sekuritas",
+      "created_at": "2025-05-22T07:21:51.307Z",
+      "created_by": "Dimas Satrio Anggoro",
+      "edited_at": "2025-08-28T03:31:38.104Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "64f5a8d2-5f5a-4fb6-b83a-65a7d22374c6",
+      "customer_code": "CST-20250522-019",
+      "name": "QNB Bank",
+      "created_at": "2025-05-22T07:21:15.111Z",
+      "created_by": "Dimas Satrio Anggoro",
+      "edited_at": "2025-08-28T03:33:11.730Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "46235c1b-c8af-4406-9180-c49140edd7cb",
+      "customer_code": "CST-20250522-018",
+      "name": "Mandiri Manajemen Investasi",
+      "created_at": "2025-05-22T07:20:58.167Z",
+      "created_by": "Dimas Satrio Anggoro",
+      "edited_at": "2025-09-02T10:29:05.524Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "1f9e39c4-6511-4474-beb3-9ab4b4da6d95",
+      "customer_code": "CST-20250522-017",
+      "name": "Jalin Pembayaran Nusantara (Jalin)",
+      "created_at": "2025-05-22T07:20:41.487Z",
+      "created_by": "Dimas Satrio Anggoro",
+      "edited_at": "2025-08-28T03:34:44.416Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "5e53977e-11f0-4aa6-be52-6b2ba8319574",
+      "customer_code": "CST-20250522-014",
+      "name": "Mandiri Sekuritas",
+      "created_at": "2025-05-22T07:19:33.658Z",
+      "created_by": "Dimas Satrio Anggoro",
+      "edited_at": "2025-05-22T07:19:33.658Z",
+      "edited_by": "Dimas Satrio Anggoro"
+    },
+    {
+      "id": "b27fcbc5-04c6-446f-a779-278edb288862",
+      "customer_code": "CST-20250522-013",
+      "name": "Bank CIMB Niaga",
+      "created_at": "2025-05-22T07:19:22.464Z",
+      "created_by": "Dimas Satrio Anggoro",
+      "edited_at": "2025-08-28T03:36:19.025Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "cc0244a7-b80a-4df9-97d6-f2c3d90a0afb",
+      "customer_code": "CST-20250522-012",
+      "name": "Asuransi Jiwa Inhealth Indonesia",
+      "created_at": "2025-05-22T07:19:07.577Z",
+      "created_by": "Dimas Satrio Anggoro",
+      "edited_at": "2025-08-28T03:41:26.493Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "cde04cad-d300-42f9-939c-9840c0d6d657",
+      "customer_code": "CST-20250522-011",
+      "name": "Mitra Transaksi Indonesia",
+      "created_at": "2025-05-22T07:18:40.516Z",
+      "created_by": "Dimas Satrio Anggoro",
+      "edited_at": "2025-08-28T03:57:41.022Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "2062572b-98a9-4d14-abec-ec6732157c2e",
+      "customer_code": "CST-20250522-010",
+      "name": "BCA Finance",
+      "created_at": "2025-05-22T07:18:33.016Z",
+      "created_by": "Dimas Satrio Anggoro",
+      "edited_at": "2025-08-28T03:58:05.018Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "b0cf2bf0-78ce-41a5-a3f3-43f2a28b9d70",
+      "customer_code": "CST-20250522-009",
+      "name": "BCA Sekuritas",
+      "created_at": "2025-05-22T07:18:23.288Z",
+      "created_by": "Dimas Satrio Anggoro",
+      "edited_at": "2025-08-28T03:58:27.621Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "5c39df04-990f-47cc-99cd-1f2332622274",
+      "customer_code": "CST-20250522-008",
+      "name": "BCA Multi Finance",
+      "created_at": "2025-05-22T07:18:08.678Z",
+      "created_by": "Dimas Satrio Anggoro",
+      "edited_at": "2025-08-28T03:58:49.736Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "a44cb423-b492-40fb-9eeb-767511fc19fe",
+      "customer_code": "CST-20250522-007",
+      "name": "Mandiri Utama Finance",
+      "created_at": "2025-05-22T07:17:56.220Z",
+      "created_by": "Dimas Satrio Anggoro",
+      "edited_at": "2025-08-28T03:59:40.908Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "945fe313-6b2a-4cf8-9f76-aa7b02a62a74",
+      "customer_code": "CST-20250522-006",
+      "name": "Maybank Indonesia Finance",
+      "created_at": "2025-05-22T07:17:40.775Z",
+      "created_by": "Dimas Satrio Anggoro",
+      "edited_at": "2025-08-28T04:00:34.174Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "89f86d88-72f5-43cd-840b-993a1e045d04",
+      "customer_code": "CST-20250522-005",
+      "name": "Bank Maybank Indonesia",
+      "created_at": "2025-05-22T07:16:46.881Z",
+      "created_by": "Dimas Satrio Anggoro",
+      "edited_at": "2025-09-03T08:37:38.242Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "fbcdefe3-b4a6-41c5-bc47-30faf9bfc572",
+      "customer_code": "CST-20250522-004",
+      "name": "Otoritas Jasa Keuangan",
+      "created_at": "2025-05-22T07:16:36.865Z",
+      "created_by": "Dimas Satrio Anggoro",
+      "edited_at": "2025-08-28T04:02:54.243Z",
+      "edited_by": "Anggraeni Dyahpuspito Rustantri Sulardi Putri"
+    },
+    {
+      "id": "05d16ea0-6543-430c-a639-8479a2cf4c0f",
+      "customer_code": "CST-20250522-003",
+      "name": "Bank Indonesia",
+      "created_at": "2025-05-22T07:16:20.698Z",
+      "created_by": "Dimas Satrio Anggoro",
+      "edited_at": "2025-05-22T07:16:20.698Z",
+      "edited_by": "Dimas Satrio Anggoro"
+    },
+    {
+      "id": "2b7061f3-1edb-491a-95b7-c3e4901910a8",
+      "customer_code": "CST-20250522-002",
+      "name": "Bank Mega",
+      "created_at": "2025-05-22T07:16:05.785Z",
+      "created_by": "Dimas Satrio Anggoro",
+      "edited_at": "2025-05-22T07:16:05.785Z",
+      "edited_by": "Dimas Satrio Anggoro"
+    }
+  ],
+  "data_count": 310
+}
