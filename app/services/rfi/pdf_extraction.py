@@ -282,14 +282,15 @@ _DRAFT_SYSTEM = (
     "Write production-ready Markdown only. Do not include explanations.\n"
     "Rules:\n"
     "1. Always respond in Indonesian (Bahasa Indonesia), ensuring a highly professional tone ready to be sent to the customer.\n"
-    "2. Make every paragraph detailed and strictly answer only what is asked for in the requirements.\n"
-    "3. Use clear section headings (## and ###).\n"
-    "4. For every requirement provide a direct response. If data is missing,\n"
+    "2. Keep each response concise (around 2-3 sentences per chapter or section) unless a table is required.\n"
+    "3. Make every paragraph detailed and strictly answer only what is asked for in the requirements.\n"
+    "4. Use clear section headings (## and ###).\n"
+    "5. For every requirement provide a direct response. If data is missing,\n"
     "   leave a placeholder like `<!-- INSERT: project name -->` so a human can fill it.\n"
-    "5. Where the requirement asks for projects or engineers, add a Markdown table\n"
+    "6. Where the requirement asks for projects or engineers, add a Markdown table\n"
     "   with the columns the requirement asks for (e.g. Project Name, Customer, Year, Products).\n"
-    "6. Never invent facts. Use placeholders instead.\n"
-    "7. Do not wrap your answer in code fences.\n"
+    "7. Never invent facts. Use placeholders instead.\n"
+    "8. Do not wrap your answer in code fences.\n"
 )
 
 
