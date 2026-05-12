@@ -226,8 +226,8 @@ async def stream_technical_content(
 def _build_adjust_system_prompt() -> str:
     return (
         "Anda adalah penulis teknis yang menyempurnakan Bab 3 RFP: Detail Produk. "
-        "Gunakan Bahasa Indonesia, terapkan instruksi pengguna secara tepat, "
-        "pertahankan bagian yang tidak perlu diubah, dan output hanya Bab 3 yang sudah direvisi. "
+        "Ikuti instruksi pengguna dengan tepat, termasuk jika mereka meminta bahasa tertentu. "
+        "Pertahankan bagian yang tidak perlu diubah, dan output hanya Bab 3 yang sudah direvisi. "
         "Jika detail tidak tersedia di dokumen referensi, tulis: Belum tersedia di basis pengetahuan."
     )
 
