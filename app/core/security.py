@@ -2,7 +2,7 @@ import logging
 import time
 from collections import defaultdict
 from dataclasses import dataclass
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 import httpx
 from fastapi import Depends, HTTPException, Request
@@ -14,6 +14,10 @@ from app.config import API_AUTH_SECRET, POCKETBASE_URL, is_email_domain_allowed
 from app.db.user_repo import upsert_user_from_pb_record
 
 logger = logging.getLogger(__name__)
+
+_token_cache: Dict[str, Tuple[dict, float]] = {}
+_TOKEN_CACHE_TTL = 60
+_TOKEN_CACHE_MAX = 500
 
 REQUEST_LOGS: Dict[str, List[float]] = defaultdict(list)
 RATE_LIMIT_STASH_TIME = 60
@@ -58,7 +62,25 @@ class CurrentUser:
 
 
 async def validate_pocketbase_token(token: str) -> Optional[dict]:
-    """Returns PocketBase auth record dict or None."""
+    """Returns PocketBase auth record dict or None. Results are cached for _TOKEN_CACHE_TTL seconds."""
+    now = time.time()
+    cached = _token_cache.get(token)
+    if cached:
+        record, expires_at = cached
+        if now < expires_at:
+            logger.debug("token cache hit")
+            return record
+        del _token_cache[token]
+        logger.debug("token cache expired, evicting")
+
+    if len(_token_cache) > _TOKEN_CACHE_MAX:
+        expired_keys = [k for k, (_, exp) in _token_cache.items() if now >= exp]
+        for k in expired_keys:
+            del _token_cache[k]
+        if len(_token_cache) > _TOKEN_CACHE_MAX:
+            oldest_key = min(_token_cache, key=lambda k: _token_cache[k][1])
+            del _token_cache[oldest_key]
+
     base = (POCKETBASE_URL or "").rstrip("/")
     if not base:
         return None
@@ -67,7 +89,7 @@ async def validate_pocketbase_token(token: str) -> Optional[dict]:
         {"Authorization": f"Bearer {token}"},
         {"Authorization": token},
     )
-    async with httpx.AsyncClient(timeout=15.0) as client:
+    async with httpx.AsyncClient(timeout=10.0) as client:
         for hdr in headers_variants:
             try:
                 resp = await client.post(url, headers=hdr)
@@ -87,6 +109,7 @@ async def validate_pocketbase_token(token: str) -> Optional[dict]:
                 continue
             record = data.get("record") or data
             if isinstance(record, dict) and record.get("id"):
+                _token_cache[token] = (record, now + _TOKEN_CACHE_TTL)
                 return record
     return None
 

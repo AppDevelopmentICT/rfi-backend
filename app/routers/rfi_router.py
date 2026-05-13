@@ -1,6 +1,8 @@
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile, Depends, Request, BackgroundTasks
 from fastapi.responses import StreamingResponse, JSONResponse
+import asyncio
 import io
+import logging
 import re
 import uuid
 from datetime import datetime, timedelta, timezone
@@ -22,6 +24,7 @@ from pydantic import BaseModel
 
 router = APIRouter(prefix="/api/v1/rfi", tags=["RFI/RFP"])
 LOCK_TIMEOUT = timedelta(minutes=30)
+_rfi_logger = logging.getLogger(__name__)
 
 def _caller_ip(request: Request) -> str | None:
     return request.client.host if request.client else None
@@ -227,6 +230,7 @@ async def get_rfi_document(
     db: Session = Depends(get_db),
     user: CurrentUser = Depends(get_current_user),
 ):
+    _rfi_logger.debug("[poll] GET /%s by user=%s", document_key, user.email or "svc")
     doc = _get_project_by_key(db, document_key)
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
@@ -419,10 +423,33 @@ async def regenerate_rfi_row(
 
     updated_row = dict(row)
 
+    _rfi_logger.info(
+        "regenerate_row start doc=%s sheet=%s row=%d cols=%d ip=%s",
+        document_key, req.sheet, req.rowIdx, len(fill_indices), _caller_ip(request),
+    )
+
     try:
+        import asyncio
+        import time as _time
+        _col_start = _time.monotonic()
         for col_idx in fill_indices:
             col_header = headers[col_idx]
-            answer = await ask_ollama(context_prompt, col_header)
+            try:
+                answer = await asyncio.wait_for(
+                    ask_ollama(context_prompt, col_header),
+                    timeout=60.0,
+                )
+                _rfi_logger.info(
+                    "regenerate_row col done doc=%s sheet=%s row=%d col=%s dur=%.1fs",
+                    document_key, req.sheet, req.rowIdx, col_header, _time.monotonic() - _col_start,
+                )
+                _col_start = _time.monotonic()
+            except asyncio.TimeoutError:
+                _rfi_logger.warning(
+                    "regenerate_row timeout col=%s doc=%s row=%d",
+                    col_header, document_key, req.rowIdx,
+                )
+                answer = "Error: AI response timed out"
             updated_row[col_header] = answer
 
         data[req.rowIdx] = updated_row
@@ -430,6 +457,11 @@ async def regenerate_rfi_row(
         doc.updated_at = datetime.now(timezone.utc)
         flag_modified(doc, "json_data")
         db.commit()
+
+        _rfi_logger.info(
+            "regenerate_row done doc=%s sheet=%s row=%d",
+            document_key, req.sheet, req.rowIdx,
+        )
 
         log_audit(
             db,
