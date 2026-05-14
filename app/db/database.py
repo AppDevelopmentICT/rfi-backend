@@ -13,9 +13,11 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, relationship, sessionmaker
 from sqlalchemy.sql import text
-from app.config import DATABASE_URL
+from app.config import DATABASE_URL, DB_CONNECT_TIMEOUT
 
 logger = logging.getLogger(__name__)
+
+_engine_connect_args = {"connect_timeout": max(5, DB_CONNECT_TIMEOUT)}
 
 engine = create_engine(
     DATABASE_URL,
@@ -23,6 +25,7 @@ engine = create_engine(
     pool_size=10,
     max_overflow=20,
     pool_timeout=30,
+    connect_args=_engine_connect_args,
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -92,6 +95,39 @@ class RFIProject(Base):
     deleted_by = relationship("User", foreign_keys=[deleted_by_user_id])
 
 
+class RFIPdfProject(Base):
+    __tablename__ = "rfi_pdf_projects"
+
+    id = Column(Integer, primary_key=True, index=True)
+    filename = Column(String, index=True)
+    slug = Column(String, unique=True, nullable=True, index=True)
+    source_storage_key = Column(String, nullable=True)
+    parsed_markdown = Column(Text, nullable=True)
+    editor_markdown = Column(Text, nullable=True)
+    editor_html = Column(Text, nullable=True)
+    requirements = Column(JSONB, nullable=True, default=list)
+    entity_refs = Column(JSONB, nullable=True, default=list)
+    metadata_json = Column("metadata_json", JSONB, nullable=True, default=dict)
+    status = Column(String, default="uploading", nullable=False)
+    error_message = Column(Text, nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc),
+    )
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    editing_user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    lock_acquired_at = Column(DateTime(timezone=True), nullable=True)
+    is_deleted = Column(Boolean, default=False, nullable=False, index=True)
+    deleted_at = Column(DateTime(timezone=True), nullable=True)
+    deleted_by_user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+
+    user = relationship("User", foreign_keys=[user_id])
+    editing_user = relationship("User", foreign_keys=[editing_user_id])
+    deleted_by = relationship("User", foreign_keys=[deleted_by_user_id])
+
+
 class RFPProject(Base):
     __tablename__ = "rfp_projects"
 
@@ -130,6 +166,7 @@ class AuditLog(Base):
     resource_type = Column(String(120), nullable=False)
     document_id = Column(Integer, ForeignKey("documents.id", ondelete="SET NULL"), nullable=True)
     rfi_project_id = Column(Integer, ForeignKey("rfi_projects.id", ondelete="SET NULL"), nullable=True)
+    rfi_pdf_project_id = Column(Integer, ForeignKey("rfi_pdf_projects.id", ondelete="SET NULL"), nullable=True)
     rfp_project_id = Column(Integer, ForeignKey("rfp_projects.id", ondelete="SET NULL"), nullable=True)
     details = Column(JSONB)
     ip_address = Column(String(45))
@@ -140,7 +177,10 @@ class AuditLog(Base):
 
 
 def init_db():
-    logger.info("Initializing Database...")
+    logger.info(
+        "Initializing database (PostgreSQL connect_timeout=%ss)...",
+        max(5, DB_CONNECT_TIMEOUT),
+    )
     try:
         with engine.connect() as conn:
             conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
@@ -211,6 +251,118 @@ def init_db():
             ))
             conn.execute(text(
                 "CREATE INDEX IF NOT EXISTS ix_rfi_projects_is_deleted ON rfi_projects(is_deleted)"
+            ))
+            conn.commit()
+
+        with engine.connect() as conn:
+            conn.execute(text("""
+                CREATE TABLE IF NOT EXISTS rfi_pdf_projects (
+                    id SERIAL PRIMARY KEY,
+                    filename VARCHAR,
+                    slug VARCHAR UNIQUE,
+                    source_storage_key VARCHAR,
+                    parsed_markdown TEXT,
+                    editor_markdown TEXT,
+                    editor_html TEXT,
+                    requirements JSONB DEFAULT '[]'::jsonb,
+                    entity_refs JSONB DEFAULT '[]'::jsonb,
+                    metadata_json JSONB DEFAULT '{}'::jsonb,
+                    status VARCHAR NOT NULL DEFAULT 'uploading',
+                    error_message TEXT,
+                    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+                    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+                    user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+                    editing_user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+                    lock_acquired_at TIMESTAMP WITH TIME ZONE,
+                    is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
+                    deleted_at TIMESTAMP WITH TIME ZONE,
+                    deleted_by_user_id INTEGER REFERENCES users(id) ON DELETE SET NULL
+                )
+            """))
+            conn.execute(text(
+                "CREATE UNIQUE INDEX IF NOT EXISTS ix_rfi_pdf_projects_slug ON rfi_pdf_projects(slug) WHERE slug IS NOT NULL"
+            ))
+            conn.execute(text(
+                "CREATE INDEX IF NOT EXISTS ix_rfi_pdf_projects_user_id ON rfi_pdf_projects(user_id)"
+            ))
+            conn.execute(text(
+                "CREATE INDEX IF NOT EXISTS ix_rfi_pdf_projects_editing_user_id ON rfi_pdf_projects(editing_user_id)"
+            ))
+            conn.execute(text(
+                "CREATE INDEX IF NOT EXISTS ix_rfi_pdf_projects_is_deleted ON rfi_pdf_projects(is_deleted)"
+            ))
+            conn.execute(text(
+                "CREATE INDEX IF NOT EXISTS ix_rfi_pdf_projects_status ON rfi_pdf_projects(status)"
+            ))
+            # CREATE TABLE IF NOT EXISTS does not mutate existing tables: older installs may
+            # miss columns added later (e.g. entity_refs). Align schema incrementally.
+            conn.execute(text(
+                "ALTER TABLE rfi_pdf_projects ADD COLUMN IF NOT EXISTS filename VARCHAR"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfi_pdf_projects ADD COLUMN IF NOT EXISTS slug VARCHAR"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfi_pdf_projects ADD COLUMN IF NOT EXISTS source_storage_key VARCHAR"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfi_pdf_projects ADD COLUMN IF NOT EXISTS parsed_markdown TEXT"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfi_pdf_projects ADD COLUMN IF NOT EXISTS editor_markdown TEXT"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfi_pdf_projects ADD COLUMN IF NOT EXISTS editor_html TEXT"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfi_pdf_projects ADD COLUMN IF NOT EXISTS "
+                "requirements JSONB DEFAULT '[]'::jsonb"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfi_pdf_projects ADD COLUMN IF NOT EXISTS "
+                "entity_refs JSONB DEFAULT '[]'::jsonb"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfi_pdf_projects ADD COLUMN IF NOT EXISTS "
+                "metadata_json JSONB DEFAULT '{}'::jsonb"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfi_pdf_projects ADD COLUMN IF NOT EXISTS "
+                "status VARCHAR NOT NULL DEFAULT 'uploading'"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfi_pdf_projects ADD COLUMN IF NOT EXISTS error_message TEXT"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfi_pdf_projects ADD COLUMN IF NOT EXISTS "
+                "created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfi_pdf_projects ADD COLUMN IF NOT EXISTS "
+                "updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfi_pdf_projects ADD COLUMN IF NOT EXISTS "
+                "user_id INTEGER REFERENCES users(id) ON DELETE SET NULL"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfi_pdf_projects ADD COLUMN IF NOT EXISTS "
+                "editing_user_id INTEGER REFERENCES users(id) ON DELETE SET NULL"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfi_pdf_projects ADD COLUMN IF NOT EXISTS "
+                "lock_acquired_at TIMESTAMP WITH TIME ZONE"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfi_pdf_projects ADD COLUMN IF NOT EXISTS "
+                "is_deleted BOOLEAN NOT NULL DEFAULT FALSE"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfi_pdf_projects ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMP WITH TIME ZONE"
+            ))
+            conn.execute(text(
+                "ALTER TABLE rfi_pdf_projects ADD COLUMN IF NOT EXISTS "
+                "deleted_by_user_id INTEGER REFERENCES users(id) ON DELETE SET NULL"
             ))
             conn.commit()
 
@@ -335,6 +487,12 @@ def init_db():
                 "ALTER TABLE audit_logs ADD COLUMN IF NOT EXISTS rfp_project_id INTEGER REFERENCES rfp_projects(id) ON DELETE SET NULL"
             ))
             conn.execute(text(
+                "ALTER TABLE audit_logs ADD COLUMN IF NOT EXISTS rfi_pdf_project_id INTEGER REFERENCES rfi_pdf_projects(id) ON DELETE SET NULL"
+            ))
+            conn.execute(text(
+                "CREATE INDEX IF NOT EXISTS ix_audit_logs_rfi_pdf_project_id ON audit_logs(rfi_pdf_project_id)"
+            ))
+            conn.execute(text(
                 "CREATE INDEX IF NOT EXISTS ix_audit_logs_user_id ON audit_logs(user_id)"
             ))
             conn.execute(text(
@@ -364,8 +522,8 @@ def init_db():
             conn.commit()
 
         logger.info("Database initialized successfully.")
-    except Exception as e:
-        logger.error(f"Failed to initialize database: {e}")
+    except Exception:
+        logger.exception("Failed to initialize database — check DATABASE_URL / VPN / DB_CONNECT_TIMEOUT")
 
 
 def get_db():

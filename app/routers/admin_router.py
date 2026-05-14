@@ -40,11 +40,38 @@ def _user_payload(user: User | None) -> dict | None:
 
 @router.get("/users")
 async def list_users(
+    q: Optional[str] = None,
+    is_admin: Optional[bool] = None,
+    page: int = 1,
+    page_size: int = 20,
     db: Session = Depends(get_db),
     _: CurrentUser = Depends(require_admin),
 ):
-    users = db.query(User).order_by(User.name.asc().nullslast(), User.email.asc()).all()
-    return [_user_payload(user) for user in users]
+    page = max(page, 1)
+    page_size = min(max(page_size, 1), 100)
+
+    query = db.query(User)
+    if q:
+        needle = f"%{q}%"
+        query = query.filter(
+            or_(User.name.ilike(needle), User.email.ilike(needle))
+        )
+    if is_admin is not None:
+        query = query.filter(User.is_admin == is_admin)
+
+    total = query.count()
+    users = (
+        query.order_by(User.name.asc().nullslast(), User.email.asc())
+        .offset((page - 1) * page_size)
+        .limit(page_size)
+        .all()
+    )
+    return {
+        "items": [_user_payload(user) for user in users],
+        "page": page,
+        "page_size": page_size,
+        "total": total,
+    }
 
 
 @router.put("/users/{user_id}/admin")

@@ -1,3 +1,4 @@
+import asyncio
 import logging
 
 from fastapi import FastAPI, Request, HTTPException
@@ -10,6 +11,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.routers.excel_router import router as example_router
 from app.routers.rfi_router import router as rfi_router
+from app.routers.rfi_pdf_router import router as rfi_pdf_router
 from app.routers.document_router import router as document_router
 from app.routers.ai_router import router as ai_router
 from app.routers.knowledge_router import router as knowledge_router
@@ -27,8 +29,8 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-
-    init_db()
+    # Avoid blocking the event loop during synchronous DB migrations; connect uses DB_CONNECT_TIMEOUT.
+    await asyncio.to_thread(init_db)
     yield
 
 app = FastAPI(
@@ -71,7 +73,7 @@ async def unhandled_exception_handler(request: Request, exc: Exception):
     )
 
 app.include_router(rfi_router)
-app.include_router(example_router)
+app.include_router(rfi_pdf_router)
 app.include_router(document_router)
 app.include_router(ai_router)
 app.include_router(knowledge_router)
@@ -79,3 +81,4 @@ app.include_router(rfp_router)
 app.include_router(dashboard_router)
 app.include_router(auth_router)
 app.include_router(admin_router)
+app.include_router(example_router)
