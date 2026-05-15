@@ -1011,7 +1011,11 @@ async def preview_rfi_pdf(
             footer=f"{project.filename or 'RFI'} · Preview",
         )
     except RuntimeError as exc:
+        logger.error("PDF preview render failed for %s: %s", document_key, exc, exc_info=True)
         raise HTTPException(status_code=502, detail=str(exc)) from exc
+    except Exception as exc:
+        logger.error("PDF preview unexpected error for %s: %s", document_key, exc, exc_info=True)
+        raise HTTPException(status_code=500, detail=f"PDF rendering error: {exc}") from exc
     return StreamingResponse(
         io.BytesIO(pdf_bytes),
         media_type="application/pdf",
@@ -1043,10 +1047,14 @@ async def export_rfi_pdf(
         pdf_bytes = render_pdf_bytes(
             markdown,
             title=str(title),
-            footer=f"{project.filename or 'RFI'} · Final",
+            footer=f"{project.filename or 'RFI'} �� Final",
         )
     except RuntimeError as exc:
+        logger.error("PDF export render failed for %s: %s", document_key, exc, exc_info=True)
         raise HTTPException(status_code=502, detail=str(exc)) from exc
+    except Exception as exc:
+        logger.error("PDF export unexpected error for %s: %s", document_key, exc, exc_info=True)
+        raise HTTPException(status_code=500, detail=f"PDF rendering error: {exc}") from exc
 
     log_audit(
         db,
