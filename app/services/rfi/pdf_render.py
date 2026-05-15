@@ -38,56 +38,77 @@ h1 {
     font-size: 22pt;
     color: #0f172a;
     border-bottom: 1.2pt solid #94a3b8;
-    padding-bottom: 4pt;
-    margin-bottom: 12pt;
+    padding-bottom: 6pt;
+    margin-top: 0;
+    margin-bottom: 14pt;
+    -pdf-keep-with-next: true;
 }
 h2 {
     font-size: 16pt;
     color: #1e293b;
-    margin-top: 18pt;
-    margin-bottom: 8pt;
+    margin-top: 20pt;
+    margin-bottom: 10pt;
+    border-bottom: 0.6pt solid #cbd5e1;
+    padding-bottom: 4pt;
+    -pdf-keep-with-next: true;
 }
 h3 {
     font-size: 13pt;
     color: #1f2937;
-    margin-top: 14pt;
+    margin-top: 16pt;
     margin-bottom: 6pt;
+    -pdf-keep-with-next: true;
 }
 h4, h5, h6 {
     color: #1f2937;
     margin-top: 12pt;
+    margin-bottom: 4pt;
+    -pdf-keep-with-next: true;
 }
 p {
     margin: 0 0 8pt 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 ul, ol {
-    margin: 0 0 8pt 18pt;
+    margin: 4pt 0 10pt 18pt;
 }
 li {
-    margin-bottom: 3pt;
+    margin-bottom: 4pt;
 }
 table {
     width: 100%;
     border-collapse: collapse;
-    margin: 10pt 0 14pt 0;
+    margin: 10pt 0 16pt 0;
     font-size: 10pt;
+    -pdf-keep-in-frame-mode: shrink;
 }
 th, td {
     border: 0.6pt solid #94a3b8;
-    padding: 5pt 7pt;
+    padding: 6pt 8pt;
     vertical-align: top;
     text-align: left;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 th {
     background-color: #e2e8f0;
     color: #0f172a;
     font-weight: 600;
+    font-size: 10pt;
+}
+tr {
+    page-break-inside: avoid;
+}
+.even-row td {
+    background-color: #f8fafc;
 }
 blockquote {
     border-left: 2.4pt solid #94a3b8;
     padding-left: 10pt;
     color: #475569;
-    margin: 6pt 0 10pt 0;
+    margin: 8pt 0 12pt 0;
+    font-style: italic;
 }
 code {
     font-family: "Courier", monospace;
@@ -97,10 +118,12 @@ code {
 }
 pre {
     background-color: #f1f5f9;
-    padding: 8pt 10pt;
-    font-size: 10pt;
+    padding: 10pt 12pt;
+    font-size: 9pt;
     border-radius: 3pt;
     white-space: pre-wrap;
+    word-wrap: break-word;
+    margin: 6pt 0 12pt 0;
 }
 .entity-chip {
     display: inline-block;
@@ -123,6 +146,11 @@ pre {
     color: #64748b;
     text-align: center;
 }
+hr {
+    border: none;
+    border-top: 0.6pt solid #cbd5e1;
+    margin: 14pt 0;
+}
 """
 
 
@@ -136,6 +164,31 @@ def _wrap_placeholders(html: str) -> str:
     return re.sub(r"<!--\s*INSERT:\s*(.*?)\s*-->", repl, html, flags=re.DOTALL)
 
 
+def _stripe_table_rows(html: str) -> str:
+    """Add alternating row backgrounds via class attributes (xhtml2pdf has no nth-child)."""
+    # Match each <table>…</table> block
+    def stripe_table(table_match: re.Match[str]) -> str:
+        table_html = table_match.group(0)
+        row_idx = 0
+
+        def tag_row(row_match: re.Match[str]) -> str:
+            nonlocal row_idx
+            tag = row_match.group(0)
+            # Skip header rows (rows containing <th>)
+            if "<th" in tag:
+                return tag
+            row_idx += 1
+            if row_idx % 2 == 0:
+                if 'class="' in tag:
+                    return tag.replace('class="', 'class="even-row ')
+                return tag.replace("<tr", '<tr class="even-row"', 1)
+            return tag
+
+        return re.sub(r"<tr[^>]*>.*?</tr>", tag_row, table_html, flags=re.DOTALL)
+
+    return re.sub(r"<table[^>]*>.*?</table>", stripe_table, html, flags=re.DOTALL)
+
+
 def markdown_to_html(markdown_text: str) -> str:
     """Convert markdown to HTML using extensions suitable for proposal documents."""
     if not markdown_text:
@@ -145,7 +198,9 @@ def markdown_to_html(markdown_text: str) -> str:
         output_format="html5",
     )
     html = converter.convert(markdown_text)
-    return _wrap_placeholders(html)
+    html = _wrap_placeholders(html)
+    html = _stripe_table_rows(html)
+    return html
 
 
 def render_html_document(title: str, body_html: str, *, footer: str | None = None) -> str:
@@ -178,3 +233,4 @@ def render_pdf_bytes(markdown_text: str, *, title: str, footer: str | None = Non
         logger.error("xhtml2pdf reported %d errors while rendering RFI PDF", result.err)
         raise RuntimeError("PDF rendering failed")
     return buffer.getvalue()
+

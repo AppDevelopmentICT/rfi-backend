@@ -201,7 +201,11 @@ async def extract_requirements(parsed_markdown: str, *, model: str | None = None
     }
 
 
-_DRAFT_STREAM_FLUSH_CHARS = 48
+_DRAFT_STREAM_FLUSH_CHARS = 8
+
+
+class GenerationCancelled(Exception):
+    """Raised when a draft generation is cancelled via stop-generation."""
 
 
 def _draft_fallback_markdown(
@@ -238,6 +242,7 @@ async def _stream_ollama_markdown_completion(
     num_predict: int,
     flush_chars: int,
     on_chunk: Callable[[str], Awaitable[None]] | None,
+    cancel_check: Callable[[], bool] | None = None,
 ) -> str:
     """Stream Ollama /api/generate; accumulate full reply; optionally emit buffered deltas."""
     payload = {
@@ -254,6 +259,10 @@ async def _stream_ollama_markdown_completion(
         async with client.stream("POST", f"{OLLAMA_API}/api/generate", json=payload) as response:
             response.raise_for_status()
             async for line in response.aiter_lines():
+                # Check for cancellation on every token
+                if cancel_check and cancel_check():
+                    logger.info("Draft generation cancelled during streaming")
+                    raise GenerationCancelled("Generation was stopped by user")
                 if not line.strip():
                     continue
                 try:
@@ -300,6 +309,7 @@ async def draft_response_markdown(
     *,
     model: str | None = None,
     on_stream_delta: Callable[[str], Awaitable[None]] | None = None,
+    cancel_check: Callable[[], bool] | None = None,
 ) -> str:
     """Use the LLM to draft markdown. Optional ``on_stream_delta`` receives streamed chunks."""
     truncated = _truncate_for_prompt(parsed_markdown)
@@ -330,7 +340,10 @@ async def draft_response_markdown(
             num_predict=4096,
             flush_chars=_DRAFT_STREAM_FLUSH_CHARS,
             on_chunk=on_stream_delta,
+            cancel_check=cancel_check,
         )
+    except GenerationCancelled:
+        raise  # Re-raise so pipeline can handle partial content
     except Exception as exc:
         logger.error("Draft generation failed: %s", exc, exc_info=True)
         return _draft_fallback_markdown(
