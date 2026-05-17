@@ -59,6 +59,7 @@ class CurrentUser:
     name: Optional[str]
     is_admin: bool
     is_service_account: bool
+    token: Optional[str] = None
 
 
 async def validate_pocketbase_token(token: str) -> Optional[dict]:
@@ -136,6 +137,7 @@ async def exchange_pocketbase_token(token: str) -> CurrentUser:
         name=user_row.name or None,
         is_admin=bool(user_row.is_admin),
         is_service_account=False,
+        token=token,
     )
 
 
@@ -157,6 +159,7 @@ async def get_current_user(
             name=None,
             is_admin=True,
             is_service_account=True,
+            token=token,
         )
     return await exchange_pocketbase_token(token)
 
