@@ -85,12 +85,12 @@ MINIO_SECURE = os.getenv("MINIO_SECURE", "false").lower() == "true"
 
 
 # CORS: comma-separated origins. Local Next.js dev origins are merged in so
-# localhost:3000 works even when ALLOWED_ORIGINS lists only production URLs.
+# localhost:7777 works even when ALLOWED_ORIGINS lists only production URLs.
 _CANONICAL_LOCAL_ORIGINS = (
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
+    "http://localhost:7777",
+    "http://127.0.0.1:7777",
 )
-_origins_raw = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000")
+_origins_raw = os.getenv("ALLOWED_ORIGINS", "http://localhost:7777")
 _parsed_origins = [o.strip() for o in _origins_raw.split(",") if o.strip()]
 if not _parsed_origins:
     _parsed_origins = list(_CANONICAL_LOCAL_ORIGINS)
