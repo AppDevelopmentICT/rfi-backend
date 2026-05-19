@@ -1,0 +1,12 @@
+# PocketBase Data Directory
+pb_data/
+
+# PocketBase Executables
+pocketbase
+pocketbase.exe
+
+# Zip files (if downloaded manually or by Docker)
+*.zip
+
+# Logs
+*.log
