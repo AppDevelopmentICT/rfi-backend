@@ -11,6 +11,7 @@ from typing import Any
 
 _lock = asyncio.Lock()
 _listeners: dict[int, list[asyncio.Queue[dict[str, Any]]]] = {}
+_cancelled: dict[int, bool] = {}
 
 
 async def subscribe_pdf_draft_stream(project_id: int) -> asyncio.Queue[dict[str, Any]]:
@@ -38,3 +39,21 @@ async def broadcast_pdf_draft(project_id: int, message: dict[str, Any]) -> None:
         queues = list(_listeners.get(project_id, []))
     for q in queues:
         await q.put(message)
+
+
+async def cancel_pdf_draft(project_id: int) -> None:
+    """Signal the running pipeline for *project_id* to stop streaming."""
+    async with _lock:
+        _cancelled[project_id] = True
+
+
+def is_pdf_draft_cancelled(project_id: int) -> bool:
+    """Check (non-async, lock-free read) whether cancellation was requested."""
+    return _cancelled.get(project_id, False)
+
+
+async def clear_pdf_draft_cancel(project_id: int) -> None:
+    """Reset the cancellation flag — call at the start of a new pipeline run."""
+    async with _lock:
+        _cancelled.pop(project_id, None)
+

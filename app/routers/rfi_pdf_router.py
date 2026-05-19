@@ -53,10 +53,13 @@ from app.db.database import AuditLog, RFIPdfProject, SessionLocal, User, get_db
 from app.services.audit_service import log_audit
 from app.services.external.docling import parse_document
 from app.services.rfi.master_data import list_engineers, list_projects
-from app.services.rfi.pdf_extraction import draft_response_markdown, extract_requirements
+from app.services.rfi.pdf_extraction import draft_response_markdown, extract_requirements, GenerationCancelled
 from app.services.rfi.pdf_render import render_pdf_bytes
 from app.services.rfi.pdf_draft_stream_bus import (
     broadcast_pdf_draft,
+    cancel_pdf_draft,
+    clear_pdf_draft_cancel,
+    is_pdf_draft_cancelled,
     subscribe_pdf_draft_stream,
     unsubscribe_pdf_draft_stream,
 )
@@ -276,6 +279,7 @@ async def _run_pdf_pipeline(
     ip_address: str | None,
 ) -> None:
     """Async pipeline: Docling parse → requirement extraction → draft generation."""
+    await clear_pdf_draft_cancel(project_id)
     db = SessionLocal()
     try:
         _update_status(db, project_id, STATUS_PARSING)
@@ -328,9 +332,16 @@ async def _run_pdf_pipeline(
         async def emit_delta(delta: str) -> None:
             await broadcast_pdf_draft(project_id, {"type": "draft_delta", "delta": delta})
 
-        draft_markdown = await draft_response_markdown(
-            parsed_markdown, extraction, on_stream_delta=emit_delta
-        )
+        try:
+            draft_markdown = await draft_response_markdown(
+                parsed_markdown, extraction, on_stream_delta=emit_delta,
+                cancel_check=lambda: is_pdf_draft_cancelled(project_id),
+            )
+        except GenerationCancelled:
+            logger.info("Pipeline cancelled for project %s", project_id)
+            await broadcast_pdf_draft(project_id, {"type": "draft_complete"})
+            return
+
         project = db.query(RFIPdfProject).filter(RFIPdfProject.id == project_id).first()
         if not project:
             return
@@ -846,6 +857,7 @@ async def regenerate_rfi_pdf(
     )
 
     async def _regenerate_task(project_id: int, model: str | None, instructions: str | None):
+        await clear_pdf_draft_cancel(project_id)
         inner_db = SessionLocal()
         try:
             current = inner_db.query(RFIPdfProject).filter(RFIPdfProject.id == project_id).first()
@@ -864,12 +876,19 @@ async def regenerate_rfi_pdf(
             async def emit_delta(delta: str) -> None:
                 await broadcast_pdf_draft(project_id, {"type": "draft_delta", "delta": delta})
 
-            draft = await draft_response_markdown(
-                current.parsed_markdown,
-                extraction,
-                model=model,
-                on_stream_delta=emit_delta,
-            )
+            try:
+                draft = await draft_response_markdown(
+                    current.parsed_markdown,
+                    extraction,
+                    model=model,
+                    on_stream_delta=emit_delta,
+                    cancel_check=lambda: is_pdf_draft_cancelled(project_id),
+                )
+            except GenerationCancelled:
+                logger.info("Regenerate cancelled for project %s", project_id)
+                await broadcast_pdf_draft(project_id, {"type": "draft_complete"})
+                return
+
             current.requirements = extraction.get("requirements", [])
             current.metadata_json = {**(current.metadata_json or {}), **metadata}
             current.editor_markdown = draft
@@ -928,6 +947,46 @@ async def regenerate_rfi_pdf(
     return _project_payload(project, user)
 
 
+@router.post("/{document_key}/stop-generation")
+async def stop_rfi_pdf_generation(
+    document_key: str,
+    request: Request,
+    db: Session = Depends(get_db),
+    user: CurrentUser = Depends(get_current_user),
+):
+    """Cancel a running draft generation and keep partial content."""
+    project = _get_project_by_key(db, document_key)
+    if not project:
+        raise HTTPException(status_code=404, detail="RFI PDF not found")
+
+    # Set the cancellation flag — the streaming loop will pick this up
+    await cancel_pdf_draft(project.id)
+
+    # If the pipeline hasn't finished yet, mark the project as ready with
+    # whatever content it has so far.
+    if project.status in (STATUS_DRAFTING, STATUS_GENERATING, STATUS_EXTRACTING):
+        project.status = STATUS_READY
+        project.error_message = None
+        project.editing_user_id = None
+        project.lock_acquired_at = None
+        project.updated_at = datetime.now(timezone.utc)
+        db.commit()
+        db.refresh(project)
+
+    # Tell any connected WebSocket clients that the draft is done
+    await broadcast_pdf_draft(project.id, {"type": "draft_complete"})
+
+    log_audit(
+        db,
+        user_id=user.id if not user.is_service_account else None,
+        action="rfi_pdf.generation_stopped",
+        resource_type="rfi_pdf_project",
+        rfi_pdf_project_id=project.id,
+        details={"filename": project.filename},
+        ip_address=_caller_ip(request),
+    )
+    return _project_payload(project, user)
+
 @router.get("/{document_key}/preview")
 async def preview_rfi_pdf(
     document_key: str,
@@ -952,7 +1011,11 @@ async def preview_rfi_pdf(
             footer=f"{project.filename or 'RFI'} · Preview",
         )
     except RuntimeError as exc:
+        logger.error("PDF preview render failed for %s: %s", document_key, exc, exc_info=True)
         raise HTTPException(status_code=502, detail=str(exc)) from exc
+    except Exception as exc:
+        logger.error("PDF preview unexpected error for %s: %s", document_key, exc, exc_info=True)
+        raise HTTPException(status_code=500, detail=f"PDF rendering error: {exc}") from exc
     return StreamingResponse(
         io.BytesIO(pdf_bytes),
         media_type="application/pdf",
@@ -984,10 +1047,14 @@ async def export_rfi_pdf(
         pdf_bytes = render_pdf_bytes(
             markdown,
             title=str(title),
-            footer=f"{project.filename or 'RFI'} · Final",
+            footer=f"{project.filename or 'RFI'} �� Final",
         )
     except RuntimeError as exc:
+        logger.error("PDF export render failed for %s: %s", document_key, exc, exc_info=True)
         raise HTTPException(status_code=502, detail=str(exc)) from exc
+    except Exception as exc:
+        logger.error("PDF export unexpected error for %s: %s", document_key, exc, exc_info=True)
+        raise HTTPException(status_code=500, detail=f"PDF rendering error: {exc}") from exc
 
     log_audit(
         db,
